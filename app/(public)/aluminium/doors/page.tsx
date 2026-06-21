@@ -1,0 +1,57 @@
+import React from 'react';
+import Link from 'next/link';
+import { ArrowRight, ShieldCheck, DoorClosed } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+
+export const metadata = {
+  title: 'Aluminium Balcony Sliding & Fold Doors | Daddy Peenya',
+  description: 'Heavy-duty architectural aluminium balcony sliding doors, folding glass doors, and entrance doors. Custom manufactured at Peenya, Bangalore.',
+};
+
+export default function AluminiumDoorsPage() {
+  return (
+    <div className="py-12 sm:py-16 space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      {/* Header */}
+      <div className="space-y-4 max-w-3xl">
+        <span className="text-xs font-bold text-brand-secondary uppercase tracking-wider block">DOOR SYSTEMS</span>
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-primary tracking-tight">
+          Heavy-Duty Aluminium Balcony Doors
+        </h1>
+        <p className="text-brand-muted text-sm sm:text-base leading-relaxed">
+          Designed specifically to bridge indoor spaces and outdoor balconies. Utilizing heavy structural frames, we fabricate panoramic sliding door panels, folding stack sashes, and robust swing entrance doors that carry large glass sheets cleanly.
+        </p>
+        <div className="pt-2">
+          <Link href="/aluminium/configurator">
+            <Button className="font-bold flex items-center gap-1.5 shadow-sm hover:shadow-md">
+              Configure Aluminium Door Estimate <ArrowRight className="w-4 h-4" />
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      {/* Grid of Styles */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
+        <Card className="border-brand-border bg-white flex flex-col justify-between">
+          <CardContent className="p-6 sm:p-8 space-y-4">
+            <h3 className="font-bold text-lg text-brand-primary">Heavy Sliding Patio Doors</h3>
+            <p className="text-xs text-brand-muted leading-relaxed">
+              Available as classic multi-track sliding panels or advanced lift-and-slide configurations. Lift-and-slide mechanics lift the door panel off the track gasket when turning the handle, allowing extremely heavy 200 kg sashes to slide with zero friction.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-brand-border bg-white flex flex-col justify-between">
+          <CardContent className="p-6 sm:p-8 space-y-4">
+            <h3 className="font-bold text-lg text-brand-primary">Folding (Bi-Fold) Glass Doors</h3>
+            <p className="text-xs text-brand-muted leading-relaxed">
+              Multi-panel glass doors that fold and stack against the wall. Perfect for wide balconies or outdoor patios, creating an uninterrupted opening of up to 90% of the structural aperture width.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+    </div>
+  );
+}

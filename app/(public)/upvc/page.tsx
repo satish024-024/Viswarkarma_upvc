@@ -1,0 +1,97 @@
+import React from 'react';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+
+export const metadata = {
+  title: 'High-Performance uPVC Window & Door Systems | Peenya Factory Direct',
+  description: '德国 uPVC profiles manufactured locally in Bangalore. Offering soundproofing (up to 40dB), thermal efficiency, waterproofing, and multi-point locks.',
+};
+
+export default function UpvcOverviewPage() {
+  return (
+    <div className="py-12 sm:py-16 space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      {/* Hero Info */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="lg:col-span-7 space-y-6">
+          <span className="text-xs font-bold text-brand-secondary uppercase tracking-wider block">PREMIUM VINYL SYSTEM</span>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-primary tracking-tight leading-tight">
+            High-Performance uPVC Framing Profiles
+          </h1>
+          <p className="text-brand-muted text-sm sm:text-base leading-relaxed">
+            Our uPVC window and door systems are fabricated using special UV-stabilized impact-resistant compound extrusions. Unlike cheap vinyl that yellows or warps under direct sun, our profiles are steel-reinforced and custom corner-welded to remain airtight for over 30 years.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/upvc/configurator">
+              <Button className="font-bold flex items-center gap-1.5 shadow-sm hover:shadow-md">
+                Configure uPVC Estimate <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+            <Link href="/contact">
+              <Button variant="secondary" className="font-bold">Book Free Site Survey</Button>
+            </Link>
+          </div>
+        </div>
+        <div className="lg:col-span-5 bg-slate-50 border border-brand-border p-6 rounded-2xl space-y-4">
+          <h3 className="text-xs font-bold text-brand-primary uppercase tracking-wider block border-b border-brand-border pb-2">Technical Properties</h3>
+          <div className="space-y-2 text-xs font-medium">
+            <div className="flex justify-between">
+              <span className="text-brand-muted">Profile Chamber Count</span>
+              <span className="text-brand-primary font-bold">3, 4, or 5 Chambers</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-brand-muted">Steel Reinforcement</span>
+              <span className="text-brand-primary font-bold">1.5mm - 2.0mm Galvanized</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-brand-muted">Acoustic Reduction</span>
+              <span className="text-brand-primary font-bold">up to 38 - 42 Decibels</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-brand-muted">U-Value (Thermal loss)</span>
+              <span className="text-brand-primary font-bold">1.2 - 1.8 W/m²K</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Sub-vertical links grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-brand-border pt-12">
+        <Card className="border-brand-border p-6 sm:p-8 flex flex-col justify-between">
+          <div className="space-y-4">
+            <h3 className="text-xl font-bold text-brand-primary">uPVC Windows</h3>
+            <p className="text-xs text-brand-muted leading-relaxed">
+              Choose from classic outward-swinging casement sashes, space-saving multi-track horizontal sliders, fixed picture windows, or advanced European-style tilt-and-turn units.
+            </p>
+          </div>
+          <div className="pt-6">
+            <Link href="/upvc/windows">
+              <Button variant="secondary" size="sm" className="font-bold flex items-center gap-1">
+                Browse Windows <ArrowRight className="w-3.5 h-3.5" />
+              </Button>
+            </Link>
+          </div>
+        </Card>
+
+        <Card className="border-brand-border p-6 sm:p-8 flex flex-col justify-between">
+          <div className="space-y-4">
+            <h3 className="text-xl font-bold text-brand-primary">uPVC Doors</h3>
+            <p className="text-xs text-brand-muted leading-relaxed">
+              Available as heavy-duty swing entrance doors or wide sliding balcony patio doors with low aluminium thresholds. Fully reinforced with thick steel inserts and key-locking handles.
+            </p>
+          </div>
+          <div className="pt-6">
+            <Link href="/upvc/doors">
+              <Button variant="secondary" size="sm" className="font-bold flex items-center gap-1">
+                Browse Doors <ArrowRight className="w-3.5 h-3.5" />
+              </Button>
+            </Link>
+          </div>
+        </Card>
+      </div>
+
+    </div>
+  );
+}

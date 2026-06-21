@@ -1,0 +1,66 @@
+import React from 'react';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+
+export const metadata = {
+  title: 'Aluminium Windows | Slimline Sliding & Casement | Daddy Peenya',
+  description: 'Custom fabricated aluminium windows with slim profiles, heavy T6 alloys, and multi-point locking. Manufactured directly in Peenya, Bangalore.',
+};
+
+export default function AluminiumWindowsPage() {
+  return (
+    <div className="py-12 sm:py-16 space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      {/* Header */}
+      <div className="space-y-4 max-w-3xl">
+        <span className="text-xs font-bold text-brand-secondary uppercase tracking-wider block">WINDOW SYSTEMS</span>
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-primary tracking-tight">
+          Architectural Aluminium Windows
+        </h1>
+        <p className="text-brand-muted text-sm sm:text-base leading-relaxed">
+          Our aluminium windows utilize premium 6063 T6 structural alloys. By taking advantage of metal&apos;s inherent strength, we fabricate frames with minimal sightline widths, giving you maximum glass area for modern, daylight-filled rooms.
+        </p>
+        <div className="pt-2">
+          <Link href="/aluminium/configurator">
+            <Button className="font-bold flex items-center gap-1.5 shadow-sm hover:shadow-md">
+              Configure Aluminium Window Estimate <ArrowRight className="w-4 h-4" />
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      {/* Grid of Styles */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
+        <Card className="border-brand-border bg-white flex flex-col justify-between">
+          <CardContent className="p-6 space-y-4">
+            <h3 className="font-bold text-base text-brand-primary">Slim Sliding Windows</h3>
+            <p className="text-xs text-brand-muted leading-relaxed">
+              Premium minimal sightlines. Double-brushed wool seals and weather stripping block dust and heavy monsoon drafts. Supported by bottom-rolling tracks for effortless sliding action.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-brand-border bg-white flex flex-col justify-between">
+          <CardContent className="p-6 space-y-4">
+            <h3 className="font-bold text-base text-brand-primary">Architectural Casement</h3>
+            <p className="text-xs text-brand-muted leading-relaxed">
+              Classic openable windows with heavy-duty hidden friction hinges. Closes airtight with continuous compression seals, providing high soundproofing and structural seal performance.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-brand-border bg-white flex flex-col justify-between">
+          <CardContent className="p-6 space-y-4">
+            <h3 className="font-bold text-base text-brand-primary">Fixed Picture Panels</h3>
+            <p className="text-xs text-brand-muted leading-relaxed">
+              Designed for structural openings that only require natural light and views. Fits large laminated or double glazed safety glass units securely without sagging.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+    </div>
+  );
+}
