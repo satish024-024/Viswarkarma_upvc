@@ -2,11 +2,11 @@ import { BusinessSettings, ServiceVertical, Project, Testimonial, FAQ, ServiceAr
 
 export const businessSettings: BusinessSettings = {
   name: "Viswarkarma uPVC & Aluminium",
-  tagline: "25+ Years of Custom Fabrication & Precision Installation",
+  tagline: "25+ Years of Custom Fabrication & Precision Installation | Pan-India Service",
   phone: "+91 98860 12345",
   whatsapp: "+919886012345",
   email: "contact@viswarkarmaupvc.com",
-  address: "Bangalore Fabrication Workshop & Office, Bengaluru, Karnataka, India",
+  address: "Rajahmundry Head Office & Fabrication Workshop, Rajahmundry, Andhra Pradesh, India",
   hours: "Monday - Saturday: 9:30 AM - 7:00 PM",
   googleMapUrl: "",
   experienceYears: 25
@@ -79,10 +79,10 @@ export const projectsList: Project[] = [
   {
     id: "proj-1",
     title: "Modern Villa uPVC Installation",
-    description: "Full-house custom uPVC casement windows and wide sliding doors installed for a luxury villa in Sarjapur, featuring Golden Oak wood finish and double-glazed toughened glass.",
+    description: "Full-house custom uPVC casement windows and wide sliding doors installed for a luxury villa in Rajahmundry, featuring Golden Oak wood finish and double-glazed toughened glass.",
     image: "https://5.imimg.com/data5/MM/LH/JN/SELLER-64612523/upvc-modern-windows-500x500.jpg",
     category: "upvc",
-    location: "Sarjapur Road, Bangalore",
+    location: "Rajahmundry, Andhra Pradesh",
     completedYear: 2025,
     specs: {
       system: "uPVC Windows & Doors",
@@ -93,11 +93,11 @@ export const projectsList: Project[] = [
   },
   {
     id: "proj-2",
-    title: "High-Rise Apartment Aluminium Work",
-    description: "Sleek slate-grey anodized aluminium sliding balcony windows engineered for high-altitude wind load resistance in a 24th-floor apartment in Whitefield.",
+    title: "Commercial Building Aluminium Work",
+    description: "Sleek slate-grey anodized aluminium sliding balcony windows engineered for high wind load resistance in a multi-story commercial building in Vijayawada.",
     image: "https://5.imimg.com/data5/QR/VY/TK/SELLER-64612523/casement-window-500x500.jpeg",
     category: "aluminium",
-    location: "Whitefield, Bangalore",
+    location: "Vijayawada, Andhra Pradesh",
     completedYear: 2025,
     specs: {
       system: "Slimline Aluminium Systems",
@@ -112,7 +112,7 @@ export const projectsList: Project[] = [
     description: "Custom frameless glass balcony railings utilizing heavy-duty floor-mounted SS316 spigots and 12mm laminated toughened safety glass for clear views.",
     image: "https://5.imimg.com/data5/NM/TM/OQ/SELLER-64612523/toughened-glass-sliding-door-500x500.jpg",
     category: "glass",
-    location: "Koramangala, Bangalore",
+    location: "Visakhapatnam, Andhra Pradesh",
     completedYear: 2024,
     specs: {
       system: "Frameless Glass Railing",
@@ -124,10 +124,10 @@ export const projectsList: Project[] = [
   {
     id: "proj-4",
     title: "uPVC Sliding Doors with Integrated Pleated Mesh",
-    description: "Multi-track uPVC sliding doors in Anthracite Grey color with integrated premium pleated mosquito mesh for a penthouse balcony in Indiranagar.",
+    description: "Multi-track uPVC sliding doors in Anthracite Grey color with integrated premium pleated mosquito mesh for a penthouse balcony in Hyderabad.",
     image: "https://5.imimg.com/data5/AL/LI/CS/SELLER-64612523/upvc-glass-double-door-500x500.jpg",
     category: "upvc",
-    location: "Indiranagar, Bangalore",
+    location: "Hyderabad, Telangana",
     completedYear: 2024,
     specs: {
       system: "uPVC Sliding Doors",
@@ -143,9 +143,9 @@ export const testimonialsList: Testimonial[] = [
     id: "t-1",
     name: "Subhash Chandran",
     role: "Homeowner",
-    content: "We installed uPVC windows for our entire independent house in Jayanagar. The soundproofing is remarkable. We live near a busy intersection, and once we close the windows, it is dead silent. Highly professional installation team.",
+    content: "We installed uPVC windows for our entire independent house in Rajahmundry. The soundproofing is remarkable. We live near a busy intersection, and once we close the windows, it is dead silent. Highly professional installation team.",
     rating: 5,
-    location: "Jayanagar, Bangalore",
+    location: "Rajahmundry, Andhra Pradesh",
     projectType: "uPVC Windows & Doors"
   },
   {
@@ -154,7 +154,7 @@ export const testimonialsList: Testimonial[] = [
     role: "Lead Architect, Mehta & Associates",
     content: "As an architect, I am very picky about profiles and alignment. Viswarkarma uPVC has fabricated and installed profiles for three of my villa projects. Their attention to detail on gaskets, corner joints, and silicone sealing is top-tier.",
     rating: 5,
-    location: "HSR Layout, Bangalore",
+    location: "Visakhapatnam, Andhra Pradesh",
     projectType: "Architectural Aluminium Sliding Systems"
   },
   {
@@ -163,7 +163,7 @@ export const testimonialsList: Testimonial[] = [
     role: "Villa Owner",
     content: "Highly recommend their pleated mosquito mesh systems. It slides smoothly and disappears when not in use. Their 25 years of experience shows in how they handled our crooked masonry openings and made everything look perfectly level.",
     rating: 5,
-    location: "Indiranagar, Bangalore",
+    location: "Vijayawada, Andhra Pradesh",
     projectType: "Pleated Mesh & uPVC Sliding Doors"
   }
 ];
@@ -204,20 +204,20 @@ export const faqsList: FAQ[] = [
 export const serviceAreas: ServiceArea[] = [
   {
     id: "sa-1",
-    city: "Bengaluru (Bangalore)",
-    areas: ["Indiranagar", "Jayanagar", "Whitefield", "Koramangala", "HSR Layout", "Sarjapur", "Malleshwaram", "Sadashivanagar", "Yelahanka", "Electronic City", "Bellandur", "Bannerghatta"],
+    city: "Andhra Pradesh (HQ)",
+    areas: ["Rajahmundry", "Vijayawada", "Visakhapatnam (Vizag)", "Kakinada", "Guntur", "Eluru", "Nellore", "Tirupati"],
     isMajor: true
   },
   {
     id: "sa-2",
-    city: "Mysuru (Mysore)",
-    areas: ["Gokulam", "Vontikoppal", "Jayalakshmipuram", "Vijayanagar"],
+    city: "Telangana & Hyderabad",
+    areas: ["Gachibowli", "Jubilee Hills", "Madhapur", "Kondapur", "Secunderabad"],
     isMajor: false
   },
   {
     id: "sa-3",
-    city: "Tumakuru (Tumkur)",
-    areas: ["Siddhartha Nagar", "Sira Road", "Kyathasandra"],
+    city: "Pan-India Services",
+    areas: ["Mumbai", "Bengaluru", "Chennai", "Delhi NCR", "Kolkata", "Pune"],
     isMajor: false
   }
 ];

@@ -19,7 +19,7 @@ const PRODUCTS = [
 const STEPS = [
   { n: '01', Icon: Sparkles, title: 'Get an Instant Estimate',  body: 'Use our online home estimator. Enter your home size and number of windows — get a price range in 2 minutes.' },
   { n: '02', Icon: Ruler,    title: 'We Visit & Measure — Free', body: 'Our surveyor visits at no charge, laser-measures every opening, and records exact wall depths.' },
-  { n: '03', Icon: Wrench,   title: 'Fabricated & Installed',   body: 'Profiles custom-made in our Bangalore workshop, then installed by our own team with full weather sealing.' },
+  { n: '03', Icon: Wrench,   title: 'Fabricated & Installed',   body: 'Profiles custom-made in our Rajahmundry workshop, then installed by our own team with full weather sealing.' },
 ];
 
 const BENEFITS = [
@@ -47,42 +47,42 @@ export default function Homepage() {
     <div className="w-full">
 
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="bg-[#FDFBF6] border-b border-[#E2D9C8]">
+      <section className="bg-ivory border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
           {/* Copy */}
           <div className="space-y-7">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#D4AF6A] bg-[#FAF4E6] text-[#9A7C2E] text-xs font-bold uppercase tracking-wider">
-              <Award className="w-3.5 h-3.5" /> 25+ Years · Family-Run · Bangalore
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border-gold bg-gold-faint text-gold text-xs font-bold uppercase tracking-wider">
+              <Award className="w-3.5 h-3.5" /> 25+ Years · Family-Run · Rajahmundry HQ · Pan-India
             </span>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1C160C] tracking-tight leading-[1.15]">
-              Bespoke <span className="text-[#B8963E]">uPVC & Aluminium</span> Systems
-              <span className="block mt-2 text-2xl sm:text-3xl lg:text-4xl font-light text-[#4A3F2F] leading-tight">
-                Engineered for Bangalore&apos;s <span className="text-[#B8963E] font-serif italic font-semibold">Finest Residences</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-heading tracking-tight leading-[1.15]">
+              Bespoke <span className="text-gold">uPVC & Aluminium</span> Systems
+              <span className="block mt-2 text-2xl sm:text-3xl lg:text-4xl font-light text-body leading-tight">
+                Engineered for India&apos;s <span className="text-gold font-serif italic font-semibold">Finest Residences</span>
               </span>
             </h1>
 
-            <p className="text-[#4A3F2F] text-base leading-relaxed max-w-xl">
-              We engineer, custom-fabricate, and precision-install complete window and door systems for prestigious homes. Handcrafted in our Bangalore workshop with zero middlemen, ensuring unmatched security, acoustics, and elegance.
+            <p className="text-body text-base leading-relaxed max-w-xl">
+              We engineer, custom-fabricate, and precision-install complete window and door systems for prestigious homes. Handcrafted in our Rajahmundry workshop and installed anywhere in India with zero middlemen, ensuring unmatched security, acoustics, and elegance.
             </p>
 
             <div className="flex flex-wrap gap-3">
-              <Link href="/quote" className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold bg-[#B8963E] hover:bg-[#9A7C2E] text-white text-sm transition-all shadow-md shadow-[#B8963E]/20">
+              <Link href="/quote" className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold bg-gold hover:bg-gold-rich text-white text-sm transition-all shadow-md shadow-gold/20">
                 <Sparkles className="w-4 h-4" /> Get Free Home Estimate
               </Link>
-              <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold border border-[#E2D9C8] bg-white text-[#1C160C] hover:border-[#D4AF6A] hover:bg-[#FAF4E6] text-sm transition-all">
+              <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold border border-border bg-white text-heading hover:border-border-gold hover:bg-gold-faint text-sm transition-all">
                 <MessageSquare className="w-4 h-4 text-emerald-600" /> WhatsApp Us
               </a>
-              <a href={`tel:${settings.phone}`} className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold border border-[#E2D9C8] bg-white text-[#1C160C] hover:border-[#D4AF6A] hover:bg-[#FAF4E6] text-sm transition-all">
-                <Phone className="w-4 h-4 text-[#B8963E]" /> Call Now
+              <a href={`tel:${settings.phone}`} className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold border border-border bg-white text-heading hover:border-border-gold hover:bg-gold-faint text-sm transition-all">
+                <Phone className="w-4 h-4 text-gold-light" /> Call Now
               </a>
             </div>
 
             <div className="grid grid-cols-2 gap-2">
               {['Free Site Measurement', '20-Year Profile Warranty', 'Whole-Home Pricing', 'German Multi-Point Locks'].map((f) => (
-                <div key={f} className="flex items-center gap-2 text-xs font-semibold text-[#4A3F2F]">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#B8963E] flex-shrink-0" /> {f}
+                <div key={f} className="flex items-center gap-2 text-xs font-semibold text-body">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-gold-light flex-shrink-0" /> {f}
                 </div>
               ))}
             </div>
@@ -92,14 +92,14 @@ export default function Homepage() {
           <div className="grid grid-cols-2 gap-4">
             {[
               { n: '25+',   l: 'Years of Experience', s: 'Family-run since 1999' },
-              { n: '5,000+', l: 'Windows Installed',   s: 'Across Bangalore & Karnataka' },
+              { n: '5,000+', l: 'Windows Installed',   s: 'Across AP & Pan-India' },
               { n: '100%',  l: 'In-house Fabrication', s: 'No middlemen or resellers' },
               { n: 'Free',  l: 'Site Measurement',     s: 'We come to you at no cost' },
             ].map((st) => (
-              <div key={st.n} className="bg-white border border-[#E2D9C8] rounded-2xl p-5 space-y-1 hover:border-[#D4AF6A] hover:shadow-md transition-all">
-                <span className="block text-3xl font-black text-[#B8963E] leading-none">{st.n}</span>
-                <span className="block text-sm font-bold text-[#1C160C] leading-tight">{st.l}</span>
-                <span className="block text-[11px] text-[#8C7B68]">{st.s}</span>
+              <div key={st.n} className="bg-white border border-border rounded-2xl p-5 space-y-1 hover:border-border-gold hover:shadow-md transition-all">
+                <span className="block text-3xl font-black text-gold leading-none">{st.n}</span>
+                <span className="block text-sm font-bold text-heading leading-tight">{st.l}</span>
+                <span className="block text-[11px] text-muted">{st.s}</span>
               </div>
             ))}
           </div>
@@ -110,26 +110,26 @@ export default function Homepage() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="text-center space-y-2 max-w-2xl mx-auto">
-            <span className="inline-block text-xs font-bold uppercase tracking-widest text-[#B8963E] border border-[#D4AF6A] bg-[#FAF4E6] px-3 py-1 rounded-full">What We Install</span>
-            <h2 className="text-3xl sm:text-4xl font-black text-[#1C160C] tracking-tight">See Exactly What You&apos;re Getting</h2>
-            <p className="text-[#4A3F2F] text-sm leading-relaxed">Every style is custom-made at our Bangalore workshop. Tap any card to get an instant price estimate.</p>
+            <span className="inline-block text-xs font-bold uppercase tracking-widest text-gold border border-border-gold bg-gold-faint px-3 py-1 rounded-full">What We Install</span>
+            <h2 className="text-3xl sm:text-4xl font-black text-heading tracking-tight">See Exactly What You&apos;re Getting</h2>
+            <p className="text-body text-sm leading-relaxed">Every style is custom-made at our fabrication facility. Tap any card to get an instant price estimate.</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {PRODUCTS.map((p, i) => (
               <Link href="/quote" key={p.id} className="group block">
-                <div className="bg-white border border-[#E2D9C8] rounded-2xl overflow-hidden hover:border-[#D4AF6A] hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 h-full flex flex-col">
-                  <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#F8F4EC]">
+                <div className="bg-white border border-border rounded-2xl overflow-hidden hover:border-border-gold hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 h-full flex flex-col">
+                  <div className="relative w-full aspect-[4/3] overflow-hidden bg-cream">
                     <Image src={p.img} alt={p.name} fill sizes="(max-width:640px)100vw,(max-width:1024px)50vw,33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" priority={i < 3} />
-                    <span className="absolute top-3 left-3 bg-[#B8963E] text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">{p.badge}</span>
+                    <span className="absolute top-3 left-3 bg-gold text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">{p.badge}</span>
                   </div>
                   <div className="p-4 flex-1 flex flex-col justify-between space-y-2">
                     <div>
-                      <h3 className="font-black text-[#1C160C] text-sm group-hover:text-[#B8963E] transition-colors">{p.name}</h3>
-                      <p className="text-[10px] font-bold text-[#B8963E] uppercase tracking-wide mt-0.5">{p.note}</p>
-                      <p className="text-xs text-[#4A3F2F] mt-1.5 leading-relaxed">{p.desc}</p>
+                      <h3 className="font-black text-heading text-sm group-hover:text-gold transition-colors">{p.name}</h3>
+                      <p className="text-[10px] font-bold text-gold uppercase tracking-wide mt-0.5">{p.note}</p>
+                      <p className="text-xs text-body mt-1.5 leading-relaxed">{p.desc}</p>
                     </div>
-                    <div className="flex items-center gap-1 text-xs font-bold text-[#B8963E] pt-1">
+                    <div className="flex items-center gap-1 text-xs font-bold text-gold pt-1">
                       Get Estimate <ArrowRight className="w-3 h-3" />
                     </div>
                   </div>
@@ -141,30 +141,30 @@ export default function Homepage() {
       </section>
 
       {/* ── HOW IT WORKS ─────────────────────────────────────── */}
-      <section className="py-20 bg-[#F8F4EC]">
+      <section className="py-20 bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="text-center space-y-2 max-w-2xl mx-auto">
-            <span className="inline-block text-xs font-bold uppercase tracking-widest text-[#B8963E] border border-[#D4AF6A] bg-[#FAF4E6] px-3 py-1 rounded-full">Simple 3-Step Process</span>
-            <h2 className="text-3xl sm:text-4xl font-black text-[#1C160C] tracking-tight">From Estimate to Installed — We Handle Everything</h2>
+            <span className="inline-block text-xs font-bold uppercase tracking-widest text-gold border border-border-gold bg-gold-faint px-3 py-1 rounded-full">Simple 3-Step Process</span>
+            <h2 className="text-3xl sm:text-4xl font-black text-heading tracking-tight">From Estimate to Installed — We Handle Everything</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {STEPS.map((st) => (
-              <div key={st.n} className="bg-white border border-[#E2D9C8] rounded-2xl p-7 hover:border-[#D4AF6A] hover:shadow-md transition-all space-y-4">
+              <div key={st.n} className="bg-white border border-border rounded-2xl p-7 hover:border-border-gold hover:shadow-md transition-all space-y-4">
                 <div className="flex items-start justify-between">
-                  <span className="text-5xl font-black text-[#F0E3C0] leading-none font-mono">{st.n}</span>
-                  <div className="w-10 h-10 rounded-xl bg-[#FAF4E6] border border-[#D4AF6A] flex items-center justify-center">
-                    <st.Icon className="w-5 h-5 text-[#B8963E]" />
+                  <span className="text-5xl font-black text-warm leading-none font-mono">{st.n}</span>
+                  <div className="w-10 h-10 rounded-xl bg-gold-faint border border-border-gold flex items-center justify-center">
+                    <st.Icon className="w-5 h-5 text-gold" />
                   </div>
                 </div>
-                <h3 className="font-bold text-[#1C160C] text-base leading-tight">{st.title}</h3>
-                <p className="text-[#4A3F2F] text-sm leading-relaxed">{st.body}</p>
+                <h3 className="font-bold text-heading text-base leading-tight">{st.title}</h3>
+                <p className="text-body text-sm leading-relaxed">{st.body}</p>
               </div>
             ))}
           </div>
 
           <div className="text-center pt-2">
-            <Link href="/quote" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold bg-[#B8963E] hover:bg-[#9A7C2E] text-white text-sm transition-all shadow-md shadow-[#B8963E]/20">
+            <Link href="/quote" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold bg-gold hover:bg-gold-rich text-white text-sm transition-all shadow-md shadow-gold/20">
               <Sparkles className="w-4 h-4" /> Start Your Free Estimate
             </Link>
           </div>
@@ -172,17 +172,17 @@ export default function Homepage() {
       </section>
 
       {/* ── BENEFITS ─────────────────────────────────────────── */}
-      <section className="py-14 bg-white border-y border-[#E2D9C8]">
+      <section className="py-14 bg-white border-y border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-center text-2xl font-black text-[#1C160C] mb-10">Why Homeowners Choose Viswarkarma</h2>
+          <h2 className="text-center text-2xl font-black text-heading mb-10">Why Homeowners Choose Viswarkarma</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
             {BENEFITS.map((b) => (
-              <div key={b.label} className="flex flex-col items-center text-center space-y-3 p-5 rounded-2xl border border-[#E2D9C8] hover:border-[#D4AF6A] hover:bg-[#FAF4E6] transition-all">
-                <div className="w-11 h-11 rounded-xl bg-[#FAF4E6] border border-[#D4AF6A] flex items-center justify-center">
-                  <b.Icon className="w-5 h-5 text-[#B8963E]" />
+              <div key={b.label} className="flex flex-col items-center text-center space-y-3 p-5 rounded-2xl border border-border hover:border-border-gold hover:bg-gold-faint transition-all">
+                <div className="w-11 h-11 rounded-xl bg-gold-faint border border-border-gold flex items-center justify-center">
+                  <b.Icon className="w-5 h-5 text-gold-light" />
                 </div>
-                <span className="font-black text-[#1C160C] text-sm">{b.label}</span>
-                <span className="text-xs text-[#8C7B68] leading-tight">{b.sub}</span>
+                <span className="font-black text-heading text-sm">{b.label}</span>
+                <span className="text-xs text-muted leading-tight">{b.sub}</span>
               </div>
             ))}
           </div>
@@ -190,12 +190,12 @@ export default function Homepage() {
       </section>
 
       {/* ── uPVC vs ALUMINIUM ────────────────────────────────── */}
-      <section className="py-20 bg-[#FDFBF6]">
+      <section className="py-20 bg-ivory">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="text-center space-y-2">
-            <span className="inline-block text-xs font-bold uppercase tracking-widest text-[#B8963E] border border-[#D4AF6A] bg-[#FAF4E6] px-3 py-1 rounded-full">uPVC vs Aluminium</span>
-            <h2 className="text-3xl font-black text-[#1C160C] tracking-tight">Which System is Right for Your Home?</h2>
-            <p className="text-[#4A3F2F] text-sm max-w-lg mx-auto">Both are excellent choices — here&apos;s a quick comparison.</p>
+            <span className="inline-block text-xs font-bold uppercase tracking-widest text-gold border border-border-gold bg-gold-faint px-3 py-1 rounded-full">uPVC vs Aluminium</span>
+            <h2 className="text-3xl font-black text-heading tracking-tight">Which System is Right for Your Home?</h2>
+            <p className="text-body text-sm max-w-lg mx-auto">Both are excellent choices — here&apos;s a quick comparison.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -215,27 +215,27 @@ export default function Homepage() {
                 con: 'Conducts heat (thermal break option available)',
               },
             ].map((c) => (
-              <div key={c.title} className="bg-white border border-[#E2D9C8] rounded-2xl overflow-hidden hover:border-[#D4AF6A] hover:shadow-md transition-all">
-                <div className="relative h-48 overflow-hidden bg-[#F8F4EC]">
+              <div key={c.title} className="bg-white border border-border rounded-2xl overflow-hidden hover:border-border-gold hover:shadow-md transition-all">
+                <div className="relative h-48 overflow-hidden bg-cream">
                   <Image src={c.img} alt={c.title} fill sizes="(max-width:768px)100vw,50vw" className="object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1C160C]/70 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   <div className="absolute bottom-4 left-4">
                     <span className="block text-white font-black text-lg">{c.title}</span>
-                    <span className="block text-[#D4AF6A] text-xs mt-0.5">{c.sub}</span>
+                    <span className="block text-gold-light text-xs mt-0.5">{c.sub}</span>
                   </div>
                 </div>
                 <div className="p-5 space-y-3">
                   {c.pros.map((p) => (
                     <div key={p} className="flex items-start gap-2 text-sm">
-                      <span className="text-[#B8963E] font-bold mt-0.5 flex-shrink-0">✓</span>
-                      <span className="text-[#4A3F2F]">{p}</span>
+                      <span className="text-gold font-bold mt-0.5 flex-shrink-0">✓</span>
+                      <span className="text-body">{p}</span>
                     </div>
                   ))}
                   <div className="flex items-start gap-2 text-sm">
-                    <span className="text-[#B8A898] font-bold mt-0.5 flex-shrink-0">○</span>
-                    <span className="text-[#8C7B68]">{c.con}</span>
+                    <span className="text-muted font-bold mt-0.5 flex-shrink-0">○</span>
+                    <span className="text-muted">{c.con}</span>
                   </div>
-                  <Link href={c.href} className="block w-full mt-2 py-2.5 rounded-xl border border-[#D4AF6A] text-[#B8963E] font-bold text-sm text-center hover:bg-[#FAF4E6] transition-colors">
+                  <Link href={c.href} className="block w-full mt-2 py-2.5 rounded-xl border border-border-gold text-gold font-bold text-sm text-center hover:bg-gold-faint transition-colors">
                     Explore {c.title} →
                   </Link>
                 </div>
@@ -246,31 +246,31 @@ export default function Homepage() {
       </section>
 
       {/* ── PROJECTS ─────────────────────────────────────────── */}
-      <section className="py-20 bg-[#F8F4EC]">
+      <section className="py-20 bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div className="space-y-1">
-              <span className="inline-block text-xs font-bold uppercase tracking-widest text-[#B8963E] border border-[#D4AF6A] bg-[#FAF4E6] px-3 py-1 rounded-full">Our Work</span>
-              <h2 className="text-3xl font-black text-[#1C160C] tracking-tight">Recent Installations</h2>
+              <span className="inline-block text-xs font-bold uppercase tracking-widest text-gold border border-border-gold bg-gold-faint px-3 py-1 rounded-full">Our Work</span>
+              <h2 className="text-3xl font-black text-heading tracking-tight">Recent Installations</h2>
             </div>
-            <Link href="/projects" className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-[#E2D9C8] bg-white text-[#4A3F2F] font-bold text-sm hover:border-[#D4AF6A] transition-all">
+            <Link href="/projects" className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-border bg-white text-body font-bold text-sm hover:border-border-gold transition-all">
               View All <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {projects.slice(0, 4).map((proj) => (
-              <div key={proj.id} className="bg-white border border-[#E2D9C8] rounded-2xl overflow-hidden hover:border-[#D4AF6A] hover:shadow-md transition-all group">
-                <div className="h-36 bg-gradient-to-br from-[#F8F4EC] to-[#F0E3C0] flex items-center justify-center p-4">
+              <div key={proj.id} className="bg-white border border-border rounded-2xl overflow-hidden hover:border-border-gold hover:shadow-md transition-all group">
+                <div className="h-36 bg-gradient-to-br from-cream to-warm flex items-center justify-center p-4">
                   <div className="text-center">
-                    <span className="block text-[9px] font-bold uppercase tracking-widest text-[#B8963E] mb-1">{proj.category}</span>
-                    <span className="block text-sm font-bold text-[#1C160C] leading-tight">{proj.title}</span>
+                    <span className="block text-[9px] font-bold uppercase tracking-widest text-gold mb-1">{proj.category}</span>
+                    <span className="block text-sm font-bold text-heading leading-tight">{proj.title}</span>
                   </div>
                 </div>
                 <div className="p-4 space-y-1">
-                  <h3 className="font-black text-xs text-[#1C160C] group-hover:text-[#B8963E] transition-colors leading-snug">{proj.title}</h3>
-                  <p className="text-[11px] text-[#4A3F2F] line-clamp-2">{proj.description}</p>
-                  <div className="flex justify-between text-[10px] text-[#8C7B68] pt-2 border-t border-[#E2D9C8]">
+                  <h3 className="font-black text-xs text-heading group-hover:text-gold transition-colors leading-snug">{proj.title}</h3>
+                  <p className="text-[11px] text-body line-clamp-2">{proj.description}</p>
+                  <div className="flex justify-between text-[10px] text-muted pt-2 border-t border-border">
                     <span>{proj.location}</span><span>{proj.specs.series}</span>
                   </div>
                 </div>
@@ -284,23 +284,23 @@ export default function Homepage() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center space-y-1">
-            <span className="inline-block text-xs font-bold uppercase tracking-widest text-[#B8963E] border border-[#D4AF6A] bg-[#FAF4E6] px-3 py-1 rounded-full">Client Reviews</span>
-            <h2 className="text-3xl font-black text-[#1C160C] tracking-tight">Trusted by Families Across Bangalore</h2>
+            <span className="inline-block text-xs font-bold uppercase tracking-widest text-gold border border-border-gold bg-gold-faint px-3 py-1 rounded-full">Client Reviews</span>
+            <h2 className="text-3xl font-black text-heading tracking-tight">Trusted by Families Across India</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {reviews.slice(0, 3).map((r) => (
-              <div key={r.id} className="bg-[#FDFBF6] border border-[#E2D9C8] rounded-2xl p-5 space-y-3 hover:border-[#D4AF6A] hover:shadow-sm transition-all">
+              <div key={r.id} className="bg-ivory border border-border rounded-2xl p-5 space-y-3 hover:border-border-gold hover:shadow-sm transition-all">
                 <div className="flex gap-0.5">
-                  {Array.from({ length: r.rating }).map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-[#B8963E] text-[#B8963E]" />)}
+                  {Array.from({ length: r.rating }).map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-gold text-gold" />)}
                 </div>
-                <p className="text-sm text-[#4A3F2F] italic leading-relaxed">&ldquo;{r.content}&rdquo;</p>
-                <div className="pt-2 border-t border-[#E2D9C8] flex items-center justify-between">
+                <p className="text-sm text-body italic leading-relaxed">&ldquo;{r.content}&rdquo;</p>
+                <div className="pt-2 border-t border-border flex items-center justify-between">
                   <div>
-                    <span className="block font-black text-[#1C160C] text-sm">{r.name}</span>
-                    <span className="block text-[#8C7B68] text-xs">{r.role}</span>
+                    <span className="block font-black text-heading text-sm">{r.name}</span>
+                    <span className="block text-muted text-xs">{r.role}</span>
                   </div>
-                  <span className="text-[#8C7B68] text-xs font-medium">{r.location}</span>
+                  <span className="text-muted text-xs font-medium">{r.location}</span>
                 </div>
               </div>
             ))}
@@ -309,26 +309,26 @@ export default function Homepage() {
       </section>
 
       {/* ── CTA BANNER ───────────────────────────────────────── */}
-      <section className="py-16 bg-[#FAF4E6] border-y border-[#D4AF6A]">
+      <section className="py-16 bg-cream border-y border-border">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#F0E3C0] border border-[#D4AF6A] mx-auto">
-            <Sparkles className="w-6 h-6 text-[#B8963E]" />
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white border border-border mx-auto">
+            <Sparkles className="w-6 h-6 text-gold" />
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-[#1C160C] tracking-tight leading-tight">
+          <h2 className="text-3xl sm:text-4xl font-black text-heading tracking-tight leading-tight">
             Ready to Upgrade Your Entire Home?
           </h2>
-          <p className="text-[#4A3F2F] text-sm leading-relaxed max-w-xl mx-auto">
+          <p className="text-body text-sm leading-relaxed max-w-xl mx-auto">
             Enter your home size and window count — get a price range in 2 minutes. Then we visit, measure, and give a final quote. <strong>No pressure. No hidden charges.</strong>
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/quote" className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold bg-[#B8963E] hover:bg-[#9A7C2E] text-white text-sm shadow-md shadow-[#B8963E]/20 transition-all">
+            <Link href="/quote" className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold bg-gold hover:bg-gold-rich text-white text-sm shadow-md shadow-gold/20 transition-all">
               <Sparkles className="w-4 h-4" /> Launch Home Estimator
             </Link>
-            <a href={`tel:${settings.phone}`} className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold border border-[#D4AF6A] text-[#9A7C2E] hover:bg-[#F0E3C0] text-sm transition-all">
+            <a href={`tel:${settings.phone}`} className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold border border-border-gold text-gold hover:bg-gold-faint text-sm transition-all">
               <Phone className="w-4 h-4" /> Book Free Site Visit
             </a>
           </div>
-          <p className="text-[#8C7B68] text-xs">Serving Bangalore · No visit charges · Professional installation · 25+ years experience</p>
+          <p className="text-muted text-xs">Serving Pan-India · No visit charges · Professional installation · 25+ years experience</p>
         </div>
       </section>
 
