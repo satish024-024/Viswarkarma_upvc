@@ -5,8 +5,8 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
-  title: 'High-Performance uPVC Window & Door Systems | Peenya Factory Direct',
-  description: '德国 uPVC profiles manufactured locally in Bangalore. Offering soundproofing (up to 40dB), thermal efficiency, waterproofing, and multi-point locks.',
+  title: 'High-Performance uPVC Window & Door Systems | Direct Factory Pricing',
+  description: 'Premium uPVC profiles manufactured locally in Bangalore. Offering soundproofing (up to 40dB), thermal efficiency, waterproofing, and multi-point locks.',
 };
 
 export default function UpvcOverviewPage() {

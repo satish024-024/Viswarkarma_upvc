@@ -23,7 +23,7 @@ export default function ProjectsPage() {
           Our Structural Showcase
         </h1>
         <p className="text-sm text-brand-muted leading-relaxed">
-          Explore actual customer sites where our Peenya factory team engineered and installed uPVC windows, panoramic aluminium sliding doors, and frameless glass balustrades.
+          Explore actual customer sites where our specialized in-house team engineered and installed uPVC windows, panoramic aluminium sliding doors, and frameless glass balustrades.
         </p>
       </div>
 

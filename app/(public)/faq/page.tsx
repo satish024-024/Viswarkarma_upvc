@@ -4,7 +4,7 @@ import { faqsList } from '@/lib/data/business';
 
 export const metadata = {
   title: 'Frequently Asked Questions | Daddy uPVC & Aluminium',
-  description: 'Find answers about uPVC vs aluminium window profiles, double-glazing specifications, sound insulation, Peenya manufacturing, and home installations.',
+  description: 'Find answers about uPVC vs aluminium window profiles, double-glazing specifications, sound insulation, in-house manufacturing, and home installations.',
 };
 
 export default function FAQPage() {

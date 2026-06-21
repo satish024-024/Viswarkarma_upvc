@@ -19,7 +19,7 @@ export default function ServiceAreasPage() {
           Areas We Serve Across Karnataka
         </h1>
         <p className="text-sm text-brand-muted leading-relaxed">
-          From our Peenya fabrication plant, we dispatch custom window sashes and technicians directly to building sites.
+          From our local fabrication plant, we dispatch custom window sashes and technicians directly to building sites.
         </p>
       </div>
 

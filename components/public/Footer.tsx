@@ -25,12 +25,12 @@ export default function Footer() {
             </div>
           </Link>
           <p className="text-xs text-slate-400 leading-relaxed">
-            With over {businessSettings.experienceYears} years of custom manufacturing experience, we specialize in high-performance windows, doors, mosquito meshes, and structural glass installations. Fabricated in Peenya and installed by experts.
+            With over {businessSettings.experienceYears} years of custom manufacturing experience, we specialize in high-performance windows, doors, mosquito meshes, and structural glass installations. Fabricated in our local facility and installed by experts.
           </p>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1 text-[11px] font-semibold text-white bg-slate-800 px-3 py-1 rounded-md border border-slate-700">
               <Award className="w-3.5 h-3.5 text-brand-secondary" />
-              <span>Peenya Factory Fabrication</span>
+              <span>Direct Factory Fabrication</span>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award, Compass, ShieldCheck, ShieldAlert, Sparkles, Factory, HeartHandshake } from 'lucide-react';
+import { ShieldCheck, Factory, HeartHandshake } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { businessSettings } from '@/lib/data/business';
 
@@ -30,9 +30,9 @@ export default function AboutPage() {
             <div className="w-10 h-10 rounded-lg bg-brand-light flex items-center justify-center text-brand-secondary">
               <Factory className="w-5 h-5" />
             </div>
-            <h3 className="font-bold text-base text-brand-primary">Peenya Factory Direct</h3>
+            <h3 className="font-bold text-base text-brand-primary">In-House Factory Direct</h3>
             <p className="text-xs text-brand-muted leading-relaxed">
-              We own and operate our fabrication facility in Peenya Industrial Area. By cutting out third-party dealers and distributors, we provide factory-direct savings and maintain absolute command over weld strength and frame tolerances.
+              We own and operate our dedicated Bangalore fabrication facility. By cutting out third-party dealers and distributors, we provide factory-direct savings and maintain absolute command over weld strength and frame tolerances.
             </p>
           </CardContent>
         </Card>
@@ -67,7 +67,7 @@ export default function AboutPage() {
         <div className="lg:col-span-8 space-y-4">
           <h2 className="text-2xl font-bold text-brand-primary tracking-tight">Our Manufacturing Standards</h2>
           <p className="text-xs sm:text-sm text-brand-muted leading-relaxed">
-            Every window system that leaves our Peenya plant undergoes checking for profile squareness, gasket fitment, and lock alignment. We reinforce our uPVC frames using galvanized steel reinforcement channels (minimum 1.5mm thickness) to guarantee our windows withstand gusting wind loads.
+            Every window system that leaves our local facility undergoes checking for profile squareness, gasket fitment, and lock alignment. We reinforce our uPVC frames using galvanized steel reinforcement channels (minimum 1.5mm thickness) to guarantee our windows withstand gusting wind loads.
           </p>
           <div className="flex flex-wrap gap-4 text-xs font-semibold text-brand-primary">
             <span className="flex items-center gap-1"><span className="text-brand-secondary">✔</span> Lead-Free Profiles</span>

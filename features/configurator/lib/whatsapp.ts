@@ -39,7 +39,7 @@ export function generateWhatsAppLink(state: ConfiguratorState, price: PriceBreak
 
 *Estimated Price Guide:*
 - Range: ${minPriceFormatted} to ${maxPriceFormatted}
-- Note: Final quote after measurement / hardware / glass confirmation.
+- Note: Final quote depends on site measurement, hardware, glass, and installation requirements.
 
 *Client Details:*
 - Client Name: ${state.customerName}

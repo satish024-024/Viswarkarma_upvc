@@ -1,12 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, ShieldCheck, DoorClosed } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
-  title: 'Aluminium Balcony Sliding & Fold Doors | Daddy Peenya',
-  description: 'Heavy-duty architectural aluminium balcony sliding doors, folding glass doors, and entrance doors. Custom manufactured at Peenya, Bangalore.',
+  title: 'Aluminium Balcony Sliding & Fold Doors | Daddy uPVC & Aluminium',
+  description: 'Heavy-duty architectural aluminium balcony sliding doors, folding glass doors, and entrance doors. Custom manufactured at our Bangalore facility.',
 };
 
 export default function AluminiumDoorsPage() {

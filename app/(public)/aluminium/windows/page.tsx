@@ -5,8 +5,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
-  title: 'Aluminium Windows | Slimline Sliding & Casement | Daddy Peenya',
-  description: 'Custom fabricated aluminium windows with slim profiles, heavy T6 alloys, and multi-point locking. Manufactured directly in Peenya, Bangalore.',
+  title: 'Aluminium Windows | Slimline Sliding & Casement | Daddy uPVC & Aluminium',
+  description: 'Custom fabricated aluminium windows with slim profiles, heavy T6 alloys, and multi-point locking. Manufactured directly at our Bangalore facility.',
 };
 
 export default function AluminiumWindowsPage() {

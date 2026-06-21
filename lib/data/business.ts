@@ -6,9 +6,9 @@ export const businessSettings: BusinessSettings = {
   phone: "+91 98860 12345",
   whatsapp: "+919886012345",
   email: "contact@daddyupvc.com",
-  address: "Plot No. 42, Peenya Industrial Area, 2nd Stage, Bengaluru, Karnataka 560058",
+  address: "Bangalore Fabrication Workshop & Office, Bengaluru, Karnataka, India",
   hours: "Monday - Saturday: 9:30 AM - 7:00 PM",
-  googleMapUrl: "https://maps.google.com/?q=Peenya+Industrial+Area+Bangalore",
+  googleMapUrl: "",
   experienceYears: 25
 };
 
@@ -178,7 +178,7 @@ export const faqsList: FAQ[] = [
   {
     id: "faq-2",
     question: "How long does a typical home installation take?",
-    answer: "Once site measurements are finalized, custom fabrication at our Peenya factory takes about 7 to 10 days. The actual installation of windows in your home is fast, typically completed within 1 to 2 days depending on the number of units. We ensure minimal disruption and clean up after the job.",
+    answer: "Once site measurements are finalized, custom fabrication at our local fabrication facility takes about 7 to 10 days. The actual installation of windows in your home is fast, typically completed within 1 to 2 days depending on the number of units. We ensure minimal disruption and clean up after the job.",
     category: "installation"
   },
   {

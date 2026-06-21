@@ -89,33 +89,33 @@ export const productSeries: ProductSeries[] = [
   // uPVC Series
   {
     id: "60mm_series",
-    name: "60mm Eco Series",
+    name: "60mm Series",
     family: "upvc",
-    description: "Standard 3-chamber profile system, ideal for budget-friendly residential installations.",
+    description: "Standard multi-chamber profile system.",
     thickness: "60mm",
     priceModifierPerSqFt: 0
   },
   {
     id: "80mm_series",
-    name: "80mm Premium Series",
+    name: "80mm Series",
     family: "upvc",
-    description: "Enhanced 4-chamber profile with deeper reinforcement, providing better sound insulation.",
+    description: "Medium width profile for enhanced structural stability.",
     thickness: "80mm",
     priceModifierPerSqFt: 60
   },
   {
     id: "88mm_series",
-    name: "88mm Architectural Series",
+    name: "88mm Series",
     family: "upvc",
-    description: "Premium 5-chamber design matching international standards for sound isolation.",
+    description: "Heavy-duty architectural profile width.",
     thickness: "88mm",
     priceModifierPerSqFt: 120
   },
   {
     id: "112mm_series",
-    name: "112mm Luxury Patio Series",
+    name: "112mm Series",
     family: "upvc",
-    description: "Heavy-duty multi-track system designed specifically for large glass spans and heavy-duty sliding panels.",
+    description: "Multi-track sliding profile configuration.",
     thickness: "112mm",
     priceModifierPerSqFt: 200
   },
@@ -123,25 +123,25 @@ export const productSeries: ProductSeries[] = [
   // Aluminium Series
   {
     id: "alu_50mm_series",
-    name: "50mm Slimline Series",
+    name: "50mm Series",
     family: "aluminium",
-    description: "Classic slim profile giving maximum glass area and minimalist aesthetic.",
+    description: "Standard slimline profile system.",
     thickness: "50mm",
     priceModifierPerSqFt: 0
   },
   {
     id: "alu_90mm_series",
-    name: "90mm Thermal Break Series",
+    name: "90mm Series",
     family: "aluminium",
-    description: "Heavy-duty thermally insulated profile that prevents heat conduction.",
+    description: "Thermally-broken profile system.",
     thickness: "90mm",
     priceModifierPerSqFt: 140
   },
   {
     id: "alu_120mm_series",
-    name: "120mm Lift-and-Slide Luxury",
+    name: "120mm Series",
     family: "aluminium",
-    description: "Super-premium lift-and-slide system designed for massive glass facades and smooth rolling operations.",
+    description: "Heavy-duty lift-and-slide profile configuration.",
     thickness: "120mm",
     priceModifierPerSqFt: 280
   }

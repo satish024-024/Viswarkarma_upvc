@@ -1,11 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, Award, Compass, ShieldCheck } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { ArrowRight } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
-  title: 'Architectural Aluminium Systems | Peenya factory direct | Daddy',
+  title: 'Architectural Aluminium Systems | Direct Factory Pricing | Daddy uPVC & Aluminium',
   description: 'Premium structural aluminium windows and doors with slim frames. Durable, powder-coated finishes, wind-load resistant, and thermally broken.',
 };
 

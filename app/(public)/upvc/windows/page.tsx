@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 
 export const metadata = {
   title: 'Custom uPVC Windows | sliding, Casement, & Tilt-Turn | Daddy',
-  description: 'Custom fabricated uPVC windows including 2/3 track sliding systems, openable casements, and fixed frames. Engineered in Peenya, Bangalore.',
+  description: 'Custom fabricated uPVC windows including 2/3 track sliding systems, openable casements, and fixed frames. Engineered in Bangalore.',
 };
 
 export default function UpvcWindowsPage() {

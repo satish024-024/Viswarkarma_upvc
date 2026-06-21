@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
-  title: 'Mosquito Mesh Screens & Systems | Daddy Peenya Bangalore',
+  title: 'Mosquito Mesh Screens & Systems | Daddy uPVC & Aluminium',
   description: 'Premium insect screening systems: Pleated mesh, sliding mesh, rolling screens, and high-strength SS304 rodent-proof grids. Custom sizes.',
 };
 

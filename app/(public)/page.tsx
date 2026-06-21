@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
   Phone, 
@@ -11,13 +11,16 @@ import {
   VolumeX, 
   Thermometer, 
   Droplets,
-  Sparkles
+  Sparkles,
+  Play
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { businessSettings, projectsList, testimonialsList } from '@/lib/data/business';
 
 export default function Homepage() {
+  const [activeHeroTab, setActiveHeroTab] = useState<'blueprint' | 'video'>('blueprint');
+  
   return (
     <div className="w-full space-y-16 sm:space-y-24 pb-20">
       
@@ -35,7 +38,7 @@ export default function Homepage() {
                 Architectural <span className="text-brand-secondary font-medium">uPVC & Aluminium</span> Windows and Doors
               </h1>
               <p className="text-base sm:text-lg text-brand-muted leading-relaxed max-w-xl">
-                We custom-fabricate high-performance window & door systems directly at our Peenya facility, ensuring precision insulation, soundproofing, and structural strength for your home.
+                We custom-fabricate high-performance window & door systems directly at our local fabrication workshop, ensuring precision insulation, soundproofing, and structural strength for your home.
               </p>
               
               {/* Primary Actions - Highly visible, no scroll needed */}
@@ -77,44 +80,106 @@ export default function Homepage() {
               </div>
             </div>
 
-            {/* Right: Technical Blueprint Visualizer representation */}
-            <div className="lg:col-span-5 relative flex justify-center">
-              <div className="relative w-full max-w-md bg-white border border-brand-border rounded-2xl p-6 shadow-xl aspect-square flex flex-col justify-between overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-brand-accent/30 rounded-bl-full flex items-center justify-center text-brand-secondary font-bold text-xs select-none">
-                  SCHEMATIC
-                </div>
-                <div className="space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-brand-secondary">SYSTEM PROFILE</span>
-                  <h3 className="text-lg font-extrabold text-brand-primary">Multi-Chamber uPVC</h3>
-                  <p className="text-xs text-brand-muted">Precision corner welding with galvanized steel core reinforcement.</p>
-                </div>
+            {/* Right: Technical Blueprint & Video Visualizer */}
+            <div className="lg:col-span-5 relative flex flex-col items-center">
+              <div className="w-full max-w-md bg-white border border-brand-border rounded-2xl p-6 shadow-xl aspect-square flex flex-col justify-between overflow-hidden relative">
                 
-                {/* SVG Blueprint */}
-                <div className="my-6 flex justify-center">
-                  <svg width="180" height="150" viewBox="0 0 100 80">
-                    <rect x="2" y="2" width="96" height="76" fill="none" stroke="#e2e8f0" strokeWidth="1" strokeDasharray="2,2" />
-                    {/* Outer frame */}
-                    <rect x="8" y="8" width="84" height="64" fill="none" stroke="#1e3d59" strokeWidth="4" />
-                    {/* Inner vertical slider mullion */}
-                    <line x1="50" y1="8" x2="50" y2="72" stroke="#1e3d59" strokeWidth="3" />
-                    {/* Glass reflections */}
-                    <path d="M22 25 L34 25" stroke="#cbd5e1" strokeWidth="0.75" />
-                    <path d="M25 21 L31 21" stroke="#cbd5e1" strokeWidth="0.75" />
-                    <path d="M64 45 L76 45" stroke="#cbd5e1" strokeWidth="0.75" />
-                    <path d="M67 41 L73 41" stroke="#cbd5e1" strokeWidth="0.75" />
-                    {/* Hardware latch */}
-                    <circle cx="48" cy="40" r="1.5" fill="#64748b" />
-                    <line x1="48" y1="40" x2="48" y2="46" stroke="#64748b" strokeWidth="1" />
-                    {/* Double-glazing spacer icon in corner */}
-                    <rect x="12" y="12" width="8" height="8" fill="#f1f5f9" stroke="#94a3b8" strokeWidth="0.5" />
-                    <line x1="16" y1="12" x2="16" y2="20" stroke="#94a3b8" strokeWidth="0.5" />
-                  </svg>
+                {/* Header Tabs */}
+                <div className="flex justify-between items-center border-b border-brand-border pb-3">
+                  <div className="flex gap-1.5 bg-slate-100 p-0.5 rounded-lg">
+                    <button
+                      onClick={() => setActiveHeroTab('blueprint')}
+                      className={`px-3 py-1 rounded-md text-[10px] font-bold transition-all ${
+                        activeHeroTab === 'blueprint'
+                          ? 'bg-white text-brand-primary shadow-xs'
+                          : 'text-brand-muted hover:text-brand-primary'
+                      }`}
+                    >
+                      SCHEMATIC
+                    </button>
+                    <button
+                      onClick={() => setActiveHeroTab('video')}
+                      className={`px-3 py-1 rounded-md text-[10px] font-bold transition-all ${
+                        activeHeroTab === 'video'
+                          ? 'bg-white text-brand-primary shadow-xs'
+                          : 'text-brand-muted hover:text-brand-primary'
+                      }`}
+                    >
+                      FACTORY TOUR
+                    </button>
+                  </div>
+                  <span className="text-[9px] font-extrabold uppercase tracking-wider text-brand-secondary bg-brand-accent px-2 py-0.5 rounded">
+                    {activeHeroTab === 'blueprint' ? 'System Profile' : 'In Production'}
+                  </span>
                 </div>
 
-                <div className="flex justify-between items-center text-[10px] font-semibold text-brand-muted border-t border-brand-light pt-3">
-                  <span>Acoustic Isolation: 38dB</span>
-                  <span>Wind Load: 1500 Pascal</span>
-                </div>
+                {activeHeroTab === 'blueprint' ? (
+                  <>
+                    <div className="space-y-1 mt-3">
+                      <h3 className="text-base font-extrabold text-brand-primary">Multi-Chamber uPVC Profile</h3>
+                      <p className="text-xs text-brand-muted">Precision corner welding with galvanized steel core reinforcement.</p>
+                    </div>
+                    
+                    {/* SVG Blueprint */}
+                    <div className="my-6 flex justify-center">
+                      <svg width="180" height="130" viewBox="0 0 100 80">
+                        <rect x="2" y="2" width="96" height="76" fill="none" stroke="#e2e8f0" strokeWidth="1" strokeDasharray="2,2" />
+                        {/* Outer frame */}
+                        <rect x="8" y="8" width="84" height="64" fill="none" stroke="#1e3d59" strokeWidth="4" />
+                        {/* Inner vertical slider mullion */}
+                        <line x1="50" y1="8" x2="50" y2="72" stroke="#1e3d59" strokeWidth="3" />
+                        {/* Glass reflections */}
+                        <path d="M22 25 L34 25" stroke="#cbd5e1" strokeWidth="0.75" />
+                        <path d="M25 21 L31 21" stroke="#cbd5e1" strokeWidth="0.75" />
+                        <path d="M64 45 L76 45" stroke="#cbd5e1" strokeWidth="0.75" />
+                        <path d="M67 41 L73 41" stroke="#cbd5e1" strokeWidth="0.75" />
+                        {/* Hardware latch */}
+                        <circle cx="48" cy="40" r="1.5" fill="#64748b" />
+                        <line x1="48" y1="40" x2="48" y2="46" stroke="#64748b" strokeWidth="1" />
+                        {/* Double-glazing spacer icon in corner */}
+                        <rect x="12" y="12" width="8" height="8" fill="#f1f5f9" stroke="#94a3b8" strokeWidth="0.5" />
+                        <line x1="16" y1="12" x2="16" y2="20" stroke="#94a3b8" strokeWidth="0.5" />
+                      </svg>
+                    </div>
+
+                    <div className="flex justify-between items-center text-[10px] font-semibold text-brand-muted border-t border-brand-light pt-3">
+                      <span>Acoustic Isolation: 38dB</span>
+                      <span>Wind Load: 1500 Pascal</span>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="space-y-1 mt-3">
+                      <h3 className="text-base font-extrabold text-brand-primary">Precision Manufacturing</h3>
+                      <p className="text-xs text-brand-muted">Watch how our sliding tracks and steel reinforcement are put together.</p>
+                    </div>
+
+                    {/* Premium Video Placeholder Slot */}
+                    <div className="my-4 bg-slate-900 rounded-xl relative overflow-hidden aspect-video flex flex-col items-center justify-center border border-slate-800 group cursor-pointer shadow-inner">
+                      {/* Grid overlay for texture */}
+                      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:1rem_1rem] opacity-30" />
+                      
+                      {/* Dark gradient filter */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
+                      
+                      {/* Play Button Action */}
+                      <div className="relative z-10 w-12 h-12 rounded-full bg-white/95 text-brand-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <Play className="w-5 h-5 fill-brand-primary ml-0.5" />
+                      </div>
+                      
+                      {/* Video Caption info */}
+                      <div className="absolute bottom-3 left-3 right-3 text-left z-10">
+                        <span className="text-[9px] font-bold text-brand-secondary block uppercase tracking-wider">Video Guide</span>
+                        <span className="text-xs font-semibold text-white block mt-0.5">Bangalore Workshop Tour (1:45)</span>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between items-center text-[10px] font-semibold text-brand-muted border-t border-brand-light pt-3">
+                      <span>Corner Fusion Welding</span>
+                      <span>CNC Profile Cutting</span>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
@@ -138,8 +203,8 @@ export default function Homepage() {
             <span className="block text-xs uppercase tracking-wider text-slate-300">In-house Installation</span>
           </div>
           <div className="space-y-1 border-l border-slate-700/60 pl-4">
-            <span className="block text-3xl font-extrabold text-brand-secondary">Peenya</span>
-            <span className="block text-xs uppercase tracking-wider text-slate-300">Local Factory</span>
+            <span className="block text-3xl font-extrabold text-brand-secondary">Bangalore</span>
+            <span className="block text-xs uppercase tracking-wider text-slate-300">Local Workshop</span>
           </div>
         </div>
       </section>
@@ -225,7 +290,7 @@ export default function Homepage() {
                 </div>
                 <div>
                   <span className="font-bold text-sm text-brand-primary block">In-house Custom Fabrication</span>
-                  <span className="text-xs text-brand-muted block mt-0.5">Profiles are reinforced with rust-resistant steel sashes and corner-welded inside our Peenya manufacturing facility.</span>
+                  <span className="text-xs text-brand-muted block mt-0.5">Profiles are reinforced with rust-resistant steel sashes and corner-welded inside our local fabrication facility.</span>
                 </div>
               </div>
               <div className="flex gap-4">
@@ -440,7 +505,7 @@ export default function Homepage() {
                 </div>
               </div>
               <div className="text-[10px] text-slate-500 leading-relaxed text-center">
-                Includes Peenya fabrication, weather sealing & installation setup.
+                Includes custom local fabrication, weather sealing & installation setup.
               </div>
             </div>
           </div>

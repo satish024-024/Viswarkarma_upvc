@@ -342,7 +342,12 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                         <div className="grid grid-cols-2 gap-4">
                           <button
                             type="button"
-                            onClick={() => setState(prev => ({ ...prev, family: 'upvc' }))}
+                            onClick={() => setState(prev => ({ 
+                              ...prev, 
+                              family: 'upvc',
+                              typeId: 'sliding_window',
+                              seriesId: '60mm_series'
+                            }))}
                             className={`p-4 rounded-xl border-2 text-left transition-all duration-300 cursor-pointer ${
                               state.family === 'upvc'
                                 ? 'border-brand-primary bg-blue-50/20'
@@ -354,7 +359,12 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                           </button>
                           <button
                             type="button"
-                            onClick={() => setState(prev => ({ ...prev, family: 'aluminium' }))}
+                            onClick={() => setState(prev => ({ 
+                              ...prev, 
+                              family: 'aluminium',
+                              typeId: 'alu_sliding_window',
+                              seriesId: 'alu_50mm_series'
+                            }))}
                             className={`p-4 rounded-xl border-2 text-left transition-all duration-300 cursor-pointer ${
                               state.family === 'aluminium'
                                 ? 'border-brand-primary bg-blue-50/20'
@@ -421,11 +431,6 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                                 </span>
                               </div>
                               <p className="text-xs text-brand-muted leading-relaxed">{series.description}</p>
-                            </div>
-                            <div className="text-right flex-shrink-0">
-                              <span className="text-xs font-semibold text-brand-secondary">
-                                {series.priceModifierPerSqFt === 0 ? "Standard Base" : `+ ₹${series.priceModifierPerSqFt}/sq.ft.`}
-                              </span>
                             </div>
                           </button>
                         ))}
@@ -550,7 +555,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                         >
                           {glassOptions.map(g => (
                             <option key={g.id} value={g.id}>
-                              {g.name} {g.priceModifierPerSqFt > 0 ? `(+ ₹${g.priceModifierPerSqFt}/sq.ft.)` : ''}
+                              {g.name}
                             </option>
                           ))}
                         </Select>
@@ -567,7 +572,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                         >
                           {meshOptions.map(m => (
                             <option key={m.id} value={m.id}>
-                              {m.name} {m.priceModifierPerSqFt > 0 ? `(+ ₹${m.priceModifierPerSqFt}/sq.ft.)` : ''}
+                              {m.name}
                             </option>
                           ))}
                         </Select>
@@ -584,7 +589,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                         >
                           {hardwareOptions.map(h => (
                             <option key={h.id} value={h.id}>
-                              {h.name} {h.priceModifierPerUnit > 0 ? `(+ ₹${h.priceModifierPerUnit}/unit)` : ''}
+                              {h.name}
                             </option>
                           ))}
                         </Select>
@@ -680,8 +685,8 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                         <div className="text-3xl font-extrabold text-brand-primary tracking-tight">
                           {formatINR(priceBreakdown.estimatedMinTotal)} - {formatINR(priceBreakdown.estimatedMaxTotal)}
                         </div>
-                        <p className="text-[10px] text-brand-muted font-medium max-w-sm mx-auto leading-relaxed">
-                          *Estimated price guide. Final quote will be calculated after our surveyor completes site measurement and your lock/hardware/glass specs are finalized.
+                        <p className="text-[10px] text-brand-muted font-semibold max-w-sm mx-auto leading-relaxed">
+                          * Final quote depends on site measurement, hardware, glass, and installation requirements.
                         </p>
                       </div>
 
@@ -736,7 +741,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                       <div className="p-4 rounded-lg bg-blue-50/50 border border-blue-100 flex items-start gap-2.5">
                         <Shield className="w-5 h-5 text-brand-secondary flex-shrink-0 mt-0.5" />
                         <p className="text-[11px] text-brand-primary font-medium leading-relaxed">
-                          Your quote includes our Peenya factory fabrication warranty, genuine weather-grade silicon sealing, and professional structural anchoring.
+                          Your quote includes our factory-direct fabrication warranty, genuine weather-grade silicon sealing, and professional structural anchoring.
                         </p>
                       </div>
                     </div>
@@ -759,13 +764,18 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                     Next <ChevronRight className="w-4 h-4" />
                   </Button>
                 ) : (
-                  <div className="flex flex-col sm:flex-row gap-3 w-full justify-between items-center">
-                    <Button variant="secondary" onClick={() => setCurrentStep(1)} className="w-full sm:w-auto">
-                      Start Over
-                    </Button>
-                    <Button onClick={handleWhatsAppSubmit} className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center gap-2">
-                      <Send className="w-4 h-4" /> Send Enquiry on WhatsApp
-                    </Button>
+                  <div className="w-full space-y-3">
+                    <div className="flex flex-col sm:flex-row gap-3 w-full justify-between items-center">
+                      <Button variant="secondary" onClick={() => setCurrentStep(1)} className="w-full sm:w-auto">
+                        Start Over
+                      </Button>
+                      <Button onClick={handleWhatsAppSubmit} className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center gap-2">
+                        <Send className="w-4 h-4" /> Send Enquiry on WhatsApp
+                      </Button>
+                    </div>
+                    <p className="text-[10px] text-brand-muted text-center leading-relaxed font-semibold">
+                      * Final quote depends on site measurement, hardware, glass, and installation requirements.
+                    </p>
                   </div>
                 )}
               </div>
