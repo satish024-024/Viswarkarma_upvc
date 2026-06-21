@@ -1,245 +1,145 @@
 "use client";
-
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Phone, MessageSquare, Menu, X, ChevronDown, Sparkles } from 'lucide-react';
 import { businessSettings } from '@/lib/data/business';
 
-const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'About', href: '/about' },
+const NAV = [
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/about' },
   {
-    name: 'uPVC',
-    href: '/upvc',
-    submenu: [
-      { name: 'Overview', href: '/upvc' },
-      { name: 'Windows', href: '/upvc/windows' },
-      { name: 'Doors', href: '/upvc/doors' },
+    label: 'uPVC', href: '/upvc',
+    sub: [
+      { label: 'Overview', href: '/upvc' },
+      { label: 'Windows', href: '/upvc/windows' },
+      { label: 'Doors', href: '/upvc/doors' },
     ],
   },
   {
-    name: 'Aluminium',
-    href: '/aluminium',
-    submenu: [
-      { name: 'Overview', href: '/aluminium' },
-      { name: 'Windows', href: '/aluminium/windows' },
-      { name: 'Doors', href: '/aluminium/doors' },
+    label: 'Aluminium', href: '/aluminium',
+    sub: [
+      { label: 'Overview', href: '/aluminium' },
+      { label: 'Windows', href: '/aluminium/windows' },
+      { label: 'Doors', href: '/aluminium/doors' },
     ],
   },
-  { name: 'Mosquito Mesh', href: '/mesh/mosquito-mesh' },
+  { label: 'Mosquito Mesh', href: '/mesh/mosquito-mesh' },
   {
-    name: 'Glass Work',
-    href: '/glass-railing',
-    submenu: [
-      { name: 'Glass Railings', href: '/glass-railing' },
-      { name: 'Elevation Glass', href: '/elevation-work' },
+    label: 'Glass Work', href: '/glass-railing',
+    sub: [
+      { label: 'Glass Railings', href: '/glass-railing' },
+      { label: 'Elevation Glass', href: '/elevation-work' },
     ],
   },
-  { name: 'Projects', href: '/projects' },
-  { name: 'Contact', href: '/contact' },
+  { label: 'Projects', href: '/projects' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const [drop, setDrop] = useState<string | null>(null);
+  const path = usePathname();
 
-  const isActive = (href: string) => {
-    if (href === '/' && pathname !== '/') return false;
-    return pathname.startsWith(href);
-  };
-
-  const hasActiveChild = (item: { submenu?: { href: string }[] }) =>
-    item.submenu?.some((s) => isActive(s.href)) ?? false;
+  const active = (href: string) =>
+    href === '/' ? path === '/' : path.startsWith(href);
 
   return (
-    <header className="sticky top-0 z-50 bg-white/98 backdrop-blur-md border-b border-slate-200 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-[68px]">
+    <header className="sticky top-0 z-50 bg-white border-b border-[#E2D9C8] shadow-[0_1px_8px_rgba(184,150,62,0.08)]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
 
-          {/* ── Logo ── */}
-          <Link href="/" className="flex items-center gap-3 group flex-shrink-0">
-            <div className="w-9 h-9 rounded-lg bg-slate-950 border border-gold/50 flex items-center justify-center text-gold font-black text-base transition-all duration-200 group-hover:border-gold group-hover:shadow-[0_0_12px_rgba(197,168,128,0.25)]">
-              V
-            </div>
-            <div className="leading-none">
-              <span className="text-[15px] font-black text-slate-950 block tracking-tight">Viswarkarma</span>
-              <span className="text-[9px] font-bold text-gold block uppercase tracking-[0.15em] mt-0.5">uPVC & Aluminium</span>
-            </div>
-          </Link>
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
+          <div className="w-9 h-9 rounded-lg bg-[#FAF4E6] border border-[#D4AF6A] flex items-center justify-center font-black text-[#B8963E] text-base transition-all group-hover:bg-[#F0E3C0]">
+            V
+          </div>
+          <div className="leading-none">
+            <span className="block text-[15px] font-black text-[#1C160C] tracking-tight">Viswarkarma</span>
+            <span className="block text-[9px] font-bold text-[#B8963E] uppercase tracking-[0.14em] mt-0.5">uPVC & Aluminium</span>
+          </div>
+        </Link>
 
-          {/* ── Desktop Nav ── */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {navigation.map((item) => {
-              if (item.submenu) {
-                const active = hasActiveChild(item);
-                return (
-                  <div
-                    key={item.name}
-                    className="relative"
-                    onMouseEnter={() => setActiveDropdown(item.name)}
-                    onMouseLeave={() => setActiveDropdown(null)}
-                  >
-                    <button
-                      type="button"
-                      className={`inline-flex items-center gap-1 text-[13px] font-semibold px-3 py-2 rounded-md transition-all duration-150 cursor-pointer ${
-                        active
-                          ? 'text-slate-950 bg-gold/10'
-                          : 'text-slate-500 hover:text-slate-950 hover:bg-slate-50'
-                      }`}
-                    >
-                      {item.name}
-                      <ChevronDown className={`w-3 h-3 transition-transform ${activeDropdown === item.name ? 'rotate-180' : ''}`} />
-                    </button>
-
-                    {activeDropdown === item.name && (
-                      <div className="absolute top-full left-0 mt-1 w-44 bg-white border border-slate-200 rounded-xl shadow-xl py-1.5 z-50">
-                        {item.submenu.map((sub) => (
-                          <Link
-                            key={sub.name}
-                            href={sub.href}
-                            className={`block px-4 py-2 text-[12px] font-medium transition-colors ${
-                              isActive(sub.href)
-                                ? 'text-slate-950 font-bold bg-gold/10'
-                                : 'text-slate-600 hover:text-slate-950 hover:bg-slate-50'
-                            }`}
-                          >
-                            {sub.name}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                );
-              }
-
+        {/* Desktop Nav */}
+        <nav className="hidden lg:flex items-center gap-0.5">
+          {NAV.map((item) => {
+            if (item.sub) {
+              const childActive = item.sub.some((s) => active(s.href));
               return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`text-[13px] font-semibold px-3 py-2 rounded-md transition-all duration-150 ${
-                    isActive(item.href)
-                      ? 'text-slate-950 bg-gold/10'
-                      : 'text-slate-500 hover:text-slate-950 hover:bg-slate-50'
-                  }`}
-                >
-                  {item.name}
-                </Link>
+                <div key={item.label} className="relative" onMouseEnter={() => setDrop(item.label)} onMouseLeave={() => setDrop(null)}>
+                  <button className={`inline-flex items-center gap-1 px-3 py-2 rounded-lg text-[13px] font-semibold transition-colors ${childActive ? 'text-[#B8963E] bg-[#FAF4E6]' : 'text-[#4A3F2F] hover:text-[#B8963E] hover:bg-[#FAF4E6]'}`}>
+                    {item.label}
+                    <ChevronDown className={`w-3 h-3 transition-transform ${drop === item.label ? 'rotate-180' : ''}`} />
+                  </button>
+                  {drop === item.label && (
+                    <div className="absolute top-full left-0 mt-1 w-44 bg-white border border-[#E2D9C8] rounded-xl shadow-lg py-1.5 z-50">
+                      {item.sub.map((s) => (
+                        <Link key={s.href} href={s.href} className={`block px-4 py-2 text-[12px] font-medium transition-colors ${active(s.href) ? 'text-[#B8963E] font-bold bg-[#FAF4E6]' : 'text-[#4A3F2F] hover:bg-[#FAF4E6] hover:text-[#B8963E]'}`}>
+                          {s.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               );
-            })}
-          </nav>
+            }
+            return (
+              <Link key={item.href} href={item.href} className={`px-3 py-2 rounded-lg text-[13px] font-semibold transition-colors ${active(item.href) ? 'text-[#B8963E] bg-[#FAF4E6]' : 'text-[#4A3F2F] hover:text-[#B8963E] hover:bg-[#FAF4E6]'}`}>
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
 
-          {/* ── Desktop CTA ── */}
-          <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
-            <a
-              href={`tel:${businessSettings.phone}`}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-bold text-slate-600 hover:text-slate-950 hover:bg-slate-50 transition-all"
-            >
-              <Phone className="w-3.5 h-3.5" />
-              Call
-            </a>
-            <a
-              href={`https://wa.me/${businessSettings.whatsapp.replace(/\D/g, '')}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-bold text-emerald-600 hover:bg-emerald-50 transition-all"
-            >
-              <MessageSquare className="w-3.5 h-3.5" />
-              WhatsApp
-            </a>
-            <Link
-              href="/quote"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] font-bold bg-slate-950 hover:bg-gold text-white hover:text-slate-950 transition-all duration-200 border border-transparent hover:border-gold/50 shadow-sm"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              Get Estimate
-            </Link>
-          </div>
+        {/* Desktop CTAs */}
+        <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
+          <a href={`tel:${businessSettings.phone}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-bold text-[#4A3F2F] hover:text-[#B8963E] rounded-lg hover:bg-[#FAF4E6] transition-all">
+            <Phone className="w-3.5 h-3.5" /> Call
+          </a>
+          <a href={`https://wa.me/${businessSettings.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-bold text-emerald-700 hover:bg-emerald-50 rounded-lg transition-all">
+            <MessageSquare className="w-3.5 h-3.5" /> WhatsApp
+          </a>
+          <Link href="/quote" className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] font-bold bg-[#B8963E] hover:bg-[#9A7C2E] text-white transition-all shadow-sm">
+            <Sparkles className="w-3.5 h-3.5" /> Get Estimate
+          </Link>
+        </div>
 
-          {/* ── Mobile triggers ── */}
-          <div className="lg:hidden flex items-center gap-2">
-            <a
-              href={`tel:${businessSettings.phone}`}
-              className="p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
-            >
-              <Phone className="w-4 h-4" />
-            </a>
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
-            >
-              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
+        {/* Mobile hamburger */}
+        <div className="lg:hidden flex items-center gap-2">
+          <a href={`tel:${businessSettings.phone}`} className="p-2 rounded-lg border border-[#E2D9C8] text-[#4A3F2F]">
+            <Phone className="w-4 h-4" />
+          </a>
+          <button onClick={() => setOpen(!open)} className="p-2 rounded-lg border border-[#E2D9C8] text-[#4A3F2F]">
+            {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
       </div>
 
-      {/* ── Mobile Drawer ── */}
-      {isOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-white pt-[68px] overflow-y-auto">
-          <div className="px-4 py-6 space-y-1">
-            {navigation.map((item) => {
-              if (item.submenu) {
-                return (
-                  <div key={item.name} className="space-y-1">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-3 pt-3 pb-1">
-                      {item.name}
-                    </p>
-                    {item.submenu.map((sub) => (
-                      <Link
-                        key={sub.name}
-                        href={sub.href}
-                        onClick={() => setIsOpen(false)}
-                        className={`block px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                          isActive(sub.href)
-                            ? 'text-slate-950 bg-gold/10 font-bold'
-                            : 'text-slate-600 hover:bg-slate-50'
-                        }`}
-                      >
-                        {sub.name}
-                      </Link>
-                    ))}
-                  </div>
-                );
-              }
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`block px-4 py-2.5 rounded-xl text-sm font-bold transition-colors ${
-                    isActive(item.href)
-                      ? 'text-slate-950 bg-gold/10'
-                      : 'text-slate-600 hover:bg-slate-50'
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              );
-            })}
-
-            {/* Mobile CTA block */}
-            <div className="pt-6 border-t border-slate-100 space-y-3 mt-4">
-              <a
-                href={`tel:${businessSettings.phone}`}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-slate-200 text-slate-700 font-bold text-sm"
-              >
+      {/* Mobile Drawer */}
+      {open && (
+        <div className="lg:hidden fixed inset-0 z-40 bg-white pt-16 overflow-y-auto">
+          <div className="px-4 py-5 space-y-1">
+            {NAV.map((item) => item.sub ? (
+              <div key={item.label}>
+                <p className="text-[10px] font-black uppercase tracking-widest text-[#B8A898] px-3 pt-4 pb-1">{item.label}</p>
+                {item.sub.map((s) => (
+                  <Link key={s.href} href={s.href} onClick={() => setOpen(false)} className={`block px-4 py-2.5 rounded-xl text-sm font-semibold ${active(s.href) ? 'text-[#B8963E] bg-[#FAF4E6]' : 'text-[#4A3F2F]'}`}>
+                    {s.label}
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className={`block px-4 py-2.5 rounded-xl text-sm font-bold ${active(item.href) ? 'text-[#B8963E] bg-[#FAF4E6]' : 'text-[#4A3F2F]'}`}>
+                {item.label}
+              </Link>
+            ))}
+            <div className="pt-5 border-t border-[#E2D9C8] mt-3 space-y-3">
+              <a href={`tel:${businessSettings.phone}`} className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[#E2D9C8] text-[#4A3F2F] font-bold text-sm">
                 <Phone className="w-4 h-4" /> {businessSettings.phone}
               </a>
-              <a
-                href={`https://wa.me/${businessSettings.whatsapp.replace(/\D/g, '')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 font-bold text-sm"
-              >
+              <a href={`https://wa.me/${businessSettings.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 font-bold text-sm">
                 <MessageSquare className="w-4 h-4" /> Message on WhatsApp
               </a>
-              <Link
-                href="/quote"
-                onClick={() => setIsOpen(false)}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-slate-950 text-white font-bold text-sm"
-              >
+              <Link href="/quote" onClick={() => setOpen(false)} className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#B8963E] text-white font-bold text-sm">
                 <Sparkles className="w-4 h-4" /> Get Home Estimate
               </Link>
             </div>

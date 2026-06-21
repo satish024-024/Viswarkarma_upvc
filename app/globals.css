@@ -1,67 +1,95 @@
 @import "tailwindcss";
 
+/* ─── IVORY + GOLD DESIGN TOKENS ─────────────────────────────────── */
 :root {
-  --background: #fafafa;
-  --foreground: #0a0a0a;
-  
-  --primary: #171717;
-  --primary-hover: #262626;
-  --secondary: #525252;
-  --secondary-hover: #404040;
-  --muted: #737373;
-  --muted-light: #d4d4d4;
-  --border: #e5e5e5;
-  --card: #ffffff;
-  --card-hover: #fafafa;
-  --accent: #f5f5f5;
-  --accent-text: #171717;
-  
-  --gold: #c5a880;
-  --gold-hover: #b4966e;
-  --gold-light: #fcfaf7;
+  /* Backgrounds — warm whites */
+  --bg-ivory:   #FDFBF6;   /* main page bg */
+  --bg-cream:   #F8F4EC;   /* alternate section bg */
+  --bg-warm:    #F2EBD9;   /* deeper cream for cards/highlights */
+  --bg-white:   #FFFFFF;   /* pure white cards */
+
+  /* Gold palette */
+  --gold:       #B8963E;   /* primary gold */
+  --gold-rich:  #9A7C2E;   /* darker for hover */
+  --gold-light: #D4AF6A;   /* lighter gold text */
+  --gold-pale:  #F0E3C0;   /* pale gold tint bg */
+  --gold-faint: #FAF4E6;   /* very faint gold bg */
+
+  /* Text */
+  --text-heading: #1C160C;  /* near-black warm */
+  --text-body:    #4A3F2F;  /* warm brown-gray */
+  --text-muted:   #8C7B68;  /* muted warm */
+  --text-faint:   #B8A898;  /* very faint */
+
+  /* Borders */
+  --border:       #E2D9C8;  /* warm cream border */
+  --border-gold:  #D4AF6A;  /* gold border */
+
+  /* Semantic (kept for backwards compat) */
+  --background:   var(--bg-ivory);
+  --foreground:   var(--text-heading);
+  --primary:      var(--gold);
+  --primary-hover:var(--gold-rich);
+  --secondary:    var(--text-body);
+  --muted:        var(--text-muted);
+  --border-color: var(--border);
+  --card:         var(--bg-white);
 }
 
 @theme {
-  --font-sans: var(--font-geist-sans), sans-serif;
+  --font-sans: var(--font-geist-sans), 'Inter', sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
-  
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-brand-primary: var(--primary);
-  --color-brand-primary-hover: var(--primary-hover);
-  --color-brand-secondary: var(--secondary);
-  --color-brand-secondary-hover: var(--secondary-hover);
-  --color-brand-muted: var(--muted);
-  --color-brand-muted-light: var(--muted-light);
-  --color-brand-border: var(--border);
-  --color-brand-card: var(--card);
-  --color-brand-card-hover: var(--card-hover);
-  --color-brand-accent: var(--accent);
-  --color-brand-accent-text: var(--accent-text);
-  
-  --color-gold: var(--gold);
-  --color-gold-hover: var(--gold-hover);
+
+  /* Background utilities */
+  --color-ivory:  var(--bg-ivory);
+  --color-cream:  var(--bg-cream);
+  --color-warm:   var(--bg-warm);
+
+  /* Gold utilities */
+  --color-gold:       var(--gold);
+  --color-gold-rich:  var(--gold-rich);
   --color-gold-light: var(--gold-light);
+  --color-gold-pale:  var(--gold-pale);
+  --color-gold-faint: var(--gold-faint);
+
+  /* Text utilities */
+  --color-heading: var(--text-heading);
+  --color-body:    var(--text-body);
+  --color-muted:   var(--text-muted);
+  --color-faint:   var(--text-faint);
+
+  /* Border utilities */
+  --color-border:      var(--border);
+  --color-border-gold: var(--border-gold);
+
+  /* Backwards-compat brand tokens */
+  --color-background:          var(--bg-ivory);
+  --color-foreground:          var(--text-heading);
+  --color-brand-primary:       var(--gold);
+  --color-brand-primary-hover: var(--gold-rich);
+  --color-brand-secondary:     var(--text-body);
+  --color-brand-muted:         var(--text-muted);
+  --color-brand-muted-light:   var(--text-faint);
+  --color-brand-border:        var(--border);
+  --color-brand-card:          var(--bg-white);
+  --color-brand-accent:        var(--gold-faint);
+  --color-brand-accent-text:   var(--text-heading);
+
+  /* Legacy (keep to avoid compile errors in other files) */
+  --color-gold-hover: var(--gold-rich);
+  --color-gold-light-bg: var(--gold-faint);
 }
 
+/* ─── BASE ──────────────────────────────────────────────────────── */
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--bg-ivory);
+  color: var(--text-heading);
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Custom premium scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--background);
-}
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
+/* ─── SCROLLBAR ─────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-cream); }
+::-webkit-scrollbar-thumb { background: var(--gold-pale); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-light); }
