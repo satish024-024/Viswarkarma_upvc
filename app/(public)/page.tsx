@@ -56,12 +56,15 @@ export default function Homepage() {
               <Award className="w-3.5 h-3.5" /> 25+ Years · Family-Run · Bangalore
             </span>
 
-            <h1 className="text-4xl sm:text-5xl font-black text-[#1C160C] tracking-tight leading-[1.1]">
-              Premium <span className="text-[#B8963E]">uPVC & Aluminium</span> Windows & Doors for Your Whole Home
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1C160C] tracking-tight leading-[1.15]">
+              Bespoke <span className="text-[#B8963E]">uPVC & Aluminium</span> Systems
+              <span className="block mt-2 text-2xl sm:text-3xl lg:text-4xl font-light text-[#4A3F2F] leading-tight">
+                Engineered for Bangalore&apos;s <span className="text-[#B8963E] font-serif italic font-semibold">Finest Residences</span>
+              </span>
             </h1>
 
             <p className="text-[#4A3F2F] text-base leading-relaxed max-w-xl">
-              We measure, fabricate, and install complete window & door solutions for entire homes — custom-made in our Bangalore workshop. No middlemen. One team, end-to-end.
+              We engineer, custom-fabricate, and precision-install complete window and door systems for prestigious homes. Handcrafted in our Bangalore workshop with zero middlemen, ensuring unmatched security, acoustics, and elegance.
             </p>
 
             <div className="flex flex-wrap gap-3">
