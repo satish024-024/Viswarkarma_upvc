@@ -47,12 +47,15 @@ export default function Homepage() {
     <div className="w-full">
 
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="bg-gradient-to-br from-[#F4F8FB] via-[#EEF5FA] to-[#E7F0F7] border-b border-border-soft">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-          {/* Copy */}
-          <div className="space-y-7">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#8FB1C9] bg-gold-faint text-gold text-xs font-bold uppercase tracking-wider">
+      <section className="relative bg-gradient-to-br from-[#F4F8FB] via-[#EEF5FA] to-[#E7F0F7] border-b border-border-soft overflow-hidden pt-12 pb-24 sm:pb-32">
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 opacity-[0.4]" style={{ backgroundImage: 'radial-gradient(#D5E0E8 1.5px, transparent 1.5px)', backgroundSize: '24px 24px' }}></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          {/* Left Column (Copy) */}
+          <div className="lg:col-span-7 space-y-7">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#8FB1C9] bg-gold-faint text-gold text-xs font-bold uppercase tracking-wider shadow-sm">
               <Award className="w-3.5 h-3.5 text-gold-light" /> 25+ Years · Family-Run · Rajahmundry HQ · Pan-India
             </span>
 
@@ -63,7 +66,7 @@ export default function Homepage() {
               </span>
             </h1>
 
-            <p className="text-body text-base leading-relaxed max-w-xl">
+            <p className="text-body text-base sm:text-lg leading-relaxed max-w-2xl">
               We engineer, custom-fabricate, and precision-install complete window and door systems for prestigious homes. Handcrafted in our Rajahmundry workshop and installed anywhere in India with zero middlemen, ensuring unmatched security, acoustics, and elegance.
             </p>
 
@@ -79,8 +82,8 @@ export default function Homepage() {
               </a>
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
-              {['Free Site Measurement', '20-Year Profile Warranty', 'Whole-Home Pricing', 'German Multi-Point Locks'].map((f) => (
+            <div className="flex flex-wrap gap-x-6 gap-y-3 pt-6 border-t border-border/60">
+              {['Free Site Measurement', '20-Year Profile Warranty', 'German Multi-Point Locks', 'Whole-Home Pricing'].map((f) => (
                 <div key={f} className="flex items-center gap-2 text-xs font-semibold text-body">
                   <CheckCircle2 className="w-3.5 h-3.5 text-gold-light flex-shrink-0" /> {f}
                 </div>
@@ -88,34 +91,48 @@ export default function Homepage() {
             </div>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 gap-4">
-            {[
-              { n: '25+',   l: 'Years of Experience', s: 'Family-run since 1999', bg: 'bg-white' },
-              { n: '5,000+', l: 'Windows Installed',   s: 'Across AP & Pan-India', bg: 'bg-warm' },
-              { n: '100%',  l: 'In-house Fabrication', s: 'No middlemen or resellers', bg: 'bg-warm' },
-              { n: 'Free',  l: 'Site Measurement',     s: 'We come to you at no cost', bg: 'bg-white' },
-            ].map((st) => (
-              <div key={st.n} className={`${st.bg} border border-border rounded-2xl p-5 space-y-1.5 hover:border-border-gold shadow-[0_4px_16px_rgba(22,59,99,0.04)] hover:shadow-[0_6px_20px_rgba(22,59,99,0.07)] transition-all`}>
-                <span className="block text-3xl font-black text-gold leading-none">{st.n}</span>
-                <span className="block text-xs font-black text-heading leading-tight uppercase tracking-wider">{st.l}</span>
-                <span className="block text-[11px] text-muted">{st.s}</span>
-              </div>
-            ))}
+          {/* Right Column (Luxury Image) */}
+          <div className="lg:col-span-5 relative w-full aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/3] rounded-3xl overflow-hidden border border-border bg-white shadow-[0_12px_40px_rgba(22,59,99,0.08)]">
+            <Image 
+              src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=80" 
+              alt="Bespoke luxury glass doors in modern villa" 
+              fill 
+              sizes="(max-width:1024px)100vw,50vw" 
+              className="object-cover" 
+              priority 
+            />
           </div>
         </div>
       </section>
 
+      {/* ── STATS BAR ────────────────────────────────────────── */}
+      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {[
+            { n: '25+',   l: 'Years of Experience', s: 'Family-run since 1999', bg: 'bg-white' },
+            { n: '5,000+', l: 'Windows Installed',   s: 'Across AP & Pan-India', bg: 'bg-warm' },
+            { n: '100%',  l: 'In-house Fabrication', s: 'No middlemen or resellers', bg: 'bg-warm' },
+            { n: 'Free',  l: 'Site Measurement',     s: 'We come to you at no cost', bg: 'bg-white' },
+          ].map((st) => (
+            <div key={st.n} className={`${st.bg} border border-border rounded-2xl p-6 space-y-1.5 shadow-[0_10px_30px_rgba(22,59,99,0.06)] hover:border-border-gold transition-all`}>
+              <span className="block text-3xl font-black text-gold leading-none">{st.n}</span>
+              <span className="block text-xs font-black text-heading leading-tight uppercase tracking-wider">{st.l}</span>
+              <span className="block text-[11px] text-muted">{st.s}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* ── PRODUCTS ─────────────────────────────────────────── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center space-y-2 max-w-2xl mx-auto">
             <span className="inline-block text-xs font-bold uppercase tracking-widest text-gold border border-border-gold bg-gold-faint px-3 py-1 rounded-full">What We Install</span>
             <h2 className="text-3xl sm:text-4xl font-black text-heading tracking-tight">See Exactly What You&apos;re Getting</h2>
             <p className="text-body text-sm leading-relaxed">Every style is custom-made at our fabrication facility. Tap any card to get an instant price estimate.</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {PRODUCTS.map((p, i) => (
               <Link href="/quote" key={p.id} className="group block">
                 <div className="bg-white border border-border rounded-2xl overflow-hidden hover:border-border-gold hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 h-full flex flex-col">
@@ -141,29 +158,48 @@ export default function Homepage() {
       </section>
 
       {/* ── HOW IT WORKS ─────────────────────────────────────── */}
-      <section className="py-20 bg-cream">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      <section className="py-24 bg-cream relative overflow-hidden">
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 opacity-[0.25]" style={{ backgroundImage: 'radial-gradient(#D5E0E8 1.5px, transparent 1.5px)', backgroundSize: '24px 24px' }}></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center space-y-2 max-w-2xl mx-auto">
             <span className="inline-block text-xs font-bold uppercase tracking-widest text-gold border border-border-gold bg-gold-faint px-3 py-1 rounded-full">Simple 3-Step Process</span>
             <h2 className="text-3xl sm:text-4xl font-black text-heading tracking-tight">From Estimate to Installed — We Handle Everything</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {STEPS.map((st) => (
-              <div key={st.n} className="bg-white border border-border rounded-2xl p-7 hover:border-border-gold hover:shadow-md transition-all space-y-4">
-                <div className="flex items-start justify-between">
-                  <span className="text-5xl font-black text-[#D5E0E8] leading-none font-mono">{st.n}</span>
-                  <div className="w-10 h-10 rounded-xl bg-gold-faint border border-border-soft flex items-center justify-center">
-                    <st.Icon className="w-5 h-5 text-gold" />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Steps (Left) */}
+            <div className="lg:col-span-7 space-y-5">
+              {STEPS.map((st) => (
+                <div key={st.n} className="bg-white border border-border rounded-2xl p-6 hover:border-border-gold shadow-[0_4px_20px_rgba(22,59,99,0.02)] hover:shadow-[0_8px_30px_rgba(22,59,99,0.05)] transition-all flex items-start gap-5">
+                  <span className="text-4xl font-black text-muted/30 leading-none font-mono pt-1">{st.n}</span>
+                  <div className="space-y-1.5 flex-1">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-gold-faint border border-border-soft flex items-center justify-center">
+                        <st.Icon className="w-4 h-4 text-gold" />
+                      </div>
+                      <h3 className="font-bold text-heading text-base leading-tight">{st.title}</h3>
+                    </div>
+                    <p className="text-body text-xs sm:text-sm leading-relaxed">{st.body}</p>
                   </div>
                 </div>
-                <h3 className="font-bold text-heading text-base leading-tight">{st.title}</h3>
-                <p className="text-body text-sm leading-relaxed">{st.body}</p>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            {/* Architectural Image (Right) */}
+            <div className="lg:col-span-5 relative w-full aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/5] rounded-3xl overflow-hidden border border-border bg-white shadow-[0_12px_40px_rgba(22,59,99,0.06)]">
+              <Image 
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80" 
+                alt="Architectural modern residential home design" 
+                fill 
+                sizes="(max-width:1024px)100vw,50vw" 
+                className="object-cover"
+              />
+            </div>
           </div>
 
-          <div className="text-center pt-2">
+          <div className="text-center pt-4">
             <Link href="/quote" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold bg-gold hover:bg-gold-light text-white text-sm transition-all shadow-[0_4px_12px_rgba(22,59,99,0.15)] hover:shadow-[0_6px_16px_rgba(22,59,99,0.2)]">
               <Sparkles className="w-4 h-4" /> Start Your Free Estimate
             </Link>
@@ -171,18 +207,82 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* ── BENEFITS ─────────────────────────────────────────── */}
-      <section className="py-14 bg-white border-y border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-center text-2xl font-black text-heading mb-10">Why Homeowners Choose Viswarkarma</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-            {BENEFITS.map((b) => (
-              <div key={b.label} className="flex flex-col items-center text-center space-y-3 p-5 rounded-2xl border border-border hover:border-border-gold hover:bg-gold-faint transition-all">
-                <div className="w-11 h-11 rounded-xl bg-gold-faint border border-border-soft flex items-center justify-center">
-                  <b.Icon className="w-5 h-5 text-gold-light" />
+      {/* ── PROJECTS ─────────────────────────────────────────── */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div className="space-y-1">
+              <span className="inline-block text-xs font-bold uppercase tracking-widest text-gold border border-border-gold bg-gold-faint px-3 py-1 rounded-full">Our Work</span>
+              <h2 className="text-3xl font-black text-heading tracking-tight">Recent Installations</h2>
+            </div>
+            <Link href="/projects" className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-border bg-white text-body font-bold text-sm hover:border-border-gold transition-all">
+              View All <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {projects.slice(0, 4).map((proj) => (
+              <div key={proj.id} className="bg-white border border-border rounded-2xl overflow-hidden hover:border-border-gold hover:shadow-md transition-all group">
+                <div className="h-36 bg-gradient-to-br from-[#F4F8FB] to-[#D5E0E8] flex items-center justify-center p-4">
+                  <div className="text-center">
+                    <span className="block text-[9px] font-bold uppercase tracking-widest text-gold mb-1">{proj.category}</span>
+                    <span className="block text-sm font-bold text-heading leading-tight">{proj.title}</span>
+                  </div>
                 </div>
-                <span className="font-black text-heading text-sm">{b.label}</span>
-                <span className="text-xs text-muted leading-tight">{b.sub}</span>
+                <div className="p-4 space-y-1">
+                  <h3 className="font-black text-xs text-heading group-hover:text-gold transition-colors leading-snug">{proj.title}</h3>
+                  <p className="text-[11px] text-body line-clamp-2">{proj.description}</p>
+                  <div className="flex justify-between text-[10px] text-muted pt-2 border-t border-border">
+                    <span>{proj.location}</span><span>{proj.specs.series}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── BENEFITS STRIP ───────────────────────────────────── */}
+      <section className="py-12 bg-cream border-y border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {BENEFITS.map((b) => (
+              <div key={b.label} className="flex items-center gap-4 p-4 rounded-xl bg-white border border-border-soft shadow-[0_2px_12px_rgba(22,59,99,0.02)]">
+                <div className="w-10 h-10 rounded-lg bg-gold-faint border border-border flex items-center justify-center flex-shrink-0">
+                  <b.Icon className="w-4 h-4 text-gold-light" />
+                </div>
+                <div>
+                  <span className="block font-black text-heading text-xs tracking-wider uppercase">{b.label}</span>
+                  <span className="block text-[11px] text-muted leading-tight mt-0.5">{b.sub}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── TESTIMONIALS ─────────────────────────────────────── */}
+      <section className="py-24 bg-ivory">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+          <div className="text-center space-y-1">
+            <span className="inline-block text-xs font-bold uppercase tracking-widest text-gold border border-border-gold bg-gold-faint px-3 py-1 rounded-full">Client Reviews</span>
+            <h2 className="text-3xl font-black text-heading tracking-tight">Trusted by Families Across India</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {reviews.slice(0, 3).map((r) => (
+              <div key={r.id} className="bg-white border border-border rounded-2xl p-6 space-y-4 hover:border-border-gold hover:shadow-md transition-all">
+                <div className="flex gap-0.5">
+                  {Array.from({ length: r.rating }).map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-gold text-gold" />)}
+                </div>
+                <p className="text-sm text-body italic leading-relaxed">&ldquo;{r.content}&rdquo;</p>
+                <div className="pt-3 border-t border-border flex items-center justify-between">
+                  <div>
+                    <span className="block font-black text-heading text-sm">{r.name}</span>
+                    <span className="block text-muted text-xs">{r.role}</span>
+                  </div>
+                  <span className="text-muted text-xs font-medium">{r.location}</span>
+                </div>
               </div>
             ))}
           </div>
@@ -190,8 +290,8 @@ export default function Homepage() {
       </section>
 
       {/* ── uPVC vs ALUMINIUM ────────────────────────────────── */}
-      <section className="py-20 bg-ivory">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      <section className="py-24 bg-white border-t border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center space-y-2">
             <span className="inline-block text-xs font-bold uppercase tracking-widest text-gold border border-border-gold bg-gold-faint px-3 py-1 rounded-full">uPVC vs Aluminium</span>
             <h2 className="text-3xl font-black text-heading tracking-tight">Which System is Right for Your Home?</h2>
@@ -245,90 +345,30 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* ── PROJECTS ─────────────────────────────────────────── */}
-      <section className="py-20 bg-cream">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <div className="space-y-1">
-              <span className="inline-block text-xs font-bold uppercase tracking-widest text-gold border border-border-gold bg-gold-faint px-3 py-1 rounded-full">Our Work</span>
-              <h2 className="text-3xl font-black text-heading tracking-tight">Recent Installations</h2>
-            </div>
-            <Link href="/projects" className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-border bg-white text-body font-bold text-sm hover:border-border-gold transition-all">
-              View All <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {projects.slice(0, 4).map((proj) => (
-              <div key={proj.id} className="bg-white border border-border rounded-2xl overflow-hidden hover:border-border-gold hover:shadow-md transition-all group">
-                <div className="h-36 bg-gradient-to-br from-cream to-border-soft flex items-center justify-center p-4">
-                  <div className="text-center">
-                    <span className="block text-[9px] font-bold uppercase tracking-widest text-gold mb-1">{proj.category}</span>
-                    <span className="block text-sm font-bold text-heading leading-tight">{proj.title}</span>
-                  </div>
-                </div>
-                <div className="p-4 space-y-1">
-                  <h3 className="font-black text-xs text-heading group-hover:text-gold transition-colors leading-snug">{proj.title}</h3>
-                  <p className="text-[11px] text-body line-clamp-2">{proj.description}</p>
-                  <div className="flex justify-between text-[10px] text-muted pt-2 border-t border-border">
-                    <span>{proj.location}</span><span>{proj.specs.series}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── TESTIMONIALS ─────────────────────────────────────── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <div className="text-center space-y-1">
-            <span className="inline-block text-xs font-bold uppercase tracking-widest text-gold border border-border-gold bg-gold-faint px-3 py-1 rounded-full">Client Reviews</span>
-            <h2 className="text-3xl font-black text-heading tracking-tight">Trusted by Families Across India</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {reviews.slice(0, 3).map((r) => (
-              <div key={r.id} className="bg-ivory border border-border rounded-2xl p-5 space-y-3 hover:border-border-gold hover:shadow-sm transition-all">
-                <div className="flex gap-0.5">
-                  {Array.from({ length: r.rating }).map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-gold text-gold" />)}
-                </div>
-                <p className="text-sm text-body italic leading-relaxed">&ldquo;{r.content}&rdquo;</p>
-                <div className="pt-2 border-t border-border flex items-center justify-between">
-                  <div>
-                    <span className="block font-black text-heading text-sm">{r.name}</span>
-                    <span className="block text-muted text-xs">{r.role}</span>
-                  </div>
-                  <span className="text-muted text-xs font-medium">{r.location}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── CTA BANNER ───────────────────────────────────────── */}
-      <section className="py-16 bg-cream border-y border-border">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white border border-border mx-auto">
-            <Sparkles className="w-6 h-6 text-gold" />
+      <section className="py-20 bg-gold text-white relative overflow-hidden border-t border-border-gold">
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: 'radial-gradient(#FFFFFF 1.5px, transparent 1.5px)', backgroundSize: '24px 24px' }}></div>
+        
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white/10 border border-white/20 mx-auto">
+            <Sparkles className="w-6 h-6 text-white" />
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-heading tracking-tight leading-tight">
+          <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
             Ready to Upgrade Your Entire Home?
           </h2>
-          <p className="text-body text-sm leading-relaxed max-w-xl mx-auto">
+          <p className="text-white/80 text-sm leading-relaxed max-w-xl mx-auto">
             Enter your home size and window count — get a price range in 2 minutes. Then we visit, measure, and give a final quote. <strong>No pressure. No hidden charges.</strong>
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/quote" className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold bg-gold hover:bg-gold-light text-white text-sm shadow-[0_4px_12px_rgba(22,59,99,0.15)] hover:shadow-[0_6px_16px_rgba(22,59,99,0.2)] transition-all">
-              <Sparkles className="w-4 h-4" /> Launch Home Estimator
+            <Link href="/quote" className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold bg-white text-gold hover:bg-[#EEF5FA] text-sm shadow-md transition-all">
+              <Sparkles className="w-4 h-4 text-gold" /> Launch Home Estimator
             </Link>
-            <a href={`tel:${settings.phone}`} className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold border border-border-gold text-gold hover:bg-gold-faint text-sm transition-all">
+            <a href={`tel:${settings.phone}`} className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold border border-white/30 text-white hover:bg-white/10 text-sm transition-all">
               <Phone className="w-4 h-4" /> Book Free Site Visit
             </a>
           </div>
-          <p className="text-muted text-xs">Serving Pan-India · No visit charges · Professional installation · 25+ years experience</p>
+          <p className="text-white/60 text-xs">Serving Pan-India · No visit charges · Professional installation · 25+ years experience</p>
         </div>
       </section>
 
