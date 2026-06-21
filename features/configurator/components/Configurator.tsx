@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, ChevronLeft, Send, Sparkles, AlertCircle, Shield, CheckCircle2 } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Send, Sparkles, AlertCircle, Shield, CheckCircle2, LogIn, Save } from 'lucide-react';
 import { ProductFamily } from '../types';
 import { productTypes } from '../config/data';
 import { createQuoteRequest } from '@/lib/supabase';
@@ -11,6 +11,8 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { useAuth } from '@/context/AuthContext';
+import { useDraft, markDraftSubmitted, DraftRecord } from '../lib/useDraft';
 
 // ---------------------------------------------------------------------------
 // Types & Interfaces
@@ -446,6 +448,9 @@ const INITIAL_STATE: HomeEstimatorState = {
 };
 
 export default function Configurator({ initialFamily }: ConfiguratorProps) {
+  const { user, openLoginModal } = useAuth();
+  const draftIdRef = useRef<string | null>(null);
+
   const [state, setState] = useState<HomeEstimatorState>({
     ...INITIAL_STATE,
     family: initialFamily === 'aluminium' ? 'aluminium' : 'upvc',
@@ -454,6 +459,64 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [customSqFt, setCustomSqFt] = useState('');
+  const [saveIndicator, setSaveIndicator] = useState(false);
+
+  // Build the current draft record from live state (uses estimatedMin/Max computed below)
+  function buildDraft(overrideStep?: number): DraftRecord {
+    const { min: dMin, max: dMax } = computeEstimate(state);
+    return {
+      id: draftIdRef.current ?? undefined,
+      status: 'in_progress',
+      currentStep: overrideStep ?? currentStep,
+      family: state.family,
+      selectedTypes: state.selectedTypes,
+      windowCount: state.windowCount,
+      homeSqFt: state.homeSqFt,
+      installationRequired: state.installationRequired,
+      colorChoice: state.colorChoice,
+      glassChoice: state.glassChoice,
+      meshChoice: state.meshChoice,
+      customerName: state.customerName,
+      customerPhone: state.customerPhone,
+      customerCity: state.customerCity,
+      callbackTime: state.callbackTime,
+      estimateLow: dMin,
+      estimateHigh: dMax,
+    };
+  }
+
+  // Restore state from a loaded draft
+  function handleRestore(draft: DraftRecord) {
+    setState({
+      family: draft.family as 'upvc' | 'aluminium',
+      selectedTypes: draft.selectedTypes,
+      windowCount: draft.windowCount,
+      homeSqFt: draft.homeSqFt,
+      installationRequired: draft.installationRequired,
+      colorChoice: draft.colorChoice,
+      glassChoice: draft.glassChoice,
+      meshChoice: draft.meshChoice,
+      customerName: draft.customerName,
+      customerPhone: draft.customerPhone,
+      customerCity: draft.customerCity,
+      callbackTime: draft.callbackTime,
+    });
+    setCurrentStep(draft.currentStep > 0 ? draft.currentStep : 1);
+  }
+
+  const { save } = useDraft({ user, draftIdRef, onRestore: handleRestore });
+
+  // Auto-save when state or step changes (after initial mount)
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    save(buildDraft());
+    // Show brief "Saved" indicator
+    setSaveIndicator(true);
+    const t = setTimeout(() => setSaveIndicator(false), 1800);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, currentStep]);
 
   // Revalidate state elements when system family changes
   const handleFamilyChange = (newFamily: 'upvc' | 'aluminium') => {
@@ -531,6 +594,11 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
         estimate_low: estimatedMin,
         estimate_high: estimatedMax,
       });
+      // Mark draft as submitted so it doesn't show as resumable
+      if (user && draftIdRef.current) {
+        await markDraftSubmitted(draftIdRef.current, user.id);
+        draftIdRef.current = null;
+      }
     } catch (err) {
       console.error('Error storing lead in database:', err);
     } finally {
@@ -1066,6 +1134,27 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
 
   return (
     <div className="w-full max-w-3xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+
+      {/* Auto-save indicator */}
+      {saveIndicator && user && (
+        <div className="fixed bottom-24 md:bottom-6 right-4 z-[100] flex items-center gap-2 px-3.5 py-2 bg-white border border-border rounded-full shadow-lg text-xs font-bold text-heading animate-fade-in">
+          <Save className="w-3.5 h-3.5 text-gold" /> Progress saved
+        </div>
+      )}
+
+      {/* Guest nudge — show after step 2 */}
+      {!user && currentStep >= 2 && (
+        <div className="mb-4 flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-gold/20 bg-gold-faint text-xs">
+          <span className="text-heading font-semibold">💾 <strong>Login to save your progress</strong> — come back later and continue from here.</span>
+          <button
+            onClick={openLoginModal}
+            className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold hover:bg-gold-light text-white font-bold transition-all"
+          >
+            <LogIn className="w-3.5 h-3.5" /> Sign In
+          </button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="text-center mb-8">
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gold/5 text-gold border border-gold/10 mb-3">
