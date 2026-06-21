@@ -1,29 +1,30 @@
 @import "tailwindcss";
 
-/* ─── PRUSSIAN BLUE + PEARL WHITE + SLATE DESIGN TOKENS ───────────── */
+/* ─── LIGHT BLUE-WHITE & DEEP STEEL BLUE TOKENS ───────────────────── */
 :root {
   /* Backgrounds — pearl whites & light blue-gray tints */
-  --bg-ivory:   #F7F9FC;   /* main page bg (pearl white) */
-  --bg-cream:   #EEF4F8;   /* alternate section bg (soft blue tint) */
-  --bg-warm:    #D8E0E8;   /* deeper gray-blue for cards/highlights (muted slate) */
-  --bg-white:   #FFFFFF;   /* pure white card surfaces */
+  --bg-ivory:   #F4F8FB;   /* primary page background */
+  --bg-cream:   #EAF2F8;   /* alternate section background */
+  --bg-warm:    #FBFAF6;   /* warm milk-white surface */
+  --bg-white:   #FFFFFF;   /* pure content/card white */
 
-  /* Prussian Blue & Support Blue palette */
-  --gold:       #0F2D46;   /* primary brand blue (deep Prussian) */
-  --gold-rich:  #0A1E30;   /* darker brand blue for hover */
-  --gold-light: #1E4F74;   /* secondary / support blue */
-  --gold-pale:  #EEF4F8;   /* soft blue tint bg */
-  --gold-faint: #EEF4F8;   /* very faint blue tint bg */
+  /* Brand Blues */
+  --gold:       #163B63;   /* primary deep steel/navy blue */
+  --gold-rich:  #3F78A8;   /* hover / accent blue */
+  --gold-light: #2B5C88;   /* secondary premium blue */
+  --gold-pale:  #EAF2F8;   /* soft blue pill bg / hover accent */
+  --gold-faint: #F8FCFF;   /* trust pill / faint blue bg */
 
   /* Text */
-  --text-heading: #1F2937;  /* text charcoal */
-  --text-body:    #374151;  /* body dark gray */
-  --text-muted:   #6B7280;  /* muted gray */
-  --text-faint:   #9CA3AF;  /* very faint gray */
+  --text-heading: #1C2E40;  /* main heading / primary text */
+  --text-body:    #425466;  /* secondary body text */
+  --text-muted:   #6B7B8C;  /* muted text / supporting labels */
+  --text-faint:   #8FB1C9;  /* supporting border/label tint */
 
   /* Borders */
-  --border:       #D8E0E8;  /* border / muted slate */
-  --border-gold:  #1E4F74;  /* secondary blue border */
+  --border:       #D5E0E8;  /* primary border */
+  --border-gold:  #2B5C88;  /* secondary blue border */
+  --border-soft:  #E4EDF3;  /* soft border */
 
   /* Semantic (kept for backwards compat) */
   --background:   var(--bg-ivory);
@@ -61,12 +62,13 @@
   /* Border utilities */
   --color-border:      var(--border);
   --color-border-gold: var(--border-gold);
+  --color-border-soft: var(--border-soft);
 
   /* Backwards-compat brand tokens */
   --color-background:          var(--bg-ivory);
   --color-foreground:          var(--text-heading);
   --color-brand-primary:       var(--gold);
-  --color-brand-primary-hover: var(--gold-rich);
+  --color-brand-primary-hover: var(--gold-light); /* secondary */
   --color-brand-secondary:     var(--text-body);
   --color-brand-muted:         var(--text-muted);
   --color-brand-muted-light:   var(--text-faint);
@@ -76,7 +78,7 @@
   --color-brand-accent-text:   var(--text-heading);
 
   /* Legacy (keep to avoid compile errors in other files) */
-  --color-gold-hover: var(--gold-rich);
+  --color-gold-hover: var(--gold-light);
   --color-gold-light-bg: var(--gold-faint);
 }
 

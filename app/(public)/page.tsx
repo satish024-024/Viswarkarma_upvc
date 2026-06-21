@@ -47,19 +47,19 @@ export default function Homepage() {
     <div className="w-full">
 
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="bg-ivory border-b border-border">
+      <section className="bg-gradient-to-br from-[#F4F8FB] via-[#EEF5FA] to-[#E7F0F7] border-b border-border-soft">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
           {/* Copy */}
           <div className="space-y-7">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border-gold bg-gold-faint text-gold text-xs font-bold uppercase tracking-wider">
-              <Award className="w-3.5 h-3.5" /> 25+ Years · Family-Run · Rajahmundry HQ · Pan-India
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#8FB1C9] bg-gold-faint text-gold text-xs font-bold uppercase tracking-wider">
+              <Award className="w-3.5 h-3.5 text-gold-light" /> 25+ Years · Family-Run · Rajahmundry HQ · Pan-India
             </span>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-heading tracking-tight leading-[1.15]">
-              Bespoke <span className="text-gold">uPVC & Aluminium</span> Systems
-              <span className="block mt-2 text-2xl sm:text-3xl lg:text-4xl font-light text-body leading-tight">
-                Engineered for India&apos;s <span className="text-gold font-serif italic font-semibold">Finest Residences</span>
+              Bespoke <span className="text-gold">uPVC</span> & Aluminium Systems
+              <span className="block mt-2 text-2xl sm:text-3xl lg:text-4xl font-normal text-body leading-tight">
+                Engineered for India&apos;s <span className="font-serif italic font-semibold text-heading">Finest Residences</span>
               </span>
             </h1>
 
@@ -68,13 +68,13 @@ export default function Homepage() {
             </p>
 
             <div className="flex flex-wrap gap-3">
-              <Link href="/quote" className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold bg-gold hover:bg-gold-rich text-white text-sm transition-all shadow-md shadow-gold/20">
+              <Link href="/quote" className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold bg-gold hover:bg-gold-light text-white text-sm transition-all shadow-[0_4px_12px_rgba(22,59,99,0.15)] hover:shadow-[0_6px_16px_rgba(22,59,99,0.2)]">
                 <Sparkles className="w-4 h-4" /> Get Free Home Estimate
               </Link>
-              <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold border border-border bg-white text-heading hover:border-border-gold hover:bg-gold-faint text-sm transition-all">
+              <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold border border-emerald-500/30 bg-white text-emerald-800 hover:bg-emerald-50/50 text-sm transition-all">
                 <MessageSquare className="w-4 h-4 text-emerald-600" /> WhatsApp Us
               </a>
-              <a href={`tel:${settings.phone}`} className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold border border-border bg-white text-heading hover:border-border-gold hover:bg-gold-faint text-sm transition-all">
+              <a href={`tel:${settings.phone}`} className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold border border-border bg-white text-heading hover:bg-cream text-sm transition-all">
                 <Phone className="w-4 h-4 text-gold-light" /> Call Now
               </a>
             </div>
@@ -91,14 +91,14 @@ export default function Homepage() {
           {/* Stats */}
           <div className="grid grid-cols-2 gap-4">
             {[
-              { n: '25+',   l: 'Years of Experience', s: 'Family-run since 1999' },
-              { n: '5,000+', l: 'Windows Installed',   s: 'Across AP & Pan-India' },
-              { n: '100%',  l: 'In-house Fabrication', s: 'No middlemen or resellers' },
-              { n: 'Free',  l: 'Site Measurement',     s: 'We come to you at no cost' },
+              { n: '25+',   l: 'Years of Experience', s: 'Family-run since 1999', bg: 'bg-white' },
+              { n: '5,000+', l: 'Windows Installed',   s: 'Across AP & Pan-India', bg: 'bg-warm' },
+              { n: '100%',  l: 'In-house Fabrication', s: 'No middlemen or resellers', bg: 'bg-warm' },
+              { n: 'Free',  l: 'Site Measurement',     s: 'We come to you at no cost', bg: 'bg-white' },
             ].map((st) => (
-              <div key={st.n} className="bg-white border border-border rounded-2xl p-5 space-y-1 hover:border-border-gold hover:shadow-md transition-all">
+              <div key={st.n} className={`${st.bg} border border-border rounded-2xl p-5 space-y-1.5 hover:border-border-gold shadow-[0_4px_16px_rgba(22,59,99,0.04)] hover:shadow-[0_6px_20px_rgba(22,59,99,0.07)] transition-all`}>
                 <span className="block text-3xl font-black text-gold leading-none">{st.n}</span>
-                <span className="block text-sm font-bold text-heading leading-tight">{st.l}</span>
+                <span className="block text-xs font-black text-heading leading-tight uppercase tracking-wider">{st.l}</span>
                 <span className="block text-[11px] text-muted">{st.s}</span>
               </div>
             ))}
@@ -152,8 +152,8 @@ export default function Homepage() {
             {STEPS.map((st) => (
               <div key={st.n} className="bg-white border border-border rounded-2xl p-7 hover:border-border-gold hover:shadow-md transition-all space-y-4">
                 <div className="flex items-start justify-between">
-                  <span className="text-5xl font-black text-warm leading-none font-mono">{st.n}</span>
-                  <div className="w-10 h-10 rounded-xl bg-gold-faint border border-border-gold flex items-center justify-center">
+                  <span className="text-5xl font-black text-[#D5E0E8] leading-none font-mono">{st.n}</span>
+                  <div className="w-10 h-10 rounded-xl bg-gold-faint border border-border-soft flex items-center justify-center">
                     <st.Icon className="w-5 h-5 text-gold" />
                   </div>
                 </div>
@@ -164,7 +164,7 @@ export default function Homepage() {
           </div>
 
           <div className="text-center pt-2">
-            <Link href="/quote" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold bg-gold hover:bg-gold-rich text-white text-sm transition-all shadow-md shadow-gold/20">
+            <Link href="/quote" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold bg-gold hover:bg-gold-light text-white text-sm transition-all shadow-[0_4px_12px_rgba(22,59,99,0.15)] hover:shadow-[0_6px_16px_rgba(22,59,99,0.2)]">
               <Sparkles className="w-4 h-4" /> Start Your Free Estimate
             </Link>
           </div>
@@ -178,7 +178,7 @@ export default function Homepage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
             {BENEFITS.map((b) => (
               <div key={b.label} className="flex flex-col items-center text-center space-y-3 p-5 rounded-2xl border border-border hover:border-border-gold hover:bg-gold-faint transition-all">
-                <div className="w-11 h-11 rounded-xl bg-gold-faint border border-border-gold flex items-center justify-center">
+                <div className="w-11 h-11 rounded-xl bg-gold-faint border border-border-soft flex items-center justify-center">
                   <b.Icon className="w-5 h-5 text-gold-light" />
                 </div>
                 <span className="font-black text-heading text-sm">{b.label}</span>
@@ -261,7 +261,7 @@ export default function Homepage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {projects.slice(0, 4).map((proj) => (
               <div key={proj.id} className="bg-white border border-border rounded-2xl overflow-hidden hover:border-border-gold hover:shadow-md transition-all group">
-                <div className="h-36 bg-gradient-to-br from-cream to-warm flex items-center justify-center p-4">
+                <div className="h-36 bg-gradient-to-br from-cream to-border-soft flex items-center justify-center p-4">
                   <div className="text-center">
                     <span className="block text-[9px] font-bold uppercase tracking-widest text-gold mb-1">{proj.category}</span>
                     <span className="block text-sm font-bold text-heading leading-tight">{proj.title}</span>
@@ -321,7 +321,7 @@ export default function Homepage() {
             Enter your home size and window count — get a price range in 2 minutes. Then we visit, measure, and give a final quote. <strong>No pressure. No hidden charges.</strong>
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/quote" className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold bg-gold hover:bg-gold-rich text-white text-sm shadow-md shadow-gold/20 transition-all">
+            <Link href="/quote" className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold bg-gold hover:bg-gold-light text-white text-sm shadow-[0_4px_12px_rgba(22,59,99,0.15)] hover:shadow-[0_6px_16px_rgba(22,59,99,0.2)] transition-all">
               <Sparkles className="w-4 h-4" /> Launch Home Estimator
             </Link>
             <a href={`tel:${settings.phone}`} className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold border border-border-gold text-gold hover:bg-gold-faint text-sm transition-all">
