@@ -7,6 +7,7 @@ export const productTypes: ProductType[] = [
     family: "upvc",
     description: "Space-saving horizontal sliding panels with interlocking brush seals.",
     basePricePerSqFt: 500, // Based on Dhatri uPVC Sliding Window (₹500/sq.ft)
+    image: "https://5.imimg.com/data5/SX/YV/YG/SELLER-64612523/upvc-sliding-window-500x500.jpg",
     supportedSeries: ["60mm_series", "80mm_series", "88mm_series"]
   },
   {
@@ -15,6 +16,7 @@ export const productTypes: ProductType[] = [
     family: "upvc",
     description: "Classic side-hung openable window that swings outward, offering 100% ventilation.",
     basePricePerSqFt: 500, // Based on Dhatri uPVC Casement Window (₹500/sq.ft)
+    image: "https://5.imimg.com/data5/QR/VY/TK/SELLER-64612523/casement-window-500x500.jpeg",
     supportedSeries: ["60mm_series", "80mm_series", "88mm_series"]
   },
   {
@@ -23,6 +25,7 @@ export const productTypes: ProductType[] = [
     family: "upvc",
     description: "Non-operational picture window or office partition designed for maximum light.",
     basePricePerSqFt: 300, // Based on Dhatri uPVC Office Partition (₹300/sq.ft)
+    image: "https://5.imimg.com/data5/LQ/MY/FJ/SELLER-64612523/upvc-sliding-profile-125x125.jpeg",
     supportedSeries: ["60mm_series", "80mm_series"]
   },
   {
@@ -31,6 +34,7 @@ export const productTypes: ProductType[] = [
     family: "upvc",
     description: "Wide doors sliding on heavy-duty tracks, perfect for balconies and sit-outs.",
     basePricePerSqFt: 500, // Based on Dhatri uPVC French Door (₹500/sq.ft) & Sliding Door base
+    image: "https://5.imimg.com/data5/RU/YJ/HX/SELLER-64612523/upvc-french-door-500x500.jpg",
     supportedSeries: ["80mm_series", "88mm_series", "112mm_series"]
   },
   {
@@ -39,6 +43,7 @@ export const productTypes: ProductType[] = [
     family: "upvc",
     description: "Heavy-duty sash swing double door with multi-point lock cylinders.",
     basePricePerSqFt: 800, // Based on Dhatri uPVC Glass Casement Double Door (₹800/sq.ft)
+    image: "https://5.imimg.com/data5/AL/LI/CS/SELLER-64612523/upvc-glass-double-door-500x500.jpg",
     supportedSeries: ["80mm_series", "88mm_series"]
   },
   
@@ -49,6 +54,7 @@ export const productTypes: ProductType[] = [
     family: "aluminium",
     description: "Slimline architectural aluminium sliding profiles with integrated track systems.",
     basePricePerSqFt: 550,
+    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80",
     supportedSeries: ["alu_50mm_series", "alu_90mm_series"]
   },
   {
@@ -57,6 +63,7 @@ export const productTypes: ProductType[] = [
     family: "aluminium",
     description: "Flush architectural casement window with friction hinges.",
     basePricePerSqFt: 600,
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
     supportedSeries: ["alu_50mm_series", "alu_90mm_series"]
   },
   {
@@ -65,6 +72,7 @@ export const productTypes: ProductType[] = [
     family: "aluminium",
     description: "Slim frame fixed picture window designed for modern panoramic views.",
     basePricePerSqFt: 350,
+    image: "https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=800&q=80",
     supportedSeries: ["alu_50mm_series", "alu_90mm_series"]
   },
   {
@@ -73,6 +81,7 @@ export const productTypes: ProductType[] = [
     family: "aluminium",
     description: "Premium large-pane sliding patio doors with low thresholds and structural reinforcements.",
     basePricePerSqFt: 650,
+    image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80",
     supportedSeries: ["alu_90mm_series", "alu_120mm_series"]
   },
   {
@@ -81,6 +90,7 @@ export const productTypes: ProductType[] = [
     family: "aluminium",
     description: "Modern architectural doors with high-security locks.",
     basePricePerSqFt: 850,
+    image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80",
     supportedSeries: ["alu_50mm_series", "alu_90mm_series"]
   }
 ];

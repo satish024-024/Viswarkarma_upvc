@@ -3,8 +3,8 @@ import { BusinessSettings, ServiceVertical, Project, Testimonial, FAQ, ServiceAr
 export const businessSettings: BusinessSettings = {
   name: "Viswarkarma uPVC & Aluminium",
   tagline: "25+ Years of Custom Fabrication & Precision Installation | Pan-India Service",
-  phone: "+91 98860 12345",
-  whatsapp: "+919886012345",
+  phone: "+91 95056 83584",
+  whatsapp: "+919505683584",
   email: "contact@viswarkarmaupvc.com",
   address: "Rajahmundry Head Office & Fabrication Workshop, Rajahmundry, Andhra Pradesh, India",
   hours: "Monday - Saturday: 9:30 AM - 7:00 PM",

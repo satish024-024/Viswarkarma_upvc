@@ -48,7 +48,22 @@ export default function AdminLoginPage() {
       if (error) {
         setError(error.message);
       } else if (data.session) {
-        window.location.href = '/admin/dashboard';
+        // Query the role from user_profiles table
+        const { data: profile, error: profileError } = await supabase!
+          .from('user_profiles')
+          .select('role')
+          .eq('id', data.session.user.id)
+          .maybeSingle();
+
+        if (profileError) {
+          await supabase!.auth.signOut();
+          setError('Error validating admin credentials.');
+        } else if (profile?.role === 'admin') {
+          window.location.href = '/admin/dashboard';
+        } else {
+          await supabase!.auth.signOut();
+          setError('Unauthorized: Admin access required.');
+        }
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred.');

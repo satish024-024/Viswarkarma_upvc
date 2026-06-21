@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
-import { Session } from '@supabase/supabase-js';
 import { 
   LayoutDashboard, 
   Inbox, 
@@ -15,7 +15,8 @@ import {
   Sliders, 
   LogOut,
   Menu,
-  X
+  X,
+  Globe
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -50,77 +51,53 @@ function SidebarItem({ href, icon, label, active, onClick }: SidebarItemProps) {
 }
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <AuthProvider>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </AuthProvider>
+  );
+}
+
+function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  
-  const [session, setSession] = useState<Session | { user: { email: string } } | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { session, loading, role, isAdmin } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // If Supabase client isn't available, we run in static demo bypass mode
   const isDemoMode = !supabase;
 
-  useEffect(() => {
-    let active = true;
-    if (isDemoMode) {
-      // In local demo mode, check local storage for a mock session
-      const mockSession = typeof window !== 'undefined' ? localStorage.getItem('viswarkarma_mock_admin_session') : null;
-      setTimeout(() => {
-        if (!active) return;
-        if (mockSession === 'true') {
-          setSession({ user: { email: 'admin@viswarkarmaupvc.com' } });
-        } else {
-          setSession(null);
-        }
-        setLoading(false);
-      }, 0);
-      return;
-    }
-
-    // Get current session
-    supabase!.auth.getSession().then(({ data: { session } }) => {
-      if (active) {
-        setSession(session);
-        setLoading(false);
-      }
-    });
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase!.auth.onAuthStateChange((_event, session) => {
-      if (active) {
-        setSession(session);
-        setLoading(false);
-      }
-    });
-
-    return () => {
-      active = false;
-      subscription.unsubscribe();
-    };
-  }, [isDemoMode]);
-
   // Auth guard routing
   useEffect(() => {
     if (loading) return;
 
-    const isLoginPage = pathname === '/admin/login';
-    if (!session && !isLoginPage) {
-      router.push('/admin/login');
-    } else if (session && isLoginPage) {
+    const isAuthorized = isAdmin || (isDemoMode && session?.user?.email === 'admin@viswarkarmaupvc.com');
+
+    if (!session) {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('viswarkarma_auth_redirect', pathname);
+        sessionStorage.setItem('viswarkarma_trigger_login', 'true');
+      }
+      router.push('/');
+    } else if (session && !isAuthorized) {
+      handleLogout();
+    } else if (session && pathname === '/admin/login') {
       router.push('/admin/dashboard');
     }
-  }, [session, loading, pathname, router]);
+  }, [session, loading, role, isAdmin, pathname, router, isDemoMode]);
 
   const handleLogout = async () => {
     if (isDemoMode) {
       localStorage.removeItem('viswarkarma_mock_admin_session');
-      setSession(null);
-      router.push('/admin/login');
+      window.location.href = '/';
       return;
     }
 
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('viswarkarma_auth_error', 'unauthorized');
+    }
     await supabase!.auth.signOut();
-    router.push('/admin/login');
+    router.push('/');
   };
 
   const navItems = [
@@ -164,7 +141,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <h1 className="text-base font-black tracking-tight text-slate-950 uppercase">Viswarkarma</h1>
             <span className="px-1.5 py-0.5 rounded-sm bg-slate-100 text-[9px] font-bold text-slate-600 uppercase">Admin</span>
           </div>
-          <p className="text-[10px] text-slate-500 font-semibold truncate">{session.user?.email}</p>
+          <p className="text-[10px] text-slate-500 font-semibold truncate mb-3">{session.user?.email}</p>
+          <Button 
+            variant="secondary" 
+            size="sm" 
+            onClick={() => window.open('/', '_blank')}
+            className="w-full justify-center gap-2 font-bold text-xs border-slate-200 text-slate-700 hover:bg-slate-50 h-8 cursor-pointer"
+          >
+            <Globe className="w-3.5 h-3.5" />
+            <span>View Website</span>
+          </Button>
         </div>
 
         <nav className="flex-1 space-y-1">
@@ -199,12 +185,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <div className="flex justify-between items-center">
               <div>
                 <h1 className="text-base font-black tracking-tight text-slate-950 uppercase">Viswarkarma</h1>
-                <p className="text-[10px] text-slate-500 font-semibold truncate">{session.user?.email}</p>
+                <p className="text-[10px] text-slate-500 font-semibold truncate mb-1">{session.user?.email}</p>
               </div>
               <button onClick={() => setSidebarOpen(false)}>
                 <X className="w-5 h-5 text-slate-500" />
               </button>
             </div>
+
+            <Button 
+              variant="secondary" 
+              size="sm" 
+              onClick={() => { setSidebarOpen(false); window.open('/', '_blank'); }}
+              className="w-full justify-center gap-2 font-bold text-xs border-slate-200 text-slate-700 hover:bg-slate-50 h-8 cursor-pointer mt-1"
+            >
+              <Globe className="w-3.5 h-3.5" />
+              <span>View Website</span>
+            </Button>
 
             <nav className="flex-1 space-y-1">
               {navItems.map((item) => (
@@ -238,15 +234,32 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Mobile Header */}
-        <header className="md:hidden h-14 bg-white border-b border-slate-200 px-4 flex items-center justify-between">
+        {/* Unified Header */}
+        <header className="h-14 bg-white border-b border-slate-200 px-4 md:px-8 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-2">
-            <h1 className="text-sm font-black tracking-tight text-slate-950 uppercase">Viswarkarma</h1>
-            <span className="px-1.5 py-0.5 rounded-sm bg-slate-100 text-[8px] font-bold text-slate-600 uppercase">Admin</span>
+            <button 
+              onClick={() => setSidebarOpen(true)} 
+              className="md:hidden p-1.5 -ml-1.5 rounded-md hover:bg-slate-100 cursor-pointer"
+              aria-label="Open Sidebar"
+            >
+              <Menu className="w-5 h-5 text-slate-700" />
+            </button>
+            <div className="flex items-center gap-2">
+              <h1 className="text-sm font-black tracking-tight text-slate-900 uppercase hidden md:block">Viswarkarma Admin</h1>
+              <h1 className="text-sm font-black tracking-tight text-slate-950 uppercase md:hidden">Viswarkarma</h1>
+              <span className="px-1.5 py-0.5 rounded-sm bg-slate-100 text-[8px] font-bold text-slate-600 uppercase tracking-wider">Console</span>
+            </div>
           </div>
-          <button onClick={() => setSidebarOpen(true)} className="p-1 rounded-md hover:bg-slate-100">
-            <Menu className="w-5 h-5 text-slate-700" />
-          </button>
+
+          <Button 
+            variant="secondary" 
+            size="sm" 
+            onClick={() => window.open('/', '_blank')}
+            className="flex items-center gap-1.5 font-bold text-xs border-slate-200 text-slate-700 hover:bg-slate-50 h-8 px-3 cursor-pointer"
+          >
+            <Globe className="w-3.5 h-3.5 text-slate-500" />
+            <span>Open Website</span>
+          </Button>
         </header>
 
         {/* Content Wrapper */}

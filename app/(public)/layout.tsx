@@ -3,6 +3,7 @@ import AuthModal from "@/components/public/AuthModal";
 import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
 import StickyMobileCta from "@/components/public/StickyMobileCta";
+import AdminFloatingButton from "@/components/public/AdminFloatingButton";
 
 export default function PublicLayout({
   children,
@@ -17,6 +18,7 @@ export default function PublicLayout({
         <Footer />
         <StickyMobileCta />
         <AuthModal />
+        <AdminFloatingButton />
       </div>
     </AuthProvider>
   );

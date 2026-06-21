@@ -8,6 +8,8 @@ export interface ProductType {
   basePricePerSqFt: number; // base price in INR
   image?: string;
   supportedSeries: string[]; // series IDs that support this type
+  status?: string; // 'active' | 'draft'
+  sortOrder?: number;
 }
 
 export interface ProductSeries {
@@ -17,6 +19,8 @@ export interface ProductSeries {
   description: string;
   thickness: string; // e.g. "60mm", "88mm", "112mm"
   priceModifierPerSqFt: number; // added to base price
+  status?: string;
+  sortOrder?: number;
 }
 
 export interface ColorOption {
@@ -26,6 +30,9 @@ export interface ColorOption {
   priceMultiplier: number; // e.g. 1.0 for White, 1.25 for wood finish
   description: string;
   isWoodGrain?: boolean;
+  family?: ProductFamily;
+  status?: string;
+  sortOrder?: number;
 }
 
 export interface GlassOption {
@@ -33,6 +40,9 @@ export interface GlassOption {
   name: string;
   description: string;
   priceModifierPerSqFt: number; // added to base price
+  family?: ProductFamily;
+  status?: string;
+  sortOrder?: number;
 }
 
 export interface MeshOption {
@@ -40,6 +50,9 @@ export interface MeshOption {
   name: string;
   description: string;
   priceModifierPerSqFt: number; // added to base price
+  family?: ProductFamily;
+  status?: string;
+  sortOrder?: number;
 }
 
 export interface HardwareOption {
@@ -47,6 +60,8 @@ export interface HardwareOption {
   name: string;
   description: string;
   priceModifierPerUnit: number; // added flat per unit
+  status?: string;
+  sortOrder?: number;
 }
 
 export interface ConfiguratorState {

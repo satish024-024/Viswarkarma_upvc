@@ -91,7 +91,7 @@ export default function ContactPage() {
                       Your Name *
                     </label>
                     <Input 
-                      placeholder="Rajesh Kumar"
+                      placeholder="Satish Kumar"
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
                       required
@@ -105,7 +105,7 @@ export default function ContactPage() {
                     </label>
                     <Input 
                       type="tel"
-                      placeholder="9886012345"
+                      placeholder="9505683584"
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
                       required

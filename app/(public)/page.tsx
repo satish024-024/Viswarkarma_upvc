@@ -1,9 +1,7 @@
-"use client";
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Phone, MessageSquare, ArrowRight, ShieldCheck, Award, VolumeX, Thermometer, Droplets, Sparkles, CheckCircle2, Star, Ruler, Wrench, Calculator, MapPin } from 'lucide-react';
-import { businessSettings as dflt, projectsList as dfltProjects, testimonialsList as dfltTestimonials } from '@/lib/data/business';
 import { getBusinessSettings, getProjects, getTestimonials } from '@/lib/supabase';
 
 /* ─── DATA ───────────────────────────────────────────────── */
@@ -30,16 +28,10 @@ const BENEFITS = [
 ];
 
 /* ─── COMPONENT ──────────────────────────────────────────── */
-export default function Homepage() {
-  const [settings, setSettings] = useState(dflt);
-  const [projects, setProjects] = useState(dfltProjects);
-  const [reviews, setReviews] = useState(dfltTestimonials);
-
-  useEffect(() => {
-    getBusinessSettings().then(setSettings);
-    getProjects().then(setProjects);
-    getTestimonials().then(setReviews);
-  }, []);
+export default async function Homepage() {
+  const settings = await getBusinessSettings();
+  const projects = await getProjects();
+  const reviews = await getTestimonials();
 
   const wa = `https://wa.me/${settings.whatsapp.replace(/\D/g, '')}`;
 
@@ -510,7 +502,6 @@ export default function Homepage() {
           <p className="text-white/60 text-xs">Serving Pan-India · No visit charges · Professional installation · 25+ years experience</p>
         </div>
       </section>
-
     </div>
   );
 }

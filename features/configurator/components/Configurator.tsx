@@ -3,10 +3,21 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, Send, Sparkles, AlertCircle, Shield, CheckCircle2, LogIn, Save } from 'lucide-react';
-import { ProductFamily } from '../types';
-import { productTypes } from '../config/data';
-import { createQuoteRequest } from '@/lib/supabase';
+import { ProductFamily, ProductType, ColorOption, GlassOption, MeshOption } from '../types';
+import { 
+  createQuoteRequest, 
+  getProductTypes, 
+  getColorOptions, 
+  getGlassOptions, 
+  getMeshOptions 
+} from '@/lib/supabase';
 import { businessSettings } from '@/lib/data/business';
+import { 
+  productTypes as localTypes, 
+  colorOptions as localColors, 
+  glassOptions as localGlass, 
+  meshOptions as localMesh 
+} from '../config/data';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -33,296 +44,6 @@ interface HomeEstimatorState {
   callbackTime: string;
 }
 
-interface WindowStyle {
-  id: string;
-  label: string;
-  description: string;
-  image: string;
-  productTypeId: string;
-}
-
-interface ColorSwatch {
-  id: string;
-  label: string;
-  hex: string;
-  multiplier: number;
-  description: string;
-}
-
-interface GlassOption {
-  id: string;
-  label: string;
-  priceModifier: number;
-  description: string;
-}
-
-interface MeshOption {
-  id: string;
-  label: string;
-  priceModifier: number;
-  description: string;
-}
-
-interface SystemConfig {
-  label: string;
-  description: string;
-  image: string;
-  styles: WindowStyle[];
-  colors: ColorSwatch[];
-  glass: GlassOption[];
-  mesh: MeshOption[];
-}
-
-// ---------------------------------------------------------------------------
-// System-specific Branching Configuration (Config-Driven Rates & Options)
-// ---------------------------------------------------------------------------
-
-const SYSTEM_CONFIGS: Record<'upvc' | 'aluminium', SystemConfig> = {
-  upvc: {
-    label: "uPVC Systems",
-    description: "Excellent thermal, sound & weather insulation. Most popular for residential homes.",
-    image: "https://5.imimg.com/data5/SX/YV/YG/SELLER-64612523/upvc-sliding-window-500x500.jpg",
-    styles: [
-      {
-        id: 'sliding',
-        label: 'uPVC Sliding Window',
-        description: 'Smooth, space-saving horizontal sliding panels with interlocking brush seals.',
-        image: 'https://5.imimg.com/data5/SX/YV/YG/SELLER-64612523/upvc-sliding-window-500x500.jpg',
-        productTypeId: 'sliding_window'
-      },
-      {
-        id: 'casement',
-        label: 'uPVC Casement Window',
-        description: 'Classic side-hung openable window swinging outward for 100% ventilation.',
-        image: 'https://5.imimg.com/data5/QR/VY/TK/SELLER-64612523/casement-window-500x500.jpeg',
-        productTypeId: 'casement_window'
-      },
-      {
-        id: 'french_door',
-        label: 'uPVC French Door / Slider',
-        description: 'Wide doors sliding on heavy-duty tracks, perfect for balconies and sit-outs.',
-        image: 'https://5.imimg.com/data5/RU/YJ/HX/SELLER-64612523/upvc-french-door-500x500.jpg',
-        productTypeId: 'sliding_door'
-      },
-      {
-        id: 'fixed',
-        label: 'uPVC Fixed Window',
-        description: 'Non-operational picture window or office partition designed for maximum light.',
-        image: 'https://5.imimg.com/data5/LQ/MY/FJ/SELLER-64612523/upvc-sliding-profile-125x125.jpeg',
-        productTypeId: 'fixed_window'
-      },
-      {
-        id: 'top_hung',
-        label: 'uPVC Top-Hung Window',
-        description: 'Top-hinged ventilation window, ideal for bathrooms and toilets.',
-        image: 'https://5.imimg.com/data5/PK/AF/KY/SELLER-64612523/upvc-top-hung-window-500x500.jpg',
-        productTypeId: 'fixed_window'
-      }
-    ],
-    colors: [
-      {
-        id: 'white',
-        label: 'Classic White',
-        hex: '#FFFFFF',
-        multiplier: 1.0,
-        description: 'Standard clean, high-gloss UV-stabilized white. Low maintenance.'
-      },
-      {
-        id: 'anthracite',
-        label: 'Anthracite Grey',
-        hex: '#374151',
-        multiplier: 1.20,
-        description: 'Premium matte charcoal finish. Fits modern industrial styles.'
-      },
-      {
-        id: 'golden_oak',
-        label: 'Golden Oak',
-        hex: '#854D0E',
-        multiplier: 1.25,
-        description: 'Textured realistic golden wood grain finish.'
-      },
-      {
-        id: 'walnut',
-        label: 'Walnut Wood',
-        hex: '#451A03',
-        multiplier: 1.28,
-        description: 'Dark, premium textured walnut wood grain.'
-      }
-    ],
-    glass: [
-      {
-        id: 'clear',
-        label: '5mm Clear Glass',
-        priceModifier: 0,
-        description: 'Standard clear glass suitable for budget windows.'
-      },
-      {
-        id: 'frosted',
-        label: '6mm Frosted Privacy Glass',
-        priceModifier: 50,
-        description: 'Acid-etched obscure safety glass, ideal for bathrooms.'
-      },
-      {
-        id: 'double',
-        label: '20mm DGU Double Glazing (6+8Ar+6)',
-        priceModifier: 150,
-        description: 'Double glazed unit with argon gas. Drastically reduces heat and noise.'
-      }
-    ],
-    mesh: [
-      {
-        id: 'none',
-        label: 'No Mosquito Mesh',
-        priceModifier: 0,
-        description: 'Standard glass frame without integrated flyscreens.'
-      },
-      {
-        id: 'fiberglass',
-        label: 'Fiberglass Invisible Mesh',
-        priceModifier: 40,
-        description: 'Flexible, high-visibility dark grey mesh. Blends in and keeps out bugs.'
-      },
-      {
-        id: 'ss304',
-        label: 'SS304 Stainless Steel Shield',
-        priceModifier: 120,
-        description: 'High-tensile, heavy-duty stainless steel wire mesh.'
-      }
-    ]
-  },
-  aluminium: {
-    label: "Aluminium Systems",
-    description: "Sleek slimline architectural frames. Ideal for large glass views & commercial projects.",
-    image: "https://5.imimg.com/data5/VJ/OO/VB/SELLER-64612523/upvc-sliding-window-profiles-125x125.jpg",
-    styles: [
-      {
-        id: 'alu_sliding',
-        label: 'Aluminium Sliding Window',
-        description: 'Slimline architectural aluminium sliding profiles with integrated track systems.',
-        image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80',
-        productTypeId: 'alu_sliding_window'
-      },
-      {
-        id: 'alu_casement',
-        label: 'Aluminium Casement Window',
-        description: 'Flush architectural casement window with friction hinges.',
-        image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
-        productTypeId: 'alu_casement_window'
-      },
-      {
-        id: 'alu_french_door',
-        label: 'Aluminium Balcony Slider',
-        description: 'Premium large-pane sliding patio doors with low thresholds and structural reinforcements.',
-        image: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80',
-        productTypeId: 'alu_sliding_door'
-      },
-      {
-        id: 'alu_fixed',
-        label: 'Aluminium Fixed Window',
-        description: 'Slim frame fixed picture window designed for modern panoramic views.',
-        image: 'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=800&q=80',
-        productTypeId: 'alu_fixed_window'
-      },
-      {
-        id: 'alu_top_hung',
-        label: 'Aluminium Vent Window',
-        description: 'Modern architectural toilet/ventilator windows with hidden mechanical friction stays.',
-        image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80',
-        productTypeId: 'alu_casement_window'
-      }
-    ],
-    colors: [
-      {
-        id: 'anodized_silver',
-        label: 'Natural Anodized Silver',
-        hex: '#C0C0C0',
-        multiplier: 1.0,
-        description: 'Clean, metallic anodized silver for modern architectural look.'
-      },
-      {
-        id: 'charcoal_grey',
-        label: 'Charcoal Grey',
-        hex: '#374151',
-        multiplier: 1.15,
-        description: 'Modern architectural powder-coated charcoal grey finish.'
-      },
-      {
-        id: 'matte_black',
-        label: 'Matte Jet Black',
-        hex: '#1A1A1A',
-        multiplier: 1.18,
-        description: 'Luxury matte black powder-coated frame. Sleek and bold.'
-      },
-      {
-        id: 'champagne_gold',
-        label: 'Champagne Gold',
-        hex: '#D4AF37',
-        multiplier: 1.25,
-        description: 'Premium anodized champagne gold for high-end luxury villas.'
-      },
-      {
-        id: 'wooden_walnut',
-        label: 'Walnut Woodgrain',
-        hex: '#5C3D1E',
-        multiplier: 1.30,
-        description: 'Premium timber-look sublimation heat-transfer finish.'
-      }
-    ],
-    glass: [
-      {
-        id: 'clear',
-        label: '5mm Clear Glass',
-        priceModifier: 0,
-        description: 'Standard clear glass pane.'
-      },
-      {
-        id: 'frosted',
-        label: '6mm Frosted Privacy Glass',
-        priceModifier: 60,
-        description: 'Acid-etched frosted glass for privacy.'
-      },
-      {
-        id: 'double',
-        label: '24mm Double Glazed (DGU)',
-        priceModifier: 180,
-        description: 'Superior sound reduction and energy efficiency (6+12Ar+6).'
-      },
-      {
-        id: 'toughened_laminated',
-        label: '12mm Toughened Laminated',
-        priceModifier: 280,
-        description: 'High-security safety glass designed for structural strength.'
-      }
-    ],
-    mesh: [
-      {
-        id: 'none',
-        label: 'No Mosquito Mesh',
-        priceModifier: 0,
-        description: 'No mesh.'
-      },
-      {
-        id: 'fiberglass',
-        label: 'Fiberglass Mesh',
-        priceModifier: 50,
-        description: 'Flexible and highly transparent dark grey mesh.'
-      },
-      {
-        id: 'ss304',
-        label: 'SS304 Security Mesh',
-        priceModifier: 150,
-        description: 'Heavy duty stainless steel wire mesh.'
-      },
-      {
-        id: 'pleated',
-        label: 'Premium Pleated Mesh',
-        priceModifier: 220,
-        description: 'Collapsible pleated zigzag mesh sliding horizontally.'
-      }
-    ]
-  }
-};
-
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
@@ -336,101 +57,13 @@ const STEPS = [
   { id: 6, name: 'Your Estimate' },
 ];
 
-const SQ_FT_PRESETS = [500, 750, 1000, 1200, 1500, 2000, 2500, 3000] as const;
-
 const CALLBACK_OPTIONS = [
   { id: 'morning',   label: 'Morning' },
   { id: 'afternoon', label: 'Afternoon' },
   { id: 'evening',   label: 'Evening' },
 ];
 
-// ---------------------------------------------------------------------------
-// Config-Driven Helpers
-// ---------------------------------------------------------------------------
-
-function getBasePrice(family: 'upvc' | 'aluminium', selectedTypes: string[]): number {
-  const config = SYSTEM_CONFIGS[family];
-  if (selectedTypes.length === 0) return family === 'upvc' ? 500 : 650;
-  
-  let totalBase = 0;
-  let count = 0;
-  selectedTypes.forEach(styleId => {
-    const styleObj = config.styles.find(s => s.id === styleId);
-    if (styleObj) {
-      const typeObj = productTypes.find(t => t.id === styleObj.productTypeId);
-      if (typeObj) {
-        totalBase += typeObj.basePricePerSqFt;
-        count++;
-      }
-    }
-  });
-  
-  return count > 0 ? (totalBase / count) : (family === 'upvc' ? 500 : 650);
-}
-
-function computeEstimate(st: HomeEstimatorState): { min: number; max: number; area: number } {
-  const config = SYSTEM_CONFIGS[st.family];
-  const area = Math.max(st.homeSqFt * 0.12, st.windowCount * 16);
-  
-  // Dynamic base price from selected window styles in config/data.ts
-  const base = getBasePrice(st.family, st.selectedTypes);
-  
-  const glassObj = config.glass.find(g => g.id === st.glassChoice) || config.glass[0];
-  const meshObj = config.mesh.find(m => m.id === st.meshChoice) || config.mesh[0];
-  const colorObj = config.colors.find(c => c.id === st.colorChoice) || config.colors[0];
-  
-  const glassMod = glassObj.priceModifier;
-  const meshMod = meshObj.priceModifier;
-  const colorMultiplier = colorObj.multiplier;
-  
-  const installationCost = st.installationRequired ? 60 : 0;
-  
-  const unitPrice = ((base + glassMod + meshMod) * colorMultiplier + installationCost) * area;
-  return { min: Math.round(unitPrice), max: Math.round(unitPrice * 1.15), area: Math.round(area) };
-}
-
-function buildWhatsAppMessage(st: HomeEstimatorState, min: number, max: number): string {
-  const config = SYSTEM_CONFIGS[st.family];
-  const typesLabel = st.selectedTypes.length
-    ? st.selectedTypes.map(id => config.styles.find(w => w.id === id)?.label ?? id).join(', ')
-    : 'Not selected';
-  const colorLabel = config.colors.find(c => c.id === st.colorChoice)?.label ?? st.colorChoice;
-  const glassLabel = config.glass.find(g => g.id === st.glassChoice)?.label ?? st.glassChoice;
-  const meshLabel  = config.mesh.find(m => m.id === st.meshChoice)?.label  ?? st.meshChoice;
-  const cbLabel    = CALLBACK_OPTIONS.find(c => c.id === st.callbackTime)?.label ?? st.callbackTime;
-
-  return [
-    `🏠 *Whole-Home Estimator Enquiry*`,
-    ``,
-    `*System:* ${st.family === 'upvc' ? 'uPVC' : 'Aluminium'}`,
-    `*Window Types:* ${typesLabel}`,
-    `*Window/Door Count:* ${st.windowCount}`,
-    `*Home Floor Area:* ${st.homeSqFt} sq.ft.`,
-    `*Installation Required:* ${st.installationRequired ? 'Yes' : 'No'}`,
-    ``,
-    `*Frame Colour:* ${colorLabel}`,
-    `*Glass Type:* ${glassLabel}`,
-    `*Flyscreen:* ${meshLabel}`,
-    ``,
-    `*Estimate Range:* ₹${min.toLocaleString('en-IN')} – ₹${max.toLocaleString('en-IN')}`,
-    ``,
-    `*Customer Details*`,
-    `Name: ${st.customerName}`,
-    `Phone: ${st.customerPhone}`,
-    `City / Area: ${st.customerCity}`,
-    `Preferred Callback: ${cbLabel}`,
-    ``,
-    `_Kindly arrange a free site measurement at the earliest._`,
-  ].join('\n');
-}
-
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-
-interface ConfiguratorProps {
-  initialFamily?: ProductFamily;
-}
+const SQ_FT_PRESETS = [500, 750, 1000, 1200, 1500, 2000, 2500, 3000] as const;
 
 const INITIAL_STATE: HomeEstimatorState = {
   family: 'upvc',
@@ -447,9 +80,19 @@ const INITIAL_STATE: HomeEstimatorState = {
   callbackTime: 'morning',
 };
 
+interface ConfiguratorProps {
+  initialFamily?: ProductFamily;
+}
+
 export default function Configurator({ initialFamily }: ConfiguratorProps) {
   const { user, openLoginModal } = useAuth();
   const draftIdRef = useRef<string | null>(null);
+
+  const [types, setTypes] = useState<ProductType[]>([]);
+  const [colors, setColors] = useState<ColorOption[]>([]);
+  const [glass, setGlass] = useState<GlassOption[]>([]);
+  const [mesh, setMesh] = useState<MeshOption[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const [state, setState] = useState<HomeEstimatorState>({
     ...INITIAL_STATE,
@@ -460,8 +103,145 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [customSqFt, setCustomSqFt] = useState('');
   const [saveIndicator, setSaveIndicator] = useState(false);
+  const [dbError, setDbError] = useState(false);
 
-  // Build the current draft record from live state (uses estimatedMin/Max computed below)
+  // Load database options on mount
+  useEffect(() => {
+    let active = true;
+    async function loadConfig() {
+      try {
+        const dbPromise = Promise.all([
+          getProductTypes(true),
+          getColorOptions(true),
+          getGlassOptions(true),
+          getMeshOptions(true)
+        ]);
+
+        const timeoutPromise = new Promise<never>((_, reject) => 
+          setTimeout(() => reject(new Error('Supabase request timeout')), 4500)
+        );
+
+        const [dbTypes, dbColors, dbGlass, dbMesh] = await Promise.race([
+          dbPromise,
+          timeoutPromise
+        ]);
+
+        if (active) {
+          setTypes(dbTypes);
+          setColors(dbColors);
+          setGlass(dbGlass);
+          setMesh(dbMesh);
+          setLoading(false);
+
+          // Update default choices if needed
+          const initialColor = dbColors.find(c => c.family === state.family)?.id || dbColors[0]?.id || 'white';
+          const initialGlass = dbGlass.find(g => g.family === state.family)?.id || dbGlass[0]?.id || 'clear';
+          const initialMesh = dbMesh.find(m => m.family === state.family)?.id || dbMesh[0]?.id || 'none';
+
+          setState(prev => ({
+            ...prev,
+            colorChoice: prev.colorChoice || initialColor,
+            glassChoice: prev.glassChoice || initialGlass,
+            meshChoice: prev.meshChoice || initialMesh,
+          }));
+        }
+      } catch (err) {
+        console.error("Failed to load configurator db data", err);
+        if (active) {
+          const isProduction = process.env.NODE_ENV === 'production';
+          if (isProduction) {
+            setDbError(true);
+            setLoading(false);
+          } else {
+            // Fallback to local config data (development only)
+            setTypes(localTypes);
+            setColors(localColors);
+            setGlass(localGlass);
+            setMesh(localMesh);
+            setLoading(false);
+          }
+        }
+      }
+    }
+    loadConfig();
+    return () => { active = false; };
+  }, [state.family]);
+
+  // Dynamic base price from selected window styles in database
+  const getBasePrice = (family: 'upvc' | 'aluminium', selectedTypes: string[]): number => {
+    if (selectedTypes.length === 0) return family === 'upvc' ? 500 : 650;
+    
+    let totalBase = 0;
+    let count = 0;
+    selectedTypes.forEach(styleId => {
+      const match = types.find(t => t.id === styleId);
+      if (match) {
+        totalBase += match.basePricePerSqFt;
+        count++;
+      }
+    });
+    
+    return count > 0 ? (totalBase / count) : (family === 'upvc' ? 500 : 650);
+  };
+
+  const computeEstimate = (st: HomeEstimatorState): { min: number; max: number; area: number } => {
+    const area = Math.max(st.homeSqFt * 0.12, st.windowCount * 16);
+    const base = getBasePrice(st.family, st.selectedTypes);
+    
+    const glassObj = glass.find(g => g.id === st.glassChoice) || glass.find(g => g.family === st.family) || { priceModifierPerSqFt: 0 };
+    const meshObj = mesh.find(m => m.id === st.meshChoice) || mesh.find(m => m.family === st.family) || { priceModifierPerSqFt: 0 };
+    const colorObj = colors.find(c => c.id === st.colorChoice) || colors.find(c => c.family === st.family) || { priceMultiplier: 1.0 };
+    
+    const glassMod = glassObj.priceModifierPerSqFt || 0;
+    const meshMod = meshObj.priceModifierPerSqFt || 0;
+    const colorMultiplier = colorObj.priceMultiplier || 1.0;
+    
+    const installationCost = st.installationRequired ? 60 : 0;
+    
+    const unitPrice = ((base + glassMod + meshMod) * colorMultiplier + installationCost) * area;
+    return { min: Math.round(unitPrice), max: Math.round(unitPrice * 1.15), area: Math.round(area) };
+  };
+
+  const buildWhatsAppMessage = (st: HomeEstimatorState, min: number, max: number): string => {
+    const familyStyles = types.filter(t => t.family === st.family);
+    const familyColors = colors.filter(c => !c.family || c.family === st.family);
+    const familyGlass = glass.filter(g => !g.family || g.family === st.family);
+    const familyMesh = mesh.filter(m => !m.family || m.family === st.family);
+
+    const typesLabel = st.selectedTypes.length
+      ? st.selectedTypes.map(id => familyStyles.find(w => w.id === id)?.name ?? id).join(', ')
+      : 'Not selected';
+    const colorLabel = familyColors.find(c => c.id === st.colorChoice)?.name ?? st.colorChoice;
+    const glassLabel = familyGlass.find(g => g.id === st.glassChoice)?.name ?? st.glassChoice;
+    const meshLabel  = familyMesh.find(m => m.id === st.meshChoice)?.name  ?? st.meshChoice;
+    const cbLabel    = CALLBACK_OPTIONS.find(c => c.id === st.callbackTime)?.label ?? st.callbackTime;
+
+    return [
+      `🏠 *Whole-Home Estimator Enquiry*`,
+      ``,
+      `*System:* ${st.family === 'upvc' ? 'uPVC' : 'Aluminium'}`,
+      `*Window Types:* ${typesLabel}`,
+      `*Window/Door Count:* ${st.windowCount}`,
+      `*Home Floor Area:* ${st.homeSqFt} sq.ft.`,
+      `*Installation Required:* ${st.installationRequired ? 'Yes' : 'No'}`,
+      ``,
+      `*Frame Colour:* ${colorLabel}`,
+      `*Glass Type:* ${glassLabel}`,
+      `*Flyscreen:* ${meshLabel}`,
+      ``,
+      `*Estimate Range:* ₹${min.toLocaleString('en-IN')} – ₹${max.toLocaleString('en-IN')}`,
+      ``,
+      `*Customer Details*`,
+      `Name: ${st.customerName}`,
+      `Phone: ${st.customerPhone}`,
+      `City / Area: ${st.customerCity}`,
+      `Preferred Callback: ${cbLabel}`,
+      ``,
+      `_Kindly arrange a free site measurement at the earliest._`,
+    ].join('\n');
+  };
+
+  // Build the current draft record from live state
   function buildDraft(overrideStep?: number): DraftRecord {
     const { min: dMin, max: dMax } = computeEstimate(state);
     return {
@@ -506,33 +286,39 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
 
   const { save } = useDraft({ user, draftIdRef, onRestore: handleRestore });
 
-  // Auto-save when state or step changes (after initial mount)
+  // Auto-save when state or step changes
   const mounted = useRef(false);
   useEffect(() => {
     if (!mounted.current) { mounted.current = true; return; }
-    save(buildDraft());
-    // Show brief "Saved" indicator
+    if (!loading) {
+      save(buildDraft());
+    }
     setSaveIndicator(true);
     const t = setTimeout(() => setSaveIndicator(false), 1800);
     return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state, currentStep]);
+  }, [state, currentStep, loading]);
 
-  // Revalidate state elements when system family changes
   const handleFamilyChange = (newFamily: 'upvc' | 'aluminium') => {
     if (newFamily === state.family) return;
-    const newConfig = SYSTEM_CONFIGS[newFamily];
+    
+    const familyColors = colors.filter(c => !c.family || c.family === newFamily);
+    const familyGlass = glass.filter(g => !g.family || g.family === newFamily);
+    const familyMesh = mesh.filter(m => !m.family || m.family === newFamily);
+
+    const defaultColor = familyColors[0]?.id || (newFamily === 'upvc' ? 'white' : 'anodized_silver');
+    const defaultGlass = familyGlass[0]?.id || (newFamily === 'upvc' ? 'clear' : 'clear_alu');
+    const defaultMesh = familyMesh[0]?.id || (newFamily === 'upvc' ? 'none' : 'none_alu');
+
     setState(prev => ({
       ...prev,
       family: newFamily,
-      selectedTypes: [], // Reset selected styles
-      colorChoice: newConfig.colors[0].id, // Reset to system-specific default color
-      glassChoice: newConfig.glass[0].id, // Reset to system-specific default glass
-      meshChoice: newConfig.mesh[0].id, // Reset to system-specific default mesh
+      selectedTypes: [],
+      colorChoice: defaultColor,
+      glassChoice: defaultGlass,
+      meshChoice: defaultMesh,
     }));
   };
 
-  // Validation
   const validate = (): string => {
     if (currentStep === 2 && state.selectedTypes.length === 0) {
       return 'Please select at least one window style.';
@@ -713,14 +499,14 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
 
   // Step 2 — Window Types (multi-select, system-aware)
   const renderStep2 = () => {
-    const config = SYSTEM_CONFIGS[state.family];
+    const configStyles = types.filter(t => t.family === state.family);
     return (
       <div className="space-y-4">
         <p className="text-xs text-muted">
           Select all window and door types present (or planned) in your home. You can pick multiple.
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {config.styles.map(wt => {
+          {configStyles.map(wt => {
             const isSelected = state.selectedTypes.includes(wt.id);
             return (
               <button
@@ -732,13 +518,19 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                 }`}
               >
                 <div className="relative w-full h-24 sm:h-32 bg-slate-50">
-                  <Image
-                    src={wt.image}
-                    alt={wt.label}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-102"
-                    sizes="(max-width: 640px) 50vw, 33vw"
-                  />
+                  {wt.image ? (
+                    <Image
+                      src={wt.image}
+                      alt={wt.name}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-102"
+                      sizes="(max-width: 640px) 50vw, 33vw"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400 font-bold uppercase text-[9px]">
+                      No Image
+                    </div>
+                  )}
                   {isSelected && (
                     <div className="absolute top-2.5 right-2.5 bg-gold text-white rounded-full p-0.5 shadow-sm z-10">
                       <CheckCircle2 className="w-3.5 h-3.5 stroke-[3]" />
@@ -747,7 +539,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                 </div>
                 <div className="p-3 flex-grow flex flex-col justify-between">
                   <div>
-                    <span className="block text-xs sm:text-sm font-bold text-heading leading-tight">{wt.label}</span>
+                    <span className="block text-xs sm:text-sm font-bold text-heading leading-tight">{wt.name}</span>
                     <span className="block text-[10px] sm:text-xs text-muted mt-1 leading-normal">{wt.description}</span>
                   </div>
                 </div>
@@ -881,7 +673,9 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
 
   // Step 4 — Finishes (System-Aware Colors, Glass, and Flyscreens)
   const renderStep4 = () => {
-    const config = SYSTEM_CONFIGS[state.family];
+    const configColors = colors.filter(c => !c.family || c.family === state.family);
+    const configGlass = glass.filter(g => !g.family || g.family === state.family);
+    const configMesh = mesh.filter(m => !m.family || m.family === state.family);
     return (
       <div className="space-y-8">
         {/* Frame Colour */}
@@ -890,7 +684,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
             Frame Colour / Finish
           </label>
           <div className="flex flex-wrap gap-6">
-            {config.colors.map(fc => {
+            {configColors.map(fc => {
               const isSelected = state.colorChoice === fc.id;
               return (
                 <button
@@ -921,7 +715,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                     )}
                   </div>
                   <span className={`text-[10px] font-bold tracking-wide uppercase leading-tight text-center max-w-[64px] ${isSelected ? 'text-gold' : 'text-heading'}`}>
-                    {fc.label}
+                    {fc.name}
                   </span>
                 </button>
               );
@@ -935,7 +729,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
             Glass Option <span className="text-muted font-normal normal-case text-[10px] tracking-normal leading-none">(all options are safety-tempered)</span>
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {config.glass.map(g => {
+            {configGlass.map(g => {
               const isSelected = state.glassChoice === g.id;
               return (
                 <button
@@ -949,7 +743,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                   }`}
                 >
                   <div className="flex justify-between items-center">
-                    <span className={`text-xs font-bold ${isSelected ? 'text-gold' : 'text-heading'}`}>{g.label}</span>
+                    <span className={`text-xs font-bold ${isSelected ? 'text-gold' : 'text-heading'}`}>{g.name}</span>
                     {isSelected && <CheckCircle2 className="w-4 h-4 text-gold stroke-[2.5]" />}
                   </div>
                   <span className="block text-[11px] text-muted mt-1 leading-normal">{g.description}</span>
@@ -965,7 +759,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
             Integrated Flyscreen
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {config.mesh.map(m => {
+            {configMesh.map(m => {
               const isSelected = state.meshChoice === m.id;
               return (
                 <button
@@ -979,7 +773,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                   }`}
                 >
                   <div className="flex justify-between items-center">
-                    <span className={`text-xs font-bold ${isSelected ? 'text-gold' : 'text-heading'}`}>{m.label}</span>
+                    <span className={`text-xs font-bold ${isSelected ? 'text-gold' : 'text-heading'}`}>{m.name}</span>
                     {isSelected && <CheckCircle2 className="w-4 h-4 text-gold stroke-[2.5]" />}
                   </div>
                   <span className="block text-[11px] text-muted mt-1 leading-normal">{m.description}</span>
@@ -1002,7 +796,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
       <div>
         <label className="text-xs font-bold text-heading block mb-1.5">Your Name *</label>
         <Input
-          placeholder="Rajesh Kumar"
+          placeholder="Satish Kumar"
           value={state.customerName}
           onChange={e => setState(prev => ({ ...prev, customerName: e.target.value }))}
           className="border-border/80 focus-visible:ring-gold/30 focus-visible:border-gold rounded-xl px-4 py-3 text-xs h-11"
@@ -1013,7 +807,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
         <label className="text-xs font-bold text-heading block mb-1.5">WhatsApp Phone (10 digits) *</label>
         <Input
           type="tel"
-          placeholder="9886012345"
+          placeholder="9505683584"
           maxLength={10}
           value={state.customerPhone}
           onChange={e => setState(prev => ({ ...prev, customerPhone: e.target.value.replace(/\D/g, '') }))}
@@ -1060,13 +854,17 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
 
   // Step 6 — Estimate Summary (System-Aware Wording & Wavelength)
   const renderStep6 = () => {
-    const config = SYSTEM_CONFIGS[state.family];
+    const familyStyles = types.filter(t => t.family === state.family);
+    const familyColors = colors.filter(c => !c.family || c.family === state.family);
+    const familyGlass = glass.filter(g => !g.family || g.family === state.family);
+    const familyMesh = mesh.filter(m => !m.family || m.family === state.family);
+
     const selectedTypeLabels = state.selectedTypes
-      .map(id => config.styles.find(w => w.id === id)?.label ?? id)
+      .map(id => familyStyles.find(w => w.id === id)?.name ?? id)
       .join(', ');
-    const colorLabel = config.colors.find(c => c.id === state.colorChoice)?.label ?? state.colorChoice;
-    const glassLabel = config.glass.find(g => g.id === state.glassChoice)?.label ?? state.glassChoice;
-    const meshLabel  = config.mesh.find(m => m.id === state.meshChoice)?.label  ?? state.meshChoice;
+    const colorLabel = familyColors.find(c => c.id === state.colorChoice)?.name ?? state.colorChoice;
+    const glassLabel = familyGlass.find(g => g.id === state.glassChoice)?.name ?? state.glassChoice;
+    const meshLabel  = familyMesh.find(m => m.id === state.meshChoice)?.name  ?? state.meshChoice;
 
     return (
       <div className="space-y-6">
@@ -1131,6 +929,41 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
   // ---------------------------------------------------------------------------
   // Main Render
   // ---------------------------------------------------------------------------
+
+  if (dbError) {
+    return (
+      <div className="bg-white border border-red-100 rounded-2xl p-8 text-center max-w-md mx-auto my-12 shadow-sm">
+        <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+        <h3 className="text-lg font-bold text-slate-900 mb-2">Estimator Offline</h3>
+        <p className="text-sm text-slate-600 mb-6">
+          We are currently updating our pricing catalog and configurator settings. Online quotes are temporarily unavailable.
+        </p>
+        <div className="flex flex-col gap-3">
+          <Button 
+            onClick={() => window.open(`https://wa.me/${businessSettings.whatsapp.replace(/[^0-9]/g, '')}`, '_blank')}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-10 rounded-xl"
+          >
+            Inquire on WhatsApp
+          </Button>
+          <a 
+            href={`tel:${businessSettings.phone}`}
+            className="text-xs font-semibold text-slate-500 hover:underline"
+          >
+            Or call us at {businessSettings.phone}
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-3 bg-white rounded-2xl border border-border/60 p-8 shadow-sm">
+        <div className="w-8 h-8 border-4 border-gold border-t-transparent rounded-full animate-spin" />
+        <span className="text-xs font-bold text-muted uppercase tracking-widest">Loading Estimator Options</span>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-3xl mx-auto py-4 px-4 sm:px-6 lg:px-8">

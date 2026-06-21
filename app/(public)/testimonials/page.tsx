@@ -1,13 +1,24 @@
-import React from 'react';
 import { Card } from '@/components/ui/card';
-import { testimonialsList } from '@/lib/data/business';
+import { getTestimonials } from '@/lib/supabase';
+import { testimonialsList as fallbackTestimonials } from '@/lib/data/business';
 
 export const metadata = {
   title: 'Client Reviews | Viswarkarma uPVC & Aluminium',
   description: 'Read actual testimonials from homeowners, architects, and builders who have installed custom uPVC & aluminium windows in Bangalore.',
 };
 
-export default function TestimonialsPage() {
+export default async function TestimonialsPage() {
+  let testimonials = [];
+  try {
+    testimonials = await getTestimonials();
+  } catch (err) {
+    console.error("Failed to load testimonials from Supabase", err);
+    testimonials = fallbackTestimonials;
+  }
+  if (!testimonials || testimonials.length === 0) {
+    testimonials = fallbackTestimonials;
+  }
+
   return (
     <div className="py-8 md:py-16 space-y-10 md:space-y-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
@@ -24,7 +35,7 @@ export default function TestimonialsPage() {
 
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
-        {testimonialsList.map((t) => (
+        {testimonials.map((t) => (
           <Card key={t.id} className="border-brand-border bg-white p-5 sm:p-8 space-y-4">
             <div className="flex items-center gap-1 text-brand-secondary">
               {Array.from({ length: t.rating }).map((_, i) => (

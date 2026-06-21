@@ -17,6 +17,13 @@ import {
 import { BusinessSettings, ServiceVertical, Project, Testimonial, FAQ, SystemType } from '@/types/entities';
 import { ProductType, ProductSeries, ColorOption, GlassOption, MeshOption, HardwareOption } from '@/features/configurator/types';
 
+const safeProductTypes = defaultProductTypes || [];
+const safeProductSeries = defaultProductSeries || [];
+const safeColorOptions = defaultColorOptions || [];
+const safeGlassOptions = defaultGlassOptions || [];
+const safeMeshOptions = defaultMeshOptions || [];
+const safeHardwareOptions = defaultHardwareOptions || [];
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
@@ -527,43 +534,103 @@ export async function deleteFaq(id: string) {
 }
 
 // 6. Configurator - Product Types
-export async function getProductTypes(): Promise<ProductType[]> {
+export async function getProductTypes(activeOnly = true): Promise<ProductType[]> {
   if (!supabase) {
-    return getLocalItem<ProductType[]>('viswarkarma_mock_types', defaultProductTypes);
+    const list = getLocalItem<ProductType[]>('viswarkarma_mock_types', safeProductTypes);
+    return activeOnly ? list.filter(t => t.status !== 'draft') : list;
   }
   try {
-    const { data, error } = await supabase
-      .from('product_types')
-      .select('*')
-      .eq('status', 'active')
-      .order('sort_order', { ascending: true });
+    let query = supabase.from('product_types').select('*');
+    if (activeOnly) {
+      query = query.eq('status', 'active');
+    }
+    const { data, error } = await query.order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      return getLocalItem<ProductType[]>('viswarkarma_mock_types', defaultProductTypes);
+      const list = getLocalItem<ProductType[]>('viswarkarma_mock_types', safeProductTypes);
+      return activeOnly ? list.filter(t => t.status !== 'draft') : list;
     }
 
     return data.map(d => ({
       id: d.id,
       name: d.name,
-      family: d.family_id,
+      family: d.family_id as any,
       description: d.description,
       basePricePerSqFt: Number(d.base_price_per_sqft),
-      supportedSeries: d.supported_series || []
+      supportedSeries: d.supported_series || [],
+      status: d.status,
+      sortOrder: d.sort_order,
+      image: d.image_url || safeProductTypes.find(t => t.id === d.id)?.image || ''
     }));
   } catch {
-    return getLocalItem<ProductType[]>('viswarkarma_mock_types', defaultProductTypes);
+    const list = getLocalItem<ProductType[]>('viswarkarma_mock_types', safeProductTypes);
+    return activeOnly ? list.filter(t => t.status !== 'draft') : list;
+  }
+}
+
+export async function createProductType(type: ProductType) {
+  if (!supabase) {
+    const list = getLocalItem<ProductType[]>('viswarkarma_mock_types', defaultProductTypes);
+    const updated = [...list, type];
+    setLocalItem('viswarkarma_mock_types', updated);
+    return { error: null };
+  }
+  try {
+    const { error } = await supabase.from('product_types').insert([{
+      id: type.id,
+      family_id: type.family,
+      name: type.name,
+      description: type.description,
+      base_price_per_sqft: type.basePricePerSqFt,
+      supported_series: type.supportedSeries,
+      status: type.status || 'active',
+      sort_order: type.sortOrder || 0,
+      image_url: type.image || ''
+    }]);
+    return { error };
+  } catch (err) {
+    return { error: err };
+  }
+}
+
+export async function updateProductType(id: string, type: Partial<ProductType>) {
+  if (!supabase) {
+    const list = getLocalItem<ProductType[]>('viswarkarma_mock_types', defaultProductTypes);
+    const updated = list.map(t => t.id === id ? { ...t, ...type } : t);
+    setLocalItem('viswarkarma_mock_types', updated);
+    return { error: null };
+  }
+  try {
+    const updateData: any = {};
+    if (type.family !== undefined) updateData.family_id = type.family;
+    if (type.name !== undefined) updateData.name = type.name;
+    if (type.description !== undefined) updateData.description = type.description;
+    if (type.basePricePerSqFt !== undefined) updateData.base_price_per_sqft = type.basePricePerSqFt;
+    if (type.supportedSeries !== undefined) updateData.supported_series = type.supportedSeries;
+    if (type.status !== undefined) updateData.status = type.status;
+    if (type.sortOrder !== undefined) updateData.sort_order = type.sortOrder;
+    if (type.image !== undefined) updateData.image_url = type.image;
+
+    const { error } = await supabase.from('product_types').update(updateData).eq('id', id);
+    return { error };
+  } catch (err) {
+    return { error: err };
   }
 }
 
 export async function updateProductTypePrice(id: string, basePricePerSqFt: number) {
+  return updateProductType(id, { basePricePerSqFt });
+}
+
+export async function deleteProductType(id: string) {
   if (!supabase) {
     const list = getLocalItem<ProductType[]>('viswarkarma_mock_types', defaultProductTypes);
-    const updated = list.map((t: ProductType) => t.id === id ? { ...t, basePricePerSqFt } : t);
-    setLocalItem<ProductType[]>('viswarkarma_mock_types', updated);
+    const updated = list.filter(t => t.id !== id);
+    setLocalItem('viswarkarma_mock_types', updated);
     return { error: null };
   }
   try {
-    const { error } = await supabase.from('product_types').update({ base_price_per_sqft: basePricePerSqFt }).eq('id', id);
+    const { error } = await supabase.from('product_types').delete().eq('id', id);
     return { error };
   } catch (err) {
     return { error: err };
@@ -571,43 +638,100 @@ export async function updateProductTypePrice(id: string, basePricePerSqFt: numbe
 }
 
 // 7. Configurator - Series Options
-export async function getProductSeries(): Promise<ProductSeries[]> {
+export async function getProductSeries(activeOnly = true): Promise<ProductSeries[]> {
   if (!supabase) {
-    return getLocalItem<ProductSeries[]>('viswarkarma_mock_series', defaultProductSeries);
+    const list = getLocalItem<ProductSeries[]>('viswarkarma_mock_series', safeProductSeries);
+    return activeOnly ? list.filter(s => s.status !== 'draft') : list;
   }
   try {
-    const { data, error } = await supabase
-      .from('product_series')
-      .select('*')
-      .eq('status', 'active')
-      .order('sort_order', { ascending: true });
+    let query = supabase.from('product_series').select('*');
+    if (activeOnly) {
+      query = query.eq('status', 'active');
+    }
+    const { data, error } = await query.order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      return getLocalItem<ProductSeries[]>('viswarkarma_mock_series', defaultProductSeries);
+      const list = getLocalItem<ProductSeries[]>('viswarkarma_mock_series', safeProductSeries);
+      return activeOnly ? list.filter(s => s.status !== 'draft') : list;
     }
 
     return data.map(d => ({
       id: d.id,
       name: d.name,
-      family: d.family_id,
+      family: d.family_id as any,
       description: d.description,
       thickness: d.thickness,
-      priceModifierPerSqFt: Number(d.price_modifier_per_sqft)
+      priceModifierPerSqFt: Number(d.price_modifier_per_sqft),
+      status: d.status,
+      sortOrder: d.sort_order
     }));
   } catch {
-    return getLocalItem<ProductSeries[]>('viswarkarma_mock_series', defaultProductSeries);
+    const list = getLocalItem<ProductSeries[]>('viswarkarma_mock_series', safeProductSeries);
+    return activeOnly ? list.filter(s => s.status !== 'draft') : list;
+  }
+}
+
+export async function createProductSeries(series: ProductSeries) {
+  if (!supabase) {
+    const list = getLocalItem<ProductSeries[]>('viswarkarma_mock_series', safeProductSeries);
+    const updated = [...list, series];
+    setLocalItem('viswarkarma_mock_series', updated);
+    return { error: null };
+  }
+  try {
+    const { error } = await supabase.from('product_series').insert([{
+      id: series.id,
+      family_id: series.family,
+      name: series.name,
+      description: series.description,
+      thickness: series.thickness,
+      price_modifier_per_sqft: series.priceModifierPerSqFt,
+      status: series.status || 'active',
+      sort_order: series.sortOrder || 0
+    }]);
+    return { error };
+  } catch (err) {
+    return { error: err };
+  }
+}
+
+export async function updateProductSeries(id: string, series: Partial<ProductSeries>) {
+  if (!supabase) {
+    const list = getLocalItem<ProductSeries[]>('viswarkarma_mock_series', safeProductSeries);
+    const updated = list.map(s => s.id === id ? { ...s, ...series } : s);
+    setLocalItem('viswarkarma_mock_series', updated);
+    return { error: null };
+  }
+  try {
+    const updateData: any = {};
+    if (series.family !== undefined) updateData.family_id = series.family;
+    if (series.name !== undefined) updateData.name = series.name;
+    if (series.description !== undefined) updateData.description = series.description;
+    if (series.thickness !== undefined) updateData.thickness = series.thickness;
+    if (series.priceModifierPerSqFt !== undefined) updateData.price_modifier_per_sqft = series.priceModifierPerSqFt;
+    if (series.status !== undefined) updateData.status = series.status;
+    if (series.sortOrder !== undefined) updateData.sort_order = series.sortOrder;
+
+    const { error } = await supabase.from('product_series').update(updateData).eq('id', id);
+    return { error };
+  } catch (err) {
+    return { error: err };
   }
 }
 
 export async function updateProductSeriesPrice(id: string, priceModifierPerSqFt: number) {
+  return updateProductSeries(id, { priceModifierPerSqFt });
+}
+
+export async function deleteProductSeries(id: string) {
   if (!supabase) {
-    const list = getLocalItem<ProductSeries[]>('viswarkarma_mock_series', defaultProductSeries);
-    const updated = list.map((s: ProductSeries) => s.id === id ? { ...s, priceModifierPerSqFt } : s);
-    setLocalItem<ProductSeries[]>('viswarkarma_mock_series', updated);
+    const list = getLocalItem<ProductSeries[]>('viswarkarma_mock_series', safeProductSeries);
+    const updated = list.filter(s => s.id !== id);
+    setLocalItem('viswarkarma_mock_series', updated);
     return { error: null };
   }
   try {
-    const { error } = await supabase.from('product_series').update({ price_modifier_per_sqft: priceModifierPerSqFt }).eq('id', id);
+    const { error } = await supabase.from('product_series').delete().eq('id', id);
     return { error };
   } catch (err) {
     return { error: err };
@@ -615,19 +739,21 @@ export async function updateProductSeriesPrice(id: string, priceModifierPerSqFt:
 }
 
 // 8. Configurator - Colors
-export async function getColorOptions(): Promise<ColorOption[]> {
+export async function getColorOptions(activeOnly = true): Promise<ColorOption[]> {
   if (!supabase) {
-    return getLocalItem<ColorOption[]>('viswarkarma_mock_colors', defaultColorOptions);
+    const list = getLocalItem<ColorOption[]>('viswarkarma_mock_colors', safeColorOptions);
+    return activeOnly ? list.filter(c => c.status !== 'draft') : list;
   }
   try {
-    const { data, error } = await supabase
-      .from('colour_options')
-      .select('*')
-      .eq('status', 'active')
-      .order('sort_order', { ascending: true });
+    let query = supabase.from('colour_options').select('*');
+    if (activeOnly) {
+      query = query.eq('status', 'active');
+    }
+    const { data, error } = await query.order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      return getLocalItem<ColorOption[]>('viswarkarma_mock_colors', defaultColorOptions);
+      const list = getLocalItem<ColorOption[]>('viswarkarma_mock_colors', safeColorOptions);
+      return activeOnly ? list.filter(c => c.status !== 'draft') : list;
     }
 
     return data.map(d => ({
@@ -636,22 +762,80 @@ export async function getColorOptions(): Promise<ColorOption[]> {
       hex: d.hex,
       priceMultiplier: Number(d.price_multiplier),
       description: d.description,
-      isWoodGrain: d.is_wood_grain
+      isWoodGrain: d.is_wood_grain,
+      family: d.family_id as any,
+      status: d.status,
+      sortOrder: d.sort_order
     }));
   } catch {
-    return getLocalItem<ColorOption[]>('viswarkarma_mock_colors', defaultColorOptions);
+    const list = getLocalItem<ColorOption[]>('viswarkarma_mock_colors', safeColorOptions);
+    return activeOnly ? list.filter(c => c.status !== 'draft') : list;
+  }
+}
+
+export async function createColorOption(color: ColorOption) {
+  if (!supabase) {
+    const list = getLocalItem<ColorOption[]>('viswarkarma_mock_colors', safeColorOptions);
+    const updated = [...list, color];
+    setLocalItem('viswarkarma_mock_colors', updated);
+    return { error: null };
+  }
+  try {
+    const { error } = await supabase.from('colour_options').insert([{
+      id: color.id,
+      family_id: color.family || 'upvc',
+      name: color.name,
+      hex: color.hex,
+      price_multiplier: color.priceMultiplier,
+      description: color.description,
+      is_wood_grain: color.isWoodGrain || false,
+      status: color.status || 'active',
+      sort_order: color.sortOrder || 0
+    }]);
+    return { error };
+  } catch (err) {
+    return { error: err };
+  }
+}
+
+export async function updateColorOption(id: string, color: Partial<ColorOption>) {
+  if (!supabase) {
+    const list = getLocalItem<ColorOption[]>('viswarkarma_mock_colors', safeColorOptions);
+    const updated = list.map(c => c.id === id ? { ...c, ...color } : c);
+    setLocalItem('viswarkarma_mock_colors', updated);
+    return { error: null };
+  }
+  try {
+    const updateData: any = {};
+    if (color.family !== undefined) updateData.family_id = color.family;
+    if (color.name !== undefined) updateData.name = color.name;
+    if (color.hex !== undefined) updateData.hex = color.hex;
+    if (color.priceMultiplier !== undefined) updateData.price_multiplier = color.priceMultiplier;
+    if (color.description !== undefined) updateData.description = color.description;
+    if (color.isWoodGrain !== undefined) updateData.is_wood_grain = color.isWoodGrain;
+    if (color.status !== undefined) updateData.status = color.status;
+    if (color.sortOrder !== undefined) updateData.sort_order = color.sortOrder;
+
+    const { error } = await supabase.from('colour_options').update(updateData).eq('id', id);
+    return { error };
+  } catch (err) {
+    return { error: err };
   }
 }
 
 export async function updateColorOptionMultiplier(id: string, priceMultiplier: number) {
+  return updateColorOption(id, { priceMultiplier });
+}
+
+export async function deleteColorOption(id: string) {
   if (!supabase) {
-    const list = getLocalItem<ColorOption[]>('viswarkarma_mock_colors', defaultColorOptions);
-    const updated = list.map((c: ColorOption) => c.id === id ? { ...c, priceMultiplier } : c);
-    setLocalItem<ColorOption[]>('viswarkarma_mock_colors', updated);
+    const list = getLocalItem<ColorOption[]>('viswarkarma_mock_colors', safeColorOptions);
+    const updated = list.filter(c => c.id !== id);
+    setLocalItem('viswarkarma_mock_colors', updated);
     return { error: null };
   }
   try {
-    const { error } = await supabase.from('colour_options').update({ price_multiplier: priceMultiplier }).eq('id', id);
+    const { error } = await supabase.from('colour_options').delete().eq('id', id);
     return { error };
   } catch (err) {
     return { error: err };
@@ -659,41 +843,97 @@ export async function updateColorOptionMultiplier(id: string, priceMultiplier: n
 }
 
 // 9. Configurator - Glass Options
-export async function getGlassOptions(): Promise<GlassOption[]> {
+export async function getGlassOptions(activeOnly = true): Promise<GlassOption[]> {
   if (!supabase) {
-    return getLocalItem<GlassOption[]>('viswarkarma_mock_glass', defaultGlassOptions);
+    const list = getLocalItem<GlassOption[]>('viswarkarma_mock_glass', safeGlassOptions);
+    return activeOnly ? list.filter(g => g.status !== 'draft') : list;
   }
   try {
-    const { data, error } = await supabase
-      .from('glass_options')
-      .select('*')
-      .eq('status', 'active')
-      .order('sort_order', { ascending: true });
+    let query = supabase.from('glass_options').select('*');
+    if (activeOnly) {
+      query = query.eq('status', 'active');
+    }
+    const { data, error } = await query.order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      return getLocalItem<GlassOption[]>('viswarkarma_mock_glass', defaultGlassOptions);
+      const list = getLocalItem<GlassOption[]>('viswarkarma_mock_glass', safeGlassOptions);
+      return activeOnly ? list.filter(g => g.status !== 'draft') : list;
     }
 
     return data.map(d => ({
       id: d.id,
       name: d.name,
       description: d.description,
-      priceModifierPerSqFt: Number(d.price_modifier_per_sqft)
+      priceModifierPerSqFt: Number(d.price_modifier_per_sqft),
+      family: d.family_id as any,
+      status: d.status,
+      sortOrder: d.sort_order
     }));
   } catch {
-    return getLocalItem<GlassOption[]>('viswarkarma_mock_glass', defaultGlassOptions);
+    const list = getLocalItem<GlassOption[]>('viswarkarma_mock_glass', safeGlassOptions);
+    return activeOnly ? list.filter(g => g.status !== 'draft') : list;
+  }
+}
+
+export async function createGlassOption(glass: GlassOption) {
+  if (!supabase) {
+    const list = getLocalItem<GlassOption[]>('viswarkarma_mock_glass', safeGlassOptions);
+    const updated = [...list, glass];
+    setLocalItem('viswarkarma_mock_glass', updated);
+    return { error: null };
+  }
+  try {
+    const { error } = await supabase.from('glass_options').insert([{
+      id: glass.id,
+      family_id: glass.family || 'upvc',
+      name: glass.name,
+      description: glass.description,
+      price_modifier_per_sqft: glass.priceModifierPerSqFt,
+      status: glass.status || 'active',
+      sort_order: glass.sortOrder || 0
+    }]);
+    return { error };
+  } catch (err) {
+    return { error: err };
+  }
+}
+
+export async function updateGlassOption(id: string, glass: Partial<GlassOption>) {
+  if (!supabase) {
+    const list = getLocalItem<GlassOption[]>('viswarkarma_mock_glass', safeGlassOptions);
+    const updated = list.map(g => g.id === id ? { ...g, ...glass } : g);
+    setLocalItem('viswarkarma_mock_glass', updated);
+    return { error: null };
+  }
+  try {
+    const updateData: any = {};
+    if (glass.family !== undefined) updateData.family_id = glass.family;
+    if (glass.name !== undefined) updateData.name = glass.name;
+    if (glass.description !== undefined) updateData.description = glass.description;
+    if (glass.priceModifierPerSqFt !== undefined) updateData.price_modifier_per_sqft = glass.priceModifierPerSqFt;
+    if (glass.status !== undefined) updateData.status = glass.status;
+    if (glass.sortOrder !== undefined) updateData.sort_order = glass.sortOrder;
+
+    const { error } = await supabase.from('glass_options').update(updateData).eq('id', id);
+    return { error };
+  } catch (err) {
+    return { error: err };
   }
 }
 
 export async function updateGlassOptionPrice(id: string, priceModifierPerSqFt: number) {
+  return updateGlassOption(id, { priceModifierPerSqFt });
+}
+
+export async function deleteGlassOption(id: string) {
   if (!supabase) {
-    const list = getLocalItem<GlassOption[]>('viswarkarma_mock_glass', defaultGlassOptions);
-    const updated = list.map((g: GlassOption) => g.id === id ? { ...g, priceModifierPerSqFt } : g);
-    setLocalItem<GlassOption[]>('viswarkarma_mock_glass', updated);
+    const list = getLocalItem<GlassOption[]>('viswarkarma_mock_glass', safeGlassOptions);
+    const updated = list.filter(g => g.id !== id);
+    setLocalItem('viswarkarma_mock_glass', updated);
     return { error: null };
   }
   try {
-    const { error } = await supabase.from('glass_options').update({ price_modifier_per_sqft: priceModifierPerSqFt }).eq('id', id);
+    const { error } = await supabase.from('glass_options').delete().eq('id', id);
     return { error };
   } catch (err) {
     return { error: err };
@@ -701,41 +941,97 @@ export async function updateGlassOptionPrice(id: string, priceModifierPerSqFt: n
 }
 
 // 10. Configurator - Mesh Options
-export async function getMeshOptions(): Promise<MeshOption[]> {
+export async function getMeshOptions(activeOnly = true): Promise<MeshOption[]> {
   if (!supabase) {
-    return getLocalItem<MeshOption[]>('viswarkarma_mock_mesh', defaultMeshOptions);
+    const list = getLocalItem<MeshOption[]>('viswarkarma_mock_mesh', safeMeshOptions);
+    return activeOnly ? list.filter(m => m.status !== 'draft') : list;
   }
   try {
-    const { data, error } = await supabase
-      .from('mesh_options')
-      .select('*')
-      .eq('status', 'active')
-      .order('sort_order', { ascending: true });
+    let query = supabase.from('mesh_options').select('*');
+    if (activeOnly) {
+      query = query.eq('status', 'active');
+    }
+    const { data, error } = await query.order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      return getLocalItem<MeshOption[]>('viswarkarma_mock_mesh', defaultMeshOptions);
+      const list = getLocalItem<MeshOption[]>('viswarkarma_mock_mesh', safeMeshOptions);
+      return activeOnly ? list.filter(m => m.status !== 'draft') : list;
     }
 
     return data.map(d => ({
       id: d.id,
       name: d.name,
       description: d.description,
-      priceModifierPerSqFt: Number(d.price_modifier_per_sqft)
+      priceModifierPerSqFt: Number(d.price_modifier_per_sqft),
+      family: d.family_id as any,
+      status: d.status,
+      sortOrder: d.sort_order
     }));
   } catch {
-    return getLocalItem<MeshOption[]>('viswarkarma_mock_mesh', defaultMeshOptions);
+    const list = getLocalItem<MeshOption[]>('viswarkarma_mock_mesh', safeMeshOptions);
+    return activeOnly ? list.filter(m => m.status !== 'draft') : list;
+  }
+}
+
+export async function createMeshOption(mesh: MeshOption) {
+  if (!supabase) {
+    const list = getLocalItem<MeshOption[]>('viswarkarma_mock_mesh', safeMeshOptions);
+    const updated = [...list, mesh];
+    setLocalItem('viswarkarma_mock_mesh', updated);
+    return { error: null };
+  }
+  try {
+    const { error } = await supabase.from('mesh_options').insert([{
+      id: mesh.id,
+      family_id: mesh.family || 'upvc',
+      name: mesh.name,
+      description: mesh.description,
+      price_modifier_per_sqft: mesh.priceModifierPerSqFt,
+      status: mesh.status || 'active',
+      sort_order: mesh.sortOrder || 0
+    }]);
+    return { error };
+  } catch (err) {
+    return { error: err };
+  }
+}
+
+export async function updateMeshOption(id: string, mesh: Partial<MeshOption>) {
+  if (!supabase) {
+    const list = getLocalItem<MeshOption[]>('viswarkarma_mock_mesh', safeMeshOptions);
+    const updated = list.map(m => m.id === id ? { ...m, ...mesh } : m);
+    setLocalItem('viswarkarma_mock_mesh', updated);
+    return { error: null };
+  }
+  try {
+    const updateData: any = {};
+    if (mesh.family !== undefined) updateData.family_id = mesh.family;
+    if (mesh.name !== undefined) updateData.name = mesh.name;
+    if (mesh.description !== undefined) updateData.description = mesh.description;
+    if (mesh.priceModifierPerSqFt !== undefined) updateData.price_modifier_per_sqft = mesh.priceModifierPerSqFt;
+    if (mesh.status !== undefined) updateData.status = mesh.status;
+    if (mesh.sortOrder !== undefined) updateData.sort_order = mesh.sortOrder;
+
+    const { error } = await supabase.from('mesh_options').update(updateData).eq('id', id);
+    return { error };
+  } catch (err) {
+    return { error: err };
   }
 }
 
 export async function updateMeshOptionPrice(id: string, priceModifierPerSqFt: number) {
+  return updateMeshOption(id, { priceModifierPerSqFt });
+}
+
+export async function deleteMeshOption(id: string) {
   if (!supabase) {
-    const list = getLocalItem<MeshOption[]>('viswarkarma_mock_mesh', defaultMeshOptions);
-    const updated = list.map((m: MeshOption) => m.id === id ? { ...m, priceModifierPerSqFt } : m);
-    setLocalItem<MeshOption[]>('viswarkarma_mock_mesh', updated);
+    const list = getLocalItem<MeshOption[]>('viswarkarma_mock_mesh', safeMeshOptions);
+    const updated = list.filter(m => m.id !== id);
+    setLocalItem('viswarkarma_mock_mesh', updated);
     return { error: null };
   }
   try {
-    const { error } = await supabase.from('mesh_options').update({ price_modifier_per_sqft: priceModifierPerSqFt }).eq('id', id);
+    const { error } = await supabase.from('mesh_options').delete().eq('id', id);
     return { error };
   } catch (err) {
     return { error: err };
@@ -743,41 +1039,94 @@ export async function updateMeshOptionPrice(id: string, priceModifierPerSqFt: nu
 }
 
 // 11. Configurator - Hardware Options
-export async function getHardwareOptions(): Promise<HardwareOption[]> {
+export async function getHardwareOptions(activeOnly = true): Promise<HardwareOption[]> {
   if (!supabase) {
-    return getLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', defaultHardwareOptions);
+    const list = getLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', safeHardwareOptions);
+    return activeOnly ? list.filter(h => h.status !== 'draft') : list;
   }
   try {
-    const { data, error } = await supabase
-      .from('hardware_options')
-      .select('*')
-      .eq('status', 'active')
-      .order('sort_order', { ascending: true });
+    let query = supabase.from('hardware_options').select('*');
+    if (activeOnly) {
+      query = query.eq('status', 'active');
+    }
+    const { data, error } = await query.order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      return getLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', defaultHardwareOptions);
+      const list = getLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', safeHardwareOptions);
+      return activeOnly ? list.filter(h => h.status !== 'draft') : list;
     }
 
     return data.map(d => ({
       id: d.id,
       name: d.name,
       description: d.description,
-      priceModifierPerUnit: Number(d.price_modifier_per_unit)
+      priceModifierPerUnit: Number(d.price_modifier_per_unit),
+      status: d.status,
+      sortOrder: d.sort_order
     }));
   } catch {
-    return getLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', defaultHardwareOptions);
+    const list = getLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', safeHardwareOptions);
+    return activeOnly ? list.filter(h => h.status !== 'draft') : list;
+  }
+}
+
+export async function createHardwareOption(hardware: HardwareOption) {
+  if (!supabase) {
+    const list = getLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', safeHardwareOptions);
+    const updated = [...list, hardware];
+    setLocalItem('viswarkarma_mock_hardware', updated);
+    return { error: null };
+  }
+  try {
+    const { error } = await supabase.from('hardware_options').insert([{
+      id: hardware.id,
+      name: hardware.name,
+      description: hardware.description,
+      price_modifier_per_unit: hardware.priceModifierPerUnit,
+      status: hardware.status || 'active',
+      sort_order: hardware.sortOrder || 0
+    }]);
+    return { error };
+  } catch (err) {
+    return { error: err };
+  }
+}
+
+export async function updateHardwareOption(id: string, hardware: Partial<HardwareOption>) {
+  if (!supabase) {
+    const list = getLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', safeHardwareOptions);
+    const updated = list.map(h => h.id === id ? { ...h, ...hardware } : h);
+    setLocalItem('viswarkarma_mock_hardware', updated);
+    return { error: null };
+  }
+  try {
+    const updateData: any = {};
+    if (hardware.name !== undefined) updateData.name = hardware.name;
+    if (hardware.description !== undefined) updateData.description = hardware.description;
+    if (hardware.priceModifierPerUnit !== undefined) updateData.price_modifier_per_unit = hardware.priceModifierPerUnit;
+    if (hardware.status !== undefined) updateData.status = hardware.status;
+    if (hardware.sortOrder !== undefined) updateData.sort_order = hardware.sortOrder;
+
+    const { error } = await supabase.from('hardware_options').update(updateData).eq('id', id);
+    return { error };
+  } catch (err) {
+    return { error: err };
   }
 }
 
 export async function updateHardwareOptionPrice(id: string, priceModifierPerUnit: number) {
+  return updateHardwareOption(id, { priceModifierPerUnit });
+}
+
+export async function deleteHardwareOption(id: string) {
   if (!supabase) {
-    const list = getLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', defaultHardwareOptions);
-    const updated = list.map((h: HardwareOption) => h.id === id ? { ...h, priceModifierPerUnit } : h);
-    setLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', updated);
+    const list = getLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', safeHardwareOptions);
+    const updated = list.filter(h => h.id !== id);
+    setLocalItem('viswarkarma_mock_hardware', updated);
     return { error: null };
   }
   try {
-    const { error } = await supabase.from('hardware_options').update({ price_modifier_per_unit: priceModifierPerUnit }).eq('id', id);
+    const { error } = await supabase.from('hardware_options').delete().eq('id', id);
     return { error };
   } catch (err) {
     return { error: err };

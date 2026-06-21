@@ -1,12 +1,17 @@
 "use client";
 import { supabase } from './supabase';
 
-export async function signInWithGoogle() {
+export async function signInWithGoogle(redirectTo?: string) {
   if (!supabase) throw new Error('Supabase not initialised');
+  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+  const redirectUrl = redirectTo 
+    ? `${origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`
+    : `${origin}/auth/callback`;
+
   return supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${window.location.origin}/auth/callback`,
+      redirectTo: redirectUrl,
     },
   });
 }

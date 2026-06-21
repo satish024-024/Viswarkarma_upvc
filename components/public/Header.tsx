@@ -2,8 +2,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Phone, MessageSquare, Menu, X, ChevronDown, Sparkles, LogIn, LogOut, User } from 'lucide-react';
+import { Phone, MessageSquare, Menu, X, ChevronDown, Sparkles, LogIn, LogOut, User, Sliders } from 'lucide-react';
 import { businessSettings } from '@/lib/data/business';
+import { getBusinessSettings } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { signOut } from '@/lib/auth';
 
@@ -46,7 +47,43 @@ export default function Header() {
   const [userDrop, setUserDrop] = useState(false);
   const userDropRef = useRef<HTMLDivElement>(null);
   const path = usePathname();
-  const { user, openLoginModal } = useAuth();
+  const { user, session, openLoginModal, isAdmin } = useAuth();
+  const [settings, setSettings] = useState(businessSettings);
+
+  useEffect(() => {
+    getBusinessSettings().then(setSettings);
+  }, []);
+
+  // Open login modal dynamically if unauthenticated, show error alert if unauthorized
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const triggerLogin = sessionStorage.getItem('viswarkarma_trigger_login');
+      if (triggerLogin === 'true') {
+        sessionStorage.removeItem('viswarkarma_trigger_login');
+        openLoginModal();
+      }
+
+      const authError = sessionStorage.getItem('viswarkarma_auth_error');
+      if (authError === 'unauthorized') {
+        sessionStorage.removeItem('viswarkarma_auth_error');
+        alert("Unauthorized: Admin access required.");
+      }
+    }
+  }, [openLoginModal]);
+
+  // Sync session active with dynamic redirects stored in sessionStorage
+  useEffect(() => {
+    if (session && typeof window !== 'undefined') {
+      const redirect = sessionStorage.getItem('viswarkarma_auth_redirect');
+      if (redirect) {
+        sessionStorage.removeItem('viswarkarma_auth_redirect');
+        // Prevent unauthorized redirecting loops for non-admin on admin routes
+        if (isAdmin || !redirect.startsWith('/admin')) {
+          window.location.href = redirect;
+        }
+      }
+    }
+  }, [session, isAdmin]);
 
   // Close user dropdown on outside click
   useEffect(() => {
@@ -161,10 +198,10 @@ export default function Header() {
 
         {/* Tablet & Desktop CTAs */}
         <div className="hidden md:flex items-center gap-2 flex-shrink-0">
-          <a href={`tel:${businessSettings.phone}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-bold text-body hover:text-gold rounded-lg hover:bg-gold-pale transition-all">
+          <a href={`tel:${settings.phone}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-bold text-body hover:text-gold rounded-lg hover:bg-gold-pale transition-all">
             <Phone className="w-3.5 h-3.5" /> Call
           </a>
-          <a href={`https://wa.me/${businessSettings.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-bold text-emerald-700 hover:bg-emerald-50 rounded-lg transition-all">
+          <a href={`https://wa.me/${settings.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-bold text-emerald-700 hover:bg-emerald-50 rounded-lg transition-all">
             <MessageSquare className="w-3.5 h-3.5" /> WhatsApp
           </a>
 
@@ -196,6 +233,15 @@ export default function Header() {
                     <p className="text-xs font-black text-heading truncate">{user.user_metadata?.full_name as string ?? 'My Account'}</p>
                     <p className="text-[11px] text-muted truncate">{user.email}</p>
                   </div>
+                  {isAdmin && (
+                    <Link 
+                      href="/admin/dashboard" 
+                      onClick={() => setUserDrop(false)}
+                      className="flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-gold hover:bg-gold-pale hover:text-gold border-b border-border-soft transition-colors"
+                    >
+                      <Sliders className="w-3.5 h-3.5" /> Admin Panel
+                    </Link>
+                  )}
                   <Link href="/account" className="flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-body hover:bg-gold-pale hover:text-gold transition-colors">
                     <User className="w-3.5 h-3.5" /> My Enquiries
                   </Link>
@@ -330,6 +376,11 @@ export default function Header() {
               </button>
             ) : (
               <>
+                {isAdmin && (
+                  <Link href="/admin/dashboard" onClick={() => setOpen(false)} className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold text-gold hover:text-gold hover:bg-gold-pale/50 transition-all border-b border-border-soft">
+                    <Sliders className="w-4 h-4" /> Admin Panel
+                  </Link>
+                )}
                 <Link href="/account" onClick={() => setOpen(false)} className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold text-body hover:text-gold hover:bg-gold-pale/50 transition-all">
                   <User className="w-4 h-4" /> My Enquiries
                 </Link>
@@ -348,13 +399,13 @@ export default function Header() {
         <div className="p-4 border-t border-border-soft bg-slate-50 space-y-2.5">
           <div className="grid grid-cols-2 gap-2">
             <a 
-              href={`tel:${businessSettings.phone}`}
+              href={`tel:${settings.phone}`}
               className="flex items-center justify-center gap-2 py-3 rounded-xl border border-border bg-white text-body font-bold text-xs hover:bg-slate-50 transition-colors"
             >
               <Phone className="w-3.5 h-3.5 text-[#2B5C88]" /> Call Now
             </a>
             <a 
-              href={`https://wa.me/${businessSettings.whatsapp.replace(/\D/g, '')}`} 
+              href={`https://wa.me/${settings.whatsapp.replace(/\D/g, '')}`} 
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-600 text-white font-bold text-xs hover:bg-emerald-700 transition-colors shadow-sm"

@@ -123,7 +123,7 @@ export default function AdminSettings() {
                 <Input
                   value={settings.whatsapp}
                   onChange={(e) => setSettings({ ...settings, whatsapp: e.target.value })}
-                  placeholder="+919886012345"
+                  placeholder="+919505683584"
                   className="h-10 border-slate-200 text-xs font-semibold"
                 />
               </div>
