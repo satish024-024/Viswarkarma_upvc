@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { projectsList as defaultProjects } from '@/lib/data/business';
@@ -20,7 +21,7 @@ export default function ProjectsPage() {
     : projects.filter(p => p.category === filter);
 
   return (
-    <div className="py-12 sm:py-16 space-y-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-8 md:py-16 space-y-10 md:space-y-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Page Header */}
       <div className="space-y-3 max-w-2xl">
@@ -49,17 +50,23 @@ export default function ProjectsPage() {
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {filteredProjects.map((project) => (
           <Card key={project.id} className="group overflow-hidden border-brand-border flex flex-col justify-between">
             <div>
-              <div className="bg-slate-100 border-b border-brand-border aspect-video w-full flex items-center justify-center text-brand-muted text-xs font-semibold relative">
-                <span>{project.title} Setup</span>
-                <div className="absolute top-2 left-2 bg-slate-900/80 text-white text-[9px] px-2 py-0.5 rounded font-bold uppercase tracking-wider">
+              <div className="relative aspect-video w-full overflow-hidden bg-cream border-b border-brand-border">
+                <Image 
+                  src={project.image} 
+                  alt={project.title} 
+                  fill 
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute top-2 left-2 bg-[#1C2E40]/85 backdrop-blur-sm text-white text-[9px] px-2.5 py-1 rounded font-bold uppercase tracking-wider">
                   {project.category}
                 </div>
               </div>
-              <div className="p-4 space-y-2">
+              <div className="p-3.5 sm:p-4 space-y-2">
                 <h3 className="font-bold text-sm text-brand-primary group-hover:text-brand-secondary transition-colors leading-snug">
                   {project.title}
                 </h3>
@@ -69,7 +76,7 @@ export default function ProjectsPage() {
               </div>
             </div>
             
-            <div className="p-4 pt-0 text-[10px] text-brand-muted border-t border-brand-light mt-2 space-y-1.5 bg-slate-50/50">
+            <div className="p-3.5 pt-2 sm:p-4 sm:pt-2 text-[10px] text-brand-muted border-t border-brand-light mt-2 space-y-1.5 bg-slate-50/50">
               <div className="flex justify-between font-semibold text-brand-primary">
                 <span>Location:</span>
                 <span>{project.location}</span>

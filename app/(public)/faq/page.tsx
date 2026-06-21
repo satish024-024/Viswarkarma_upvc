@@ -12,7 +12,7 @@ export default async function FAQPage() {
   const faqs = await getFaqs();
 
   return (
-    <div className="py-12 sm:py-16 space-y-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-8 md:py-16 space-y-10 md:space-y-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Page Header */}
       <div className="space-y-3 max-w-2xl">
@@ -29,7 +29,7 @@ export default async function FAQPage() {
       <div className="space-y-4">
         {faqs.map((faq) => (
           <Card key={faq.id} className="border-brand-border bg-white overflow-hidden">
-            <CardContent className="p-6 space-y-3">
+            <CardContent className="p-4 sm:p-6 space-y-3">
               <h3 className="font-bold text-sm sm:text-base text-brand-primary flex items-start gap-3">
                 <span className="text-brand-secondary text-xs uppercase bg-brand-light px-2 py-0.5 rounded font-bold mt-0.5 flex-shrink-0">Q</span>
                 <span>{faq.question}</span>

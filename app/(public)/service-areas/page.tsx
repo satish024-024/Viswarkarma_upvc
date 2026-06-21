@@ -10,7 +10,7 @@ export const metadata = {
 
 export default function ServiceAreasPage() {
   return (
-    <div className="py-12 sm:py-16 space-y-12 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-8 md:py-16 space-y-10 md:space-y-12 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Page Header */}
       <div className="space-y-3 max-w-2xl">
@@ -24,7 +24,7 @@ export default function ServiceAreasPage() {
       </div>
 
       {/* Dispatch logistics details card */}
-      <div className="bg-slate-50 border border-brand-border rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row gap-6 items-center">
+      <div className="bg-slate-50 border border-brand-border rounded-2xl p-4 sm:p-8 flex flex-col md:flex-row gap-4 sm:gap-6 items-center">
         <div className="w-12 h-12 rounded-xl bg-brand-light text-brand-secondary flex items-center justify-center flex-shrink-0">
           <Truck className="w-6 h-6" />
         </div>
@@ -40,7 +40,7 @@ export default function ServiceAreasPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {serviceAreas.map((area) => (
           <Card key={area.id} className="border-brand-border bg-white flex flex-col justify-between">
-            <CardContent className="p-6 space-y-4">
+            <CardContent className="p-4 sm:p-6 space-y-4">
               <div className="flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-brand-secondary" />
                 <h3 className="font-bold text-base text-brand-primary">{area.city}</h3>

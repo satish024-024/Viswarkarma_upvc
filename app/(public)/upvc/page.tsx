@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function UpvcOverviewPage() {
   return (
-    <div className="py-12 sm:py-16 space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-8 md:py-16 space-y-10 md:space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Hero Info */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -23,14 +23,14 @@ export default function UpvcOverviewPage() {
           <p className="text-brand-muted text-sm sm:text-base leading-relaxed">
             Our uPVC window and door systems are fabricated using special UV-stabilized impact-resistant compound extrusions. Unlike cheap vinyl that yellows or warps under direct sun, our profiles are steel-reinforced and custom corner-welded to remain airtight for over 30 years.
           </p>
-          <div className="flex flex-wrap gap-3">
-            <Link href="/upvc/configurator">
-              <Button className="font-bold flex items-center gap-1.5 shadow-sm hover:shadow-md">
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            <Link href="/upvc/configurator" className="w-full sm:w-auto">
+              <Button className="font-bold flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md w-full sm:w-auto">
                 Configure uPVC Estimate <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
-            <Link href="/contact">
-              <Button variant="secondary" className="font-bold">Book Free Site Survey</Button>
+            <Link href="/contact" className="w-full sm:w-auto">
+              <Button variant="secondary" className="font-bold w-full sm:w-auto justify-center">Book Free Site Survey</Button>
             </Link>
           </div>
         </div>

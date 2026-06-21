@@ -2,29 +2,18 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, ChevronLeft, Send, Sparkles, AlertCircle, Shield, Scale, CheckCircle2 } from 'lucide-react';
-import { ConfiguratorState, ProductFamily } from '../types';
-import { productTypes, productSeries, colorOptions, glassOptions, meshOptions, hardwareOptions } from '../config/data';
-import { calculatePrice } from '../lib/estimator';
-import { generateWhatsAppLink } from '../lib/whatsapp';
+import { ChevronRight, ChevronLeft, Send, Sparkles, AlertCircle, Shield, CheckCircle2 } from 'lucide-react';
+import { ProductFamily } from '../types';
+import { productTypes } from '../config/data';
+import { createQuoteRequest } from '@/lib/supabase';
+import { businessSettings } from '@/lib/data/business';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
-import { formatINR } from '@/lib/utils';
-import {
-  getProductTypes,
-  getProductSeries,
-  getColorOptions,
-  getGlassOptions,
-  getMeshOptions,
-  getHardwareOptions,
-  createQuoteRequest
-} from '@/lib/supabase';
-import Image from 'next/image';
 
 // ---------------------------------------------------------------------------
-// Types
+// Types & Interfaces
 // ---------------------------------------------------------------------------
 
 interface HomeEstimatorState {
@@ -42,6 +31,296 @@ interface HomeEstimatorState {
   callbackTime: string;
 }
 
+interface WindowStyle {
+  id: string;
+  label: string;
+  description: string;
+  image: string;
+  productTypeId: string;
+}
+
+interface ColorSwatch {
+  id: string;
+  label: string;
+  hex: string;
+  multiplier: number;
+  description: string;
+}
+
+interface GlassOption {
+  id: string;
+  label: string;
+  priceModifier: number;
+  description: string;
+}
+
+interface MeshOption {
+  id: string;
+  label: string;
+  priceModifier: number;
+  description: string;
+}
+
+interface SystemConfig {
+  label: string;
+  description: string;
+  image: string;
+  styles: WindowStyle[];
+  colors: ColorSwatch[];
+  glass: GlassOption[];
+  mesh: MeshOption[];
+}
+
+// ---------------------------------------------------------------------------
+// System-specific Branching Configuration (Config-Driven Rates & Options)
+// ---------------------------------------------------------------------------
+
+const SYSTEM_CONFIGS: Record<'upvc' | 'aluminium', SystemConfig> = {
+  upvc: {
+    label: "uPVC Systems",
+    description: "Excellent thermal, sound & weather insulation. Most popular for residential homes.",
+    image: "https://5.imimg.com/data5/SX/YV/YG/SELLER-64612523/upvc-sliding-window-500x500.jpg",
+    styles: [
+      {
+        id: 'sliding',
+        label: 'uPVC Sliding Window',
+        description: 'Smooth, space-saving horizontal sliding panels with interlocking brush seals.',
+        image: 'https://5.imimg.com/data5/SX/YV/YG/SELLER-64612523/upvc-sliding-window-500x500.jpg',
+        productTypeId: 'sliding_window'
+      },
+      {
+        id: 'casement',
+        label: 'uPVC Casement Window',
+        description: 'Classic side-hung openable window swinging outward for 100% ventilation.',
+        image: 'https://5.imimg.com/data5/QR/VY/TK/SELLER-64612523/casement-window-500x500.jpeg',
+        productTypeId: 'casement_window'
+      },
+      {
+        id: 'french_door',
+        label: 'uPVC French Door / Slider',
+        description: 'Wide doors sliding on heavy-duty tracks, perfect for balconies and sit-outs.',
+        image: 'https://5.imimg.com/data5/RU/YJ/HX/SELLER-64612523/upvc-french-door-500x500.jpg',
+        productTypeId: 'sliding_door'
+      },
+      {
+        id: 'fixed',
+        label: 'uPVC Fixed Window',
+        description: 'Non-operational picture window or office partition designed for maximum light.',
+        image: 'https://5.imimg.com/data5/LQ/MY/FJ/SELLER-64612523/upvc-sliding-profile-125x125.jpeg',
+        productTypeId: 'fixed_window'
+      },
+      {
+        id: 'top_hung',
+        label: 'uPVC Top-Hung Window',
+        description: 'Top-hinged ventilation window, ideal for bathrooms and toilets.',
+        image: 'https://5.imimg.com/data5/PK/AF/KY/SELLER-64612523/upvc-top-hung-window-500x500.jpg',
+        productTypeId: 'fixed_window'
+      }
+    ],
+    colors: [
+      {
+        id: 'white',
+        label: 'Classic White',
+        hex: '#FFFFFF',
+        multiplier: 1.0,
+        description: 'Standard clean, high-gloss UV-stabilized white. Low maintenance.'
+      },
+      {
+        id: 'anthracite',
+        label: 'Anthracite Grey',
+        hex: '#374151',
+        multiplier: 1.20,
+        description: 'Premium matte charcoal finish. Fits modern industrial styles.'
+      },
+      {
+        id: 'golden_oak',
+        label: 'Golden Oak',
+        hex: '#854D0E',
+        multiplier: 1.25,
+        description: 'Textured realistic golden wood grain finish.'
+      },
+      {
+        id: 'walnut',
+        label: 'Walnut Wood',
+        hex: '#451A03',
+        multiplier: 1.28,
+        description: 'Dark, premium textured walnut wood grain.'
+      }
+    ],
+    glass: [
+      {
+        id: 'clear',
+        label: '5mm Clear Glass',
+        priceModifier: 0,
+        description: 'Standard clear glass suitable for budget windows.'
+      },
+      {
+        id: 'frosted',
+        label: '6mm Frosted Privacy Glass',
+        priceModifier: 50,
+        description: 'Acid-etched obscure safety glass, ideal for bathrooms.'
+      },
+      {
+        id: 'double',
+        label: '20mm DGU Double Glazing (6+8Ar+6)',
+        priceModifier: 150,
+        description: 'Double glazed unit with argon gas. Drastically reduces heat and noise.'
+      }
+    ],
+    mesh: [
+      {
+        id: 'none',
+        label: 'No Mosquito Mesh',
+        priceModifier: 0,
+        description: 'Standard glass frame without integrated flyscreens.'
+      },
+      {
+        id: 'fiberglass',
+        label: 'Fiberglass Invisible Mesh',
+        priceModifier: 40,
+        description: 'Flexible, high-visibility dark grey mesh. Blends in and keeps out bugs.'
+      },
+      {
+        id: 'ss304',
+        label: 'SS304 Stainless Steel Shield',
+        priceModifier: 120,
+        description: 'High-tensile, heavy-duty stainless steel wire mesh.'
+      }
+    ]
+  },
+  aluminium: {
+    label: "Aluminium Systems",
+    description: "Sleek slimline architectural frames. Ideal for large glass views & commercial projects.",
+    image: "https://5.imimg.com/data5/VJ/OO/VB/SELLER-64612523/upvc-sliding-window-profiles-125x125.jpg",
+    styles: [
+      {
+        id: 'alu_sliding',
+        label: 'Aluminium Sliding Window',
+        description: 'Slimline architectural aluminium sliding profiles with integrated track systems.',
+        image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80',
+        productTypeId: 'alu_sliding_window'
+      },
+      {
+        id: 'alu_casement',
+        label: 'Aluminium Casement Window',
+        description: 'Flush architectural casement window with friction hinges.',
+        image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+        productTypeId: 'alu_casement_window'
+      },
+      {
+        id: 'alu_french_door',
+        label: 'Aluminium Balcony Slider',
+        description: 'Premium large-pane sliding patio doors with low thresholds and structural reinforcements.',
+        image: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80',
+        productTypeId: 'alu_sliding_door'
+      },
+      {
+        id: 'alu_fixed',
+        label: 'Aluminium Fixed Window',
+        description: 'Slim frame fixed picture window designed for modern panoramic views.',
+        image: 'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=800&q=80',
+        productTypeId: 'alu_fixed_window'
+      },
+      {
+        id: 'alu_top_hung',
+        label: 'Aluminium Vent Window',
+        description: 'Modern architectural toilet/ventilator windows with hidden mechanical friction stays.',
+        image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80',
+        productTypeId: 'alu_casement_window'
+      }
+    ],
+    colors: [
+      {
+        id: 'anodized_silver',
+        label: 'Natural Anodized Silver',
+        hex: '#C0C0C0',
+        multiplier: 1.0,
+        description: 'Clean, metallic anodized silver for modern architectural look.'
+      },
+      {
+        id: 'charcoal_grey',
+        label: 'Charcoal Grey',
+        hex: '#374151',
+        multiplier: 1.15,
+        description: 'Modern architectural powder-coated charcoal grey finish.'
+      },
+      {
+        id: 'matte_black',
+        label: 'Matte Jet Black',
+        hex: '#1A1A1A',
+        multiplier: 1.18,
+        description: 'Luxury matte black powder-coated frame. Sleek and bold.'
+      },
+      {
+        id: 'champagne_gold',
+        label: 'Champagne Gold',
+        hex: '#D4AF37',
+        multiplier: 1.25,
+        description: 'Premium anodized champagne gold for high-end luxury villas.'
+      },
+      {
+        id: 'wooden_walnut',
+        label: 'Walnut Woodgrain',
+        hex: '#5C3D1E',
+        multiplier: 1.30,
+        description: 'Premium timber-look sublimation heat-transfer finish.'
+      }
+    ],
+    glass: [
+      {
+        id: 'clear',
+        label: '5mm Clear Glass',
+        priceModifier: 0,
+        description: 'Standard clear glass pane.'
+      },
+      {
+        id: 'frosted',
+        label: '6mm Frosted Privacy Glass',
+        priceModifier: 60,
+        description: 'Acid-etched frosted glass for privacy.'
+      },
+      {
+        id: 'double',
+        label: '24mm Double Glazed (DGU)',
+        priceModifier: 180,
+        description: 'Superior sound reduction and energy efficiency (6+12Ar+6).'
+      },
+      {
+        id: 'toughened_laminated',
+        label: '12mm Toughened Laminated',
+        priceModifier: 280,
+        description: 'High-security safety glass designed for structural strength.'
+      }
+    ],
+    mesh: [
+      {
+        id: 'none',
+        label: 'No Mosquito Mesh',
+        priceModifier: 0,
+        description: 'No mesh.'
+      },
+      {
+        id: 'fiberglass',
+        label: 'Fiberglass Mesh',
+        priceModifier: 50,
+        description: 'Flexible and highly transparent dark grey mesh.'
+      },
+      {
+        id: 'ss304',
+        label: 'SS304 Security Mesh',
+        priceModifier: 150,
+        description: 'Heavy duty stainless steel wire mesh.'
+      },
+      {
+        id: 'pleated',
+        label: 'Premium Pleated Mesh',
+        priceModifier: 220,
+        description: 'Collapsible pleated zigzag mesh sliding horizontally.'
+      }
+    ]
+  }
+};
+
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
@@ -57,110 +336,65 @@ const STEPS = [
 
 const SQ_FT_PRESETS = [500, 750, 1000, 1200, 1500, 2000, 2500, 3000] as const;
 
-interface WindowTypeOption {
-  id: string;
-  label: string;
-  image: string;
-}
-
-const WINDOW_TYPES: WindowTypeOption[] = [
-  {
-    id: 'sliding',
-    label: 'Sliding Window',
-    image: 'https://5.imimg.com/data5/SX/YV/YG/SELLER-64612523/upvc-sliding-window-500x500.jpg',
-  },
-  {
-    id: 'casement',
-    label: 'Casement Window',
-    image: 'https://5.imimg.com/data5/QR/VY/TK/SELLER-64612523/casement-window-500x500.jpeg',
-  },
-  {
-    id: 'french_door',
-    label: 'French Door / Balcony Slider',
-    image: 'https://5.imimg.com/data5/RU/YJ/HX/SELLER-64612523/upvc-french-door-500x500.jpg',
-  },
-  {
-    id: 'fixed',
-    label: 'Fixed Window',
-    image: 'https://5.imimg.com/data5/LQ/MY/FJ/SELLER-64612523/upvc-sliding-profile-125x125.jpeg',
-  },
-  {
-    id: 'top_hung',
-    label: 'Top-Hung Window',
-    image: 'https://5.imimg.com/data5/PK/AF/KY/SELLER-64612523/upvc-top-hung-window-500x500.jpg',
-  },
-];
-
-interface ColorSwatch {
-  id: string;
-  label: string;
-  hex: string;
-  mult: number;
-}
-
-const FRAME_COLORS: ColorSwatch[] = [
-  { id: 'white',  label: 'White',           hex: '#FFFFFF', mult: 1.0  },
-  { id: 'sand',   label: 'Sand / Cream',    hex: '#D4B896', mult: 1.05 },
-  { id: 'grey',   label: 'Anthracite Grey', hex: '#3D3D3D', mult: 1.1  },
-  { id: 'walnut', label: 'Walnut Wood',     hex: '#5C3D1E', mult: 1.2  },
-  { id: 'black',  label: 'Black',           hex: '#1A1A1A', mult: 1.15 },
-];
-
-interface PillOption {
-  id: string;
-  label: string;
-}
-
-const GLASS_OPTIONS: PillOption[] = [
-  { id: 'clear',   label: 'Clear' },
-  { id: 'frosted', label: 'Frosted' },
-  { id: 'double',  label: 'Double Glazed' },
-];
-
-const MESH_OPTIONS: PillOption[] = [
-  { id: 'none',       label: 'None' },
-  { id: 'fiberglass', label: 'Fiberglass Mesh' },
-  { id: 'ss304',      label: 'SS304 Security Mesh' },
-];
-
-const CALLBACK_OPTIONS: PillOption[] = [
+const CALLBACK_OPTIONS = [
   { id: 'morning',   label: 'Morning' },
   { id: 'afternoon', label: 'Afternoon' },
   { id: 'evening',   label: 'Evening' },
 ];
 
 // ---------------------------------------------------------------------------
-// Helpers
+// Config-Driven Helpers
 // ---------------------------------------------------------------------------
 
-function glassModifier(g: string): number {
-  const map: Record<string, number> = { clear: 0, frosted: 30, double: 120 };
-  return map[g] ?? 0;
-}
-
-function meshModifier(m: string): number {
-  const map: Record<string, number> = { none: 0, fiberglass: 40, ss304: 80 };
-  return map[m] ?? 0;
-}
-
-function colorMult(c: string): number {
-  return FRAME_COLORS.find(fc => fc.id === c)?.mult ?? 1.0;
+function getBasePrice(family: 'upvc' | 'aluminium', selectedTypes: string[]): number {
+  const config = SYSTEM_CONFIGS[family];
+  if (selectedTypes.length === 0) return family === 'upvc' ? 500 : 650;
+  
+  let totalBase = 0;
+  let count = 0;
+  selectedTypes.forEach(styleId => {
+    const styleObj = config.styles.find(s => s.id === styleId);
+    if (styleObj) {
+      const typeObj = productTypes.find(t => t.id === styleObj.productTypeId);
+      if (typeObj) {
+        totalBase += typeObj.basePricePerSqFt;
+        count++;
+      }
+    }
+  });
+  
+  return count > 0 ? (totalBase / count) : (family === 'upvc' ? 500 : 650);
 }
 
 function computeEstimate(st: HomeEstimatorState): { min: number; max: number; area: number } {
+  const config = SYSTEM_CONFIGS[st.family];
   const area = Math.max(st.homeSqFt * 0.12, st.windowCount * 16);
-  const base = st.family === 'upvc' ? 500 : 600;
-  const unitPrice = ((base + glassModifier(st.glassChoice) + meshModifier(st.meshChoice)) * colorMult(st.colorChoice) + (st.installationRequired ? 60 : 0)) * area;
+  
+  // Dynamic base price from selected window styles in config/data.ts
+  const base = getBasePrice(st.family, st.selectedTypes);
+  
+  const glassObj = config.glass.find(g => g.id === st.glassChoice) || config.glass[0];
+  const meshObj = config.mesh.find(m => m.id === st.meshChoice) || config.mesh[0];
+  const colorObj = config.colors.find(c => c.id === st.colorChoice) || config.colors[0];
+  
+  const glassMod = glassObj.priceModifier;
+  const meshMod = meshObj.priceModifier;
+  const colorMultiplier = colorObj.multiplier;
+  
+  const installationCost = st.installationRequired ? 60 : 0;
+  
+  const unitPrice = ((base + glassMod + meshMod) * colorMultiplier + installationCost) * area;
   return { min: Math.round(unitPrice), max: Math.round(unitPrice * 1.15), area: Math.round(area) };
 }
 
 function buildWhatsAppMessage(st: HomeEstimatorState, min: number, max: number): string {
+  const config = SYSTEM_CONFIGS[st.family];
   const typesLabel = st.selectedTypes.length
-    ? st.selectedTypes.map(id => WINDOW_TYPES.find(w => w.id === id)?.label ?? id).join(', ')
+    ? st.selectedTypes.map(id => config.styles.find(w => w.id === id)?.label ?? id).join(', ')
     : 'Not selected';
-  const colorLabel = FRAME_COLORS.find(c => c.id === st.colorChoice)?.label ?? st.colorChoice;
-  const glassLabel = GLASS_OPTIONS.find(g => g.id === st.glassChoice)?.label ?? st.glassChoice;
-  const meshLabel  = MESH_OPTIONS.find(m => m.id === st.meshChoice)?.label  ?? st.meshChoice;
+  const colorLabel = config.colors.find(c => c.id === st.colorChoice)?.label ?? st.colorChoice;
+  const glassLabel = config.glass.find(g => g.id === st.glassChoice)?.label ?? st.glassChoice;
+  const meshLabel  = config.mesh.find(m => m.id === st.meshChoice)?.label  ?? st.meshChoice;
   const cbLabel    = CALLBACK_OPTIONS.find(c => c.id === st.callbackTime)?.label ?? st.callbackTime;
 
   return [
@@ -186,32 +420,6 @@ function buildWhatsAppMessage(st: HomeEstimatorState, min: number, max: number):
     ``,
     `_Kindly arrange a free site measurement at the earliest._`,
   ].join('\n');
-}
-
-// ---------------------------------------------------------------------------
-// Sub-components
-// ---------------------------------------------------------------------------
-
-interface PillButtonProps {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}
-
-function PillButton({ label, active, onClick }: PillButtonProps) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all duration-200 cursor-pointer ${
-        active
-          ? 'border-gold bg-gold/10 text-gold'
-          : 'border-brand-border bg-white text-brand-primary hover:border-gold/40'
-      }`}
-    >
-      {label}
-    </button>
-  );
 }
 
 // ---------------------------------------------------------------------------
@@ -247,10 +455,24 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [customSqFt, setCustomSqFt] = useState('');
 
+  // Revalidate state elements when system family changes
+  const handleFamilyChange = (newFamily: 'upvc' | 'aluminium') => {
+    if (newFamily === state.family) return;
+    const newConfig = SYSTEM_CONFIGS[newFamily];
+    setState(prev => ({
+      ...prev,
+      family: newFamily,
+      selectedTypes: [], // Reset selected styles
+      colorChoice: newConfig.colors[0].id, // Reset to system-specific default color
+      glassChoice: newConfig.glass[0].id, // Reset to system-specific default glass
+      meshChoice: newConfig.mesh[0].id, // Reset to system-specific default mesh
+    }));
+  };
+
   // Validation
   const validate = (): string => {
     if (currentStep === 2 && state.selectedTypes.length === 0) {
-      return 'Please select at least one window type.';
+      return 'Please select at least one window style.';
     }
     if (currentStep === 3) {
       if (state.windowCount < 3 || state.windowCount > 200) return 'Window count must be between 3 and 200.';
@@ -315,17 +537,18 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
       setIsSubmitting(false);
     }
     const message = buildWhatsAppMessage(state, estimatedMin, estimatedMax);
-    window.open(`https://wa.me/919449400555?text=${encodeURIComponent(message)}`, '_blank');
+    const cleanPhone = businessSettings.whatsapp.replace(/\D/g, '');
+    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   // ---------------------------------------------------------------------------
-  // Render helpers
+  // Render Helpers
   // ---------------------------------------------------------------------------
 
   const renderStepIndicator = () => (
     <>
       <div className="relative mb-10 hidden md:block">
-        <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-brand-border -translate-y-1/2 z-0" />
+        <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-border/80 -translate-y-1/2 z-0" />
         <div className="flex justify-between items-center relative z-10">
           {STEPS.map(step => {
             const isActive    = step.id === currentStep;
@@ -333,17 +556,17 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
             return (
               <div key={step.id} className="flex flex-col items-center">
                 <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm border-2 transition-all duration-300 ${
+                  className={`w-9 h-9 rounded-full flex items-center justify-center font-semibold text-xs border transition-all duration-300 ${
                     isActive
-                      ? 'bg-gold border-gold text-white shadow-md'
+                      ? 'bg-gold border-gold text-white shadow-sm ring-4 ring-gold/10 scale-105 font-bold'
                       : isCompleted
-                      ? 'bg-gold/80 border-gold text-white'
-                      : 'bg-white text-brand-muted border-brand-border'
+                      ? 'bg-gold-pale border-gold text-gold'
+                      : 'bg-white text-muted border-border'
                   }`}
                 >
                   {isCompleted ? '✓' : step.id}
                 </div>
-                <span className={`mt-2 text-xs font-medium ${isActive || isCompleted ? 'text-gold' : 'text-brand-muted'}`}>
+                <span className={`mt-2 text-[11px] font-semibold tracking-wide uppercase ${isActive ? 'text-gold' : isCompleted ? 'text-gold/80' : 'text-muted'}`}>
                   {step.name}
                 </span>
               </div>
@@ -351,11 +574,11 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
           })}
         </div>
       </div>
-      <div className="md:hidden flex items-center justify-between bg-white border border-brand-border p-4 rounded-xl mb-6">
-        <span className="text-xs font-semibold text-brand-muted uppercase tracking-wider">
+      <div className="md:hidden flex items-center justify-between bg-white border border-border/80 p-4 rounded-xl mb-6">
+        <span className="text-[10px] font-bold text-muted uppercase tracking-wider">
           Step {currentStep} of {STEPS.length}
         </span>
-        <span className="text-sm font-bold text-gold">{STEPS[currentStep - 1].name}</span>
+        <span className="text-xs font-bold text-gold uppercase tracking-wide">{STEPS[currentStep - 1].name}</span>
       </div>
     </>
   );
@@ -363,7 +586,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
   // Step 1 — System Selection
   const renderStep1 = () => (
     <div className="space-y-5">
-      <p className="text-xs text-brand-muted">
+      <p className="text-xs text-muted">
         Choose the primary material system for your home. This sets the base pricing and profile aesthetics.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -388,28 +611,30 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
             <button
               key={opt.key}
               type="button"
-              onClick={() => setState(prev => ({ ...prev, family: opt.key }))}
-              className={`relative rounded-2xl border-2 overflow-hidden text-left cursor-pointer transition-all duration-300 group ${
-                isSelected ? 'border-gold shadow-lg shadow-gold/10' : 'border-brand-border hover:border-gold/40'
+              onClick={() => handleFamilyChange(opt.key)}
+              className={`relative flex flex-col rounded-2xl border transition-all duration-300 text-left overflow-hidden cursor-pointer bg-white group ${
+                isSelected ? 'border-gold ring-1 ring-gold/20 shadow-md' : 'border-border/60 hover:border-gold/30 hover:shadow-sm'
               }`}
             >
-              <div className="relative w-full h-44 bg-zinc-900">
+              <div className="relative w-full h-32 sm:h-44 bg-slate-50">
                 <Image
                   src={opt.image}
                   alt={opt.label}
                   fill
-                  className="object-cover opacity-70 group-hover:opacity-80 transition-opacity duration-300"
+                  className="object-cover transition-transform duration-300 group-hover:scale-102"
                   sizes="(max-width: 640px) 100vw, 50vw"
                 />
                 {isSelected && (
-                  <div className="absolute inset-0 bg-gold/10 flex items-center justify-center">
-                    <CheckCircle2 className="w-10 h-10 text-gold drop-shadow-lg" />
+                  <div className="absolute top-3 right-3 bg-gold text-white rounded-full p-1 shadow-md z-10">
+                    <CheckCircle2 className="w-4 h-4 stroke-[3]" />
                   </div>
                 )}
               </div>
-              <div className="p-4 bg-zinc-900">
-                <span className="block font-bold text-base text-white">{opt.label}</span>
-                <span className="block text-xs text-zinc-400 mt-1 leading-relaxed">{opt.sub}</span>
+              <div className="p-4 flex-grow flex flex-col justify-between">
+                <div>
+                  <span className="block font-bold text-sm sm:text-base text-heading leading-tight">{opt.label}</span>
+                  <span className="block text-[11px] sm:text-xs text-muted mt-1 leading-normal">{opt.sub}</span>
+                </div>
               </div>
             </button>
           );
@@ -418,56 +643,60 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
     </div>
   );
 
-  // Step 2 — Window Types (multi-select)
-  const renderStep2 = () => (
-    <div className="space-y-4">
-      <p className="text-xs text-brand-muted">
-        Select all window and door types present (or planned) in your home. You can pick multiple.
-      </p>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        {WINDOW_TYPES.map(wt => {
-          const isSelected = state.selectedTypes.includes(wt.id);
-          return (
-            <button
-              key={wt.id}
-              type="button"
-              onClick={() => toggleType(wt.id)}
-              className={`relative rounded-xl border-2 overflow-hidden cursor-pointer transition-all duration-200 group ${
-                isSelected ? 'border-gold shadow-md shadow-gold/10' : 'border-brand-border hover:border-gold/40'
-              }`}
-            >
-              <div className="relative w-full h-32 bg-zinc-800">
-                <Image
-                  src={wt.image}
-                  alt={wt.label}
-                  fill
-                  className="object-cover opacity-75 group-hover:opacity-90 transition-opacity duration-200"
-                  sizes="(max-width: 640px) 50vw, 33vw"
-                />
-                {isSelected && (
-                  <div className="absolute inset-0 bg-gold/20 flex items-center justify-center">
-                    <CheckCircle2 className="w-8 h-8 text-gold drop-shadow" />
+  // Step 2 — Window Types (multi-select, system-aware)
+  const renderStep2 = () => {
+    const config = SYSTEM_CONFIGS[state.family];
+    return (
+      <div className="space-y-4">
+        <p className="text-xs text-muted">
+          Select all window and door types present (or planned) in your home. You can pick multiple.
+        </p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          {config.styles.map(wt => {
+            const isSelected = state.selectedTypes.includes(wt.id);
+            return (
+              <button
+                key={wt.id}
+                type="button"
+                onClick={() => toggleType(wt.id)}
+                className={`relative flex flex-col rounded-xl border transition-all duration-200 text-left overflow-hidden cursor-pointer bg-white group ${
+                  isSelected ? 'border-gold ring-1 ring-gold/20 shadow-sm' : 'border-border/60 hover:border-gold/30'
+                }`}
+              >
+                <div className="relative w-full h-24 sm:h-32 bg-slate-50">
+                  <Image
+                    src={wt.image}
+                    alt={wt.label}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-102"
+                    sizes="(max-width: 640px) 50vw, 33vw"
+                  />
+                  {isSelected && (
+                    <div className="absolute top-2.5 right-2.5 bg-gold text-white rounded-full p-0.5 shadow-sm z-10">
+                      <CheckCircle2 className="w-3.5 h-3.5 stroke-[3]" />
+                    </div>
+                  )}
+                </div>
+                <div className="p-3 flex-grow flex flex-col justify-between">
+                  <div>
+                    <span className="block text-xs sm:text-sm font-bold text-heading leading-tight">{wt.label}</span>
+                    <span className="block text-[10px] sm:text-xs text-muted mt-1 leading-normal">{wt.description}</span>
                   </div>
-                )}
-              </div>
-              <div className={`px-3 py-2 text-center ${isSelected ? 'bg-gold/10' : 'bg-zinc-900'}`}>
-                <span className={`block text-xs font-semibold leading-tight ${isSelected ? 'text-gold' : 'text-white'}`}>
-                  {wt.label}
-                </span>
-              </div>
-            </button>
-          );
-        })}
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   // Step 3 — Home Details
   const renderStep3 = () => (
     <div className="space-y-8">
       {/* Window Count */}
       <div>
-        <label className="text-sm font-semibold text-brand-primary uppercase tracking-wider block mb-4">
+        <label className="text-xs font-bold text-heading uppercase tracking-widest block mb-4">
           Number of Windows &amp; Doors
         </label>
         <div className="flex items-center gap-4">
@@ -478,7 +707,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
             step={1}
             value={state.windowCount}
             onChange={e => setState(prev => ({ ...prev, windowCount: parseInt(e.target.value) }))}
-            className="flex-1 h-1.5 bg-brand-border rounded-lg appearance-none cursor-pointer accent-gold"
+            className="flex-1 h-1 bg-border rounded-lg appearance-none cursor-pointer accent-gold"
           />
           <Input
             type="number"
@@ -491,17 +720,17 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                 windowCount: Math.min(200, Math.max(3, parseInt(e.target.value) || 3)),
               }))
             }
-            className="w-20 text-center font-bold"
+            className="w-20 text-center font-bold text-xs h-10 border-border/80 rounded-xl"
           />
         </div>
-        <div className="flex justify-between text-xs text-brand-muted mt-1">
+        <div className="flex justify-between text-[10px] font-semibold text-muted mt-1.5">
           <span>3</span><span>200</span>
         </div>
       </div>
 
       {/* Home Sq Ft */}
       <div>
-        <label className="text-sm font-semibold text-brand-primary uppercase tracking-wider block mb-3">
+        <label className="text-xs font-bold text-heading uppercase tracking-widest block mb-3">
           Approx. Home Floor Area (sq.ft.)
         </label>
         <div className="flex flex-wrap gap-2 mb-4">
@@ -513,10 +742,10 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                 key={preset}
                 type="button"
                 onClick={() => { setCustomSqFt(''); setState(prev => ({ ...prev, homeSqFt: preset })); }}
-                className={`px-3 py-1.5 rounded-lg text-sm font-semibold border transition-all duration-200 cursor-pointer ${
+                className={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all duration-200 cursor-pointer ${
                   isActive
-                    ? 'border-gold bg-gold/10 text-gold'
-                    : 'border-brand-border bg-white text-brand-primary hover:border-gold/40'
+                    ? 'border-gold bg-gold/5 text-gold font-bold'
+                    : 'border-border/60 bg-white text-heading hover:border-gold/30 hover:bg-slate-50/50'
                 }`}
               >
                 {label}
@@ -525,7 +754,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
           })}
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-brand-muted font-medium">Custom:</span>
+          <span className="text-[11px] text-muted font-bold uppercase tracking-wider">Custom:</span>
           <Input
             type="number"
             placeholder="e.g. 1800"
@@ -536,240 +765,295 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
               const parsed = parseInt(val);
               if (!isNaN(parsed) && parsed > 0) setState(prev => ({ ...prev, homeSqFt: parsed }));
             }}
-            className="w-32"
+            className="w-32 text-xs h-10 border-border/80 rounded-xl"
           />
-          <span className="text-xs text-brand-muted">sq.ft.</span>
+          <span className="text-xs text-muted font-medium">sq.ft.</span>
         </div>
-        <p className="text-xs text-brand-muted mt-2">
-          Selected: <span className="font-bold text-brand-primary">{state.homeSqFt} sq.ft.</span>
+        <p className="text-[11px] text-muted mt-2 font-medium">
+          Selected Area: <span className="font-bold text-heading">{state.homeSqFt} sq.ft.</span>
         </p>
       </div>
 
       {/* Installation Toggle */}
-      <div className="border-t border-brand-border pt-6">
-        <label className="text-sm font-semibold text-brand-primary uppercase tracking-wider block mb-3">
-          Installation Required?
+      <div className="border-t border-border-soft pt-6">
+        <label className="text-xs font-bold text-heading uppercase tracking-widest block mb-3">
+          Installation Services
         </label>
-        <div className="flex gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {(
             [
-              { val: true,  label: 'Yes — Include Installation' },
-              { val: false, label: 'No — Supply Only' },
+              { val: true,  label: 'Include Installation', desc: 'Precise leveling, structural anchoring, and weather-grade silicone sealing.' },
+              { val: false, label: 'Supply Only', desc: 'Fabrication of profiles only. Transport and setup handled by your contractor.' },
             ] as const
-          ).map(opt => (
-            <button
-              key={String(opt.val)}
-              type="button"
-              onClick={() => setState(prev => ({ ...prev, installationRequired: opt.val }))}
-              className={`flex-1 py-3 rounded-xl text-sm font-semibold border-2 transition-all duration-200 cursor-pointer ${
-                state.installationRequired === opt.val
-                  ? 'border-gold bg-gold/10 text-gold'
-                  : 'border-brand-border bg-white text-brand-primary hover:border-gold/40'
-              }`}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-
-  // Step 4 — Finishes
-  const renderStep4 = () => (
-    <div className="space-y-8">
-      {/* Frame Colour */}
-      <div>
-        <label className="text-sm font-semibold text-brand-primary uppercase tracking-wider block mb-4">
-          Frame Colour{' '}
-          <span className="text-brand-muted font-normal normal-case text-xs">(optional)</span>
-        </label>
-        <div className="flex flex-wrap gap-5">
-          {FRAME_COLORS.map(fc => {
-            const isSelected = state.colorChoice === fc.id;
+          ).map(opt => {
+            const isSelected = state.installationRequired === opt.val;
             return (
               <button
-                key={fc.id}
+                key={String(opt.val)}
                 type="button"
-                onClick={() => setState(prev => ({ ...prev, colorChoice: fc.id }))}
-                className="flex flex-col items-center gap-2 cursor-pointer group"
-                title={fc.label}
+                onClick={() => setState(prev => ({ ...prev, installationRequired: opt.val }))}
+                className={`p-4 rounded-xl border text-left cursor-pointer transition-all duration-200 ${
+                  isSelected
+                    ? 'border-gold bg-gold/5 ring-1 ring-gold/15'
+                    : 'border-border/60 bg-white hover:border-gold/30'
+                }`}
               >
-                <div
-                  className={`w-10 h-10 rounded-full border-4 transition-all duration-200 ${
-                    isSelected
-                      ? 'border-gold ring-2 ring-gold/40 scale-110'
-                      : 'border-brand-border group-hover:border-gold/40'
-                  }`}
-                  style={{
-                    backgroundColor: fc.hex,
-                    boxShadow: fc.id === 'white' ? 'inset 0 0 0 1px #e2e8f0' : undefined,
-                  }}
-                />
-                <span className={`text-[10px] font-semibold leading-tight text-center max-w-[56px] ${isSelected ? 'text-gold' : 'text-brand-primary'}`}>
-                  {fc.label}
-                </span>
+                <div className="flex justify-between items-center">
+                  <span className={`text-xs font-bold ${isSelected ? 'text-gold' : 'text-heading'}`}>{opt.label}</span>
+                  {isSelected && <CheckCircle2 className="w-4 h-4 text-gold stroke-[2.5]" />}
+                </div>
+                <span className="block text-[11px] text-muted mt-1 leading-normal">{opt.desc}</span>
               </button>
             );
           })}
         </div>
       </div>
-
-      {/* Glass Type */}
-      <div>
-        <label className="text-sm font-semibold text-brand-primary uppercase tracking-wider block mb-3">
-          Glass Type{' '}
-          <span className="text-brand-muted font-normal normal-case text-xs">(optional)</span>
-        </label>
-        <div className="flex flex-wrap gap-3">
-          {GLASS_OPTIONS.map(g => (
-            <PillButton
-              key={g.id}
-              label={g.label}
-              active={state.glassChoice === g.id}
-              onClick={() => setState(prev => ({ ...prev, glassChoice: g.id }))}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Flyscreen */}
-      <div>
-        <label className="text-sm font-semibold text-brand-primary uppercase tracking-wider block mb-3">
-          Integrated Flyscreen{' '}
-          <span className="text-brand-muted font-normal normal-case text-xs">(optional)</span>
-        </label>
-        <div className="flex flex-wrap gap-3">
-          {MESH_OPTIONS.map(m => (
-            <PillButton
-              key={m.id}
-              label={m.label}
-              active={state.meshChoice === m.id}
-              onClick={() => setState(prev => ({ ...prev, meshChoice: m.id }))}
-            />
-          ))}
-        </div>
-      </div>
     </div>
   );
+
+  // Step 4 — Finishes (System-Aware Colors, Glass, and Flyscreens)
+  const renderStep4 = () => {
+    const config = SYSTEM_CONFIGS[state.family];
+    return (
+      <div className="space-y-8">
+        {/* Frame Colour */}
+        <div>
+          <label className="text-xs font-bold text-heading uppercase tracking-widest block mb-4">
+            Frame Colour / Finish
+          </label>
+          <div className="flex flex-wrap gap-6">
+            {config.colors.map(fc => {
+              const isSelected = state.colorChoice === fc.id;
+              return (
+                <button
+                  key={fc.id}
+                  type="button"
+                  onClick={() => setState(prev => ({ ...prev, colorChoice: fc.id }))}
+                  className="flex flex-col items-center gap-2 cursor-pointer group focus:outline-none"
+                  title={fc.description}
+                >
+                  <div
+                    className={`w-12 h-12 rounded-full border-2 transition-all duration-200 relative flex items-center justify-center ${
+                      isSelected
+                        ? 'border-gold ring-4 ring-gold/10 scale-105'
+                        : 'border-border/60 group-hover:border-gold/30'
+                    }`}
+                  >
+                    <div
+                      className="w-9 h-9 rounded-full shadow-inner"
+                      style={{
+                        backgroundColor: fc.hex,
+                        boxShadow: fc.id === 'white' || fc.id === 'anodized_silver' ? 'inset 0 0 0 1px rgba(0,0,0,0.06)' : undefined,
+                      }}
+                    />
+                    {isSelected && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/10 rounded-full">
+                        <CheckCircle2 className="w-4 h-4 text-white drop-shadow stroke-[3]" />
+                      </div>
+                    )}
+                  </div>
+                  <span className={`text-[10px] font-bold tracking-wide uppercase leading-tight text-center max-w-[64px] ${isSelected ? 'text-gold' : 'text-heading'}`}>
+                    {fc.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Glass Type */}
+        <div>
+          <label className="text-xs font-bold text-heading uppercase tracking-widest block mb-3">
+            Glass Option <span className="text-muted font-normal normal-case text-[10px] tracking-normal leading-none">(all options are safety-tempered)</span>
+          </label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {config.glass.map(g => {
+              const isSelected = state.glassChoice === g.id;
+              return (
+                <button
+                  key={g.id}
+                  type="button"
+                  onClick={() => setState(prev => ({ ...prev, glassChoice: g.id }))}
+                  className={`p-3 rounded-xl border text-left cursor-pointer transition-all duration-200 ${
+                    isSelected
+                      ? 'border-gold bg-gold/5 ring-1 ring-gold/15'
+                      : 'border-border/60 bg-white hover:border-gold/30'
+                  }`}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className={`text-xs font-bold ${isSelected ? 'text-gold' : 'text-heading'}`}>{g.label}</span>
+                    {isSelected && <CheckCircle2 className="w-4 h-4 text-gold stroke-[2.5]" />}
+                  </div>
+                  <span className="block text-[11px] text-muted mt-1 leading-normal">{g.description}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Flyscreen */}
+        <div>
+          <label className="text-xs font-bold text-heading uppercase tracking-widest block mb-3">
+            Integrated Flyscreen
+          </label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {config.mesh.map(m => {
+              const isSelected = state.meshChoice === m.id;
+              return (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => setState(prev => ({ ...prev, meshChoice: m.id }))}
+                  className={`p-3 rounded-xl border text-left cursor-pointer transition-all duration-200 ${
+                    isSelected
+                      ? 'border-gold bg-gold/5 ring-1 ring-gold/15'
+                      : 'border-border/60 bg-white hover:border-gold/30'
+                  }`}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className={`text-xs font-bold ${isSelected ? 'text-gold' : 'text-heading'}`}>{m.label}</span>
+                    {isSelected && <CheckCircle2 className="w-4 h-4 text-gold stroke-[2.5]" />}
+                  </div>
+                  <span className="block text-[11px] text-muted mt-1 leading-normal">{m.description}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   // Step 5 — Contact
   const renderStep5 = () => (
     <div className="space-y-6">
-      <p className="text-xs text-brand-muted">
+      <p className="text-xs text-muted">
         Enter your details to generate the estimate and receive it directly on WhatsApp.
       </p>
 
       <div>
-        <label className="text-xs font-semibold text-brand-primary block mb-1.5">Your Name *</label>
+        <label className="text-xs font-bold text-heading block mb-1.5">Your Name *</label>
         <Input
           placeholder="Rajesh Kumar"
           value={state.customerName}
           onChange={e => setState(prev => ({ ...prev, customerName: e.target.value }))}
+          className="border-border/80 focus-visible:ring-gold/30 focus-visible:border-gold rounded-xl px-4 py-3 text-xs h-11"
         />
       </div>
 
       <div>
-        <label className="text-xs font-semibold text-brand-primary block mb-1.5">WhatsApp Phone (10 digits) *</label>
+        <label className="text-xs font-bold text-heading block mb-1.5">WhatsApp Phone (10 digits) *</label>
         <Input
           type="tel"
           placeholder="9886012345"
           maxLength={10}
           value={state.customerPhone}
           onChange={e => setState(prev => ({ ...prev, customerPhone: e.target.value.replace(/\D/g, '') }))}
+          className="border-border/80 focus-visible:ring-gold/30 focus-visible:border-gold rounded-xl px-4 py-3 text-xs h-11"
         />
       </div>
 
       <div>
-        <label className="text-xs font-semibold text-brand-primary block mb-1.5">City / Area *</label>
+        <label className="text-xs font-bold text-heading block mb-1.5">City / Area *</label>
         <Input
           placeholder="Indiranagar, Bangalore"
           value={state.customerCity}
           onChange={e => setState(prev => ({ ...prev, customerCity: e.target.value }))}
+          className="border-border/80 focus-visible:ring-gold/30 focus-visible:border-gold rounded-xl px-4 py-3 text-xs h-11"
         />
       </div>
 
       <div>
-        <label className="text-sm font-semibold text-brand-primary uppercase tracking-wider block mb-3">
+        <label className="text-xs font-bold text-heading uppercase tracking-widest block mb-3">
           Preferred Callback Time
         </label>
-        <div className="flex flex-wrap gap-3">
-          {CALLBACK_OPTIONS.map(cb => (
-            <PillButton
-              key={cb.id}
-              label={cb.label}
-              active={state.callbackTime === cb.id}
-              onClick={() => setState(prev => ({ ...prev, callbackTime: cb.id }))}
-            />
-          ))}
+        <div className="grid grid-cols-3 gap-3">
+          {CALLBACK_OPTIONS.map(cb => {
+            const isActive = state.callbackTime === cb.id;
+            return (
+              <button
+                key={cb.id}
+                type="button"
+                onClick={() => setState(prev => ({ ...prev, callbackTime: cb.id }))}
+                className={`py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 cursor-pointer text-center ${
+                  isActive
+                    ? 'border-gold bg-gold/5 text-gold font-bold shadow-sm'
+                    : 'border-border/60 bg-white text-heading hover:border-gold/30 hover:bg-slate-50/50'
+                }`}
+              >
+                {cb.label}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
   );
 
-  // Step 6 — Estimate Summary
+  // Step 6 — Estimate Summary (System-Aware Wording & Wavelength)
   const renderStep6 = () => {
+    const config = SYSTEM_CONFIGS[state.family];
     const selectedTypeLabels = state.selectedTypes
-      .map(id => WINDOW_TYPES.find(w => w.id === id)?.label ?? id)
+      .map(id => config.styles.find(w => w.id === id)?.label ?? id)
       .join(', ');
-    const colorLabel = FRAME_COLORS.find(c => c.id === state.colorChoice)?.label ?? state.colorChoice;
-    const glassLabel = GLASS_OPTIONS.find(g => g.id === state.glassChoice)?.label ?? state.glassChoice;
-    const meshLabel  = MESH_OPTIONS.find(m => m.id === state.meshChoice)?.label  ?? state.meshChoice;
+    const colorLabel = config.colors.find(c => c.id === state.colorChoice)?.label ?? state.colorChoice;
+    const glassLabel = config.glass.find(g => g.id === state.glassChoice)?.label ?? state.glassChoice;
+    const meshLabel  = config.mesh.find(m => m.id === state.meshChoice)?.label  ?? state.meshChoice;
 
     return (
       <div className="space-y-6">
-        {/* Big estimate display */}
-        <div className="rounded-2xl border-2 border-gold/40 bg-gradient-to-br from-zinc-900 to-zinc-800 p-6 text-center space-y-3">
-          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-gold uppercase tracking-widest">
-            <Sparkles className="w-3.5 h-3.5" /> Your Home Estimate
+        {/* Big estimate display card in pearl neutral / faint navy-tint theme */}
+        <div className="rounded-2xl border border-gold/10 bg-gold-pale/25 p-6 sm:p-8 text-center space-y-4 shadow-sm">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold text-gold uppercase tracking-widest bg-gold/5 border border-gold/10">
+            <Sparkles className="w-3 h-3 text-gold" /> Estimated Investment Range
           </span>
-          <div className="text-4xl font-extrabold text-gold tracking-tight leading-none">
+          <div className="text-3xl sm:text-4xl font-extrabold text-heading tracking-tight leading-none">
             ₹{estimatedMin.toLocaleString('en-IN')}
-            <span className="text-2xl mx-2 text-zinc-400">–</span>
+            <span className="text-xl mx-2 text-muted font-normal">–</span>
             ₹{estimatedMax.toLocaleString('en-IN')}
           </div>
-          <p className="text-xs text-zinc-400 font-medium">
-            Based on ~{estimatedArea} sq.ft. of estimated glazing area
-          </p>
-          <p className="text-[11px] text-zinc-500 max-w-xs mx-auto leading-relaxed border-t border-zinc-700 pt-3">
-            This is an indicative estimate only. Final quote given after free site measurement.
-          </p>
+          <div className="text-xs text-body max-w-md mx-auto leading-relaxed">
+            Indicative quote for <span className="font-bold text-heading">~{estimatedArea} sq.ft.</span> of premium {state.family === 'upvc' ? 'uPVC' : 'Aluminium'} glazing area
+          </div>
+          <div className="border-t border-border-soft pt-3.5 text-[11px] text-muted max-w-xs mx-auto leading-relaxed">
+            Includes profile fabrication, glass options, locks, mesh, and transport. Final quote given post free site measurement.
+          </div>
         </div>
 
         {/* Config summary grid */}
-        <div className="space-y-3">
-          <h4 className="text-xs font-bold text-brand-primary uppercase tracking-wider border-b border-brand-border pb-2">
-            Configuration Summary
+        <div className="space-y-4">
+          <h4 className="text-xs font-bold text-heading uppercase tracking-widest border-b border-border/60 pb-2">
+            Selected Configuration
           </h4>
-          <div className="grid grid-cols-2 gap-y-3 gap-x-6 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-6 text-xs">
             {(
               [
-                ['System',        state.family === 'upvc' ? 'uPVC' : 'Aluminium'],
-                ['Window Types',  selectedTypeLabels || '—'],
-                ['Window Count',  `${state.windowCount} openings`],
-                ['Home Area',     `${state.homeSqFt} sq.ft.`],
-                ['Installation',  state.installationRequired ? 'Included' : 'Supply Only'],
+                ['System Type',   state.family === 'upvc' ? 'uPVC Windows & Doors' : 'Aluminium Systems'],
+                ['Window Styles', selectedTypeLabels || '—'],
+                ['Openings Count',`${state.windowCount} Units`],
+                ['Floor Area',    `${state.homeSqFt} sq.ft.`],
+                ['Installation',  state.installationRequired ? 'Included (Dhatri Certified)' : 'Supply Only'],
                 ['Frame Colour',  colorLabel],
-                ['Glass',         glassLabel],
-                ['Flyscreen',     meshLabel],
+                ['Glass Style',   glassLabel],
+                ['Flyscreen Mesh',meshLabel],
                 ['Name',          state.customerName],
-                ['Phone',         state.customerPhone],
-                ['City',          state.customerCity],
+                ['Contact Phone', state.customerPhone],
+                ['City / Area',   state.customerCity],
               ] as [string, string][]
             ).map(([k, v]) => (
-              <div key={k}>
-                <span className="text-brand-muted block">{k}</span>
-                <span className="font-bold text-brand-primary">{v}</span>
+              <div key={k} className="flex flex-col">
+                <span className="text-muted text-[10px] uppercase tracking-wider font-semibold block mb-0.5">{k}</span>
+                <span className="font-bold text-heading text-[12px]">{v}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Trust badge */}
-        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-start gap-2.5">
-          <Shield className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
-          <p className="text-[11px] text-emerald-800 font-medium leading-relaxed">
-            Free site measurement included. Factory-direct pricing with genuine weather-grade silicon sealing and structural anchoring warranty.
+        <div className="p-4 rounded-xl bg-slate-50 border border-border/60 flex items-start gap-2.5">
+          <Shield className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+          <p className="text-[11px] text-body leading-relaxed">
+            Free site measurement included. Factory-direct pricing with genuine weather-grade silicone sealing and structural anchoring warranty.
           </p>
         </div>
       </div>
@@ -777,20 +1061,20 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
   };
 
   // ---------------------------------------------------------------------------
-  // Main render
+  // Main Render
   // ---------------------------------------------------------------------------
 
   return (
     <div className="w-full max-w-3xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="text-center mb-8">
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gold/10 text-gold border border-gold/30 mb-3">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gold/5 text-gold border border-gold/10 mb-3">
           <Sparkles className="w-3 h-3" /> Whole-Home Estimator
         </span>
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-brand-primary">
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-heading">
           Get Your Free Home Window Estimate
         </h1>
-        <p className="mt-2 text-base text-brand-muted max-w-2xl mx-auto">
+        <p className="mt-2 text-xs sm:text-sm text-body max-w-2xl mx-auto">
           Tell us about your home in 5 quick steps and receive an instant indicative price range — no salesperson needed.
         </p>
       </div>
@@ -799,18 +1083,18 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
       {renderStepIndicator()}
 
       {/* Wizard card */}
-      <Card className="shadow-sm bg-white border-brand-border">
+      <Card className="shadow-sm bg-white border border-border/60 rounded-2xl overflow-hidden">
         <CardContent className="p-6 sm:p-8">
           {/* Error */}
           {error && (
-            <div className="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm flex items-start gap-2">
+            <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-2">
               <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
           )}
 
           {/* Step label */}
-          <h2 className="text-xs font-bold text-brand-muted uppercase tracking-widest mb-5">
+          <h2 className="text-[10px] font-bold text-muted uppercase tracking-widest mb-5">
             Step {currentStep} — {STEPS[currentStep - 1].name}
           </h2>
 
@@ -834,32 +1118,35 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
           </AnimatePresence>
 
           {/* Navigation */}
-          <div className="mt-8 pt-6 border-t border-brand-border flex items-center justify-between gap-4">
-            {currentStep > 1 && currentStep < 6 ? (
-              <Button variant="secondary" onClick={handleBack} className="flex items-center gap-1.5">
-                <ChevronLeft className="w-4 h-4" /> Back
-              </Button>
-            ) : currentStep === 6 ? (
-              <Button
-                variant="secondary"
-                onClick={() => { setCurrentStep(1); setError(''); }}
-                className="flex items-center gap-1.5"
-              >
-                Start Over
-              </Button>
+          <div className="mt-8 pt-6 border-t border-border-soft flex items-center justify-between gap-4">
+            {currentStep > 1 ? (
+              <div className="flex items-center gap-2">
+                <Button variant="secondary" onClick={handleBack} className="flex items-center gap-1.5 border border-border text-heading hover:bg-slate-50 rounded-xl px-5 py-2.5 text-xs font-bold h-10">
+                  <ChevronLeft className="w-4 h-4" /> Back
+                </Button>
+                {currentStep === 6 && (
+                  <Button
+                    variant="secondary"
+                    onClick={() => { setCurrentStep(1); setError(''); }}
+                    className="flex items-center gap-1.5 border border-border text-heading hover:bg-slate-50 rounded-xl px-5 py-2.5 text-xs font-bold h-10"
+                  >
+                    Start Over
+                  </Button>
+                )}
+              </div>
             ) : (
               <div />
             )}
 
             {currentStep < 6 ? (
-              <Button onClick={handleNext} className="flex items-center gap-1.5 ml-auto">
+              <Button onClick={handleNext} className="flex items-center gap-1.5 ml-auto bg-gold hover:bg-gold-rich text-white rounded-xl px-6 py-2.5 text-xs font-bold h-10 shadow-sm border-none">
                 Next <ChevronRight className="w-4 h-4" />
               </Button>
             ) : (
               <Button
                 onClick={handleWhatsAppSubmit}
                 disabled={isSubmitting}
-                className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white ml-auto"
+                className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl px-6 py-2.5 text-xs font-bold h-10 shadow-sm border-none"
               >
                 {isSubmitting ? (
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -875,4 +1162,3 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
     </div>
   );
 }
-

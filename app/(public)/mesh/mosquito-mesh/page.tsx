@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function MosquitoMeshPage() {
   return (
-    <div className="py-12 sm:py-16 space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-8 md:py-16 space-y-10 md:space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Header */}
       <div className="space-y-4 max-w-3xl">
@@ -22,9 +22,9 @@ export default function MosquitoMeshPage() {
         <p className="text-brand-muted text-sm sm:text-base leading-relaxed">
           Ensure fresh air and ventilation without mosquitoes or pests entering your home. We custom manufacture integrated flyscreens using high-durability mesh options tailored for our uPVC and aluminium window systems.
         </p>
-        <div className="pt-2 flex gap-4">
-          <Link href="/quote">
-            <Button className="font-bold flex items-center gap-1.5 shadow-sm hover:shadow-md">
+        <div className="pt-2 flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          <Link href="/quote" className="w-full sm:w-auto inline-block">
+            <Button className="font-bold flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md w-full sm:w-auto">
               Calculate Estimate <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>

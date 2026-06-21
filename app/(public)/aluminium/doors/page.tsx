@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function AluminiumDoorsPage() {
   return (
-    <div className="py-12 sm:py-16 space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-8 md:py-16 space-y-10 md:space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Header */}
       <div className="space-y-4 max-w-3xl">
@@ -20,11 +20,11 @@ export default function AluminiumDoorsPage() {
           Heavy-Duty Aluminium Balcony Doors
         </h1>
         <p className="text-brand-muted text-sm sm:text-base leading-relaxed">
-          Designed specifically to bridge indoor spaces and outdoor balconies. Utilizing heavy structural frames, we fabricate panoramic sliding door panels, folding stack sashes, and robust swing entrance doors that carry large glass sheets cleanly.
+          Designed specifically to bridge indoor spaces and outdoor balconies. Utilizing heavy structural frames, we fabricate panoramic sliding door sashes, folding stack sashes, and robust swing entrance doors that carry large glass sheets cleanly.
         </p>
         <div className="pt-2">
-          <Link href="/aluminium/configurator">
-            <Button className="font-bold flex items-center gap-1.5 shadow-sm hover:shadow-md">
+          <Link href="/aluminium/configurator" className="w-full sm:w-auto inline-block">
+            <Button className="font-bold flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md w-full sm:w-auto">
               Configure Aluminium Door Estimate <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>

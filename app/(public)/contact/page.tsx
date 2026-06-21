@@ -41,7 +41,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+    <div className="py-8 md:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 md:space-y-16">
       
       {/* Page Header */}
       <div className="space-y-3 max-w-2xl">
@@ -59,7 +59,7 @@ export default function ContactPage() {
         {/* Left Form */}
         <div className="lg:col-span-7">
           <Card className="border-brand-border bg-white shadow-xs">
-            <CardContent className="p-6 sm:p-8 space-y-6">
+            <CardContent className="p-4 sm:p-8 space-y-6">
               <h2 className="text-lg font-bold text-brand-primary block border-b border-brand-border pb-2">
                 Send Quick Message
               </h2>
@@ -152,7 +152,7 @@ export default function ContactPage() {
 
         {/* Right Info */}
         <div className="lg:col-span-5 space-y-6">
-          <Card className="border-brand-border bg-slate-50/50 p-6 sm:p-8 space-y-6">
+          <Card className="border-brand-border bg-slate-50/50 p-4 sm:p-8 space-y-6">
             <h2 className="text-xs font-bold text-brand-primary uppercase tracking-wider block border-b border-brand-border pb-2">
               Factory & Office Info
             </h2>

@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Viswarkarma uPVC & Aluminium | Custom Windows & Doors Bangalore",
-  description: "Premium uPVC & Aluminium windows, doors, and glass solutions in Bangalore. 25+ years of family-run custom fabrication & precision installation.",
+  title: "Viswarkarma uPVC & Aluminium | Custom Windows & Doors | Rajahmundry, AP",
+  description: "Premium uPVC & Aluminium windows, doors, and glass solutions. Headquartered in Rajahmundry, Andhra Pradesh — serving all of India. 25+ years of family-run custom fabrication & precision installation.",
 };
 
 export default function RootLayout({

@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function GlassRailingPage() {
   return (
-    <div className="py-12 sm:py-16 space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-8 md:py-16 space-y-10 md:space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Header */}
       <div className="space-y-4 max-w-3xl">
@@ -23,8 +23,8 @@ export default function GlassRailingPage() {
           Create panoramic, unobstructed views in your balcony or terrace. We manufacture and install premium structural glass balustrades using heavy laminated toughened safety glass anchored by solid marine-grade stainless steel floor fittings.
         </p>
         <div className="pt-2">
-          <Link href="/contact">
-            <Button className="font-bold flex items-center gap-1.5 shadow-sm hover:shadow-md">
+          <Link href="/contact" className="w-full sm:w-auto inline-block">
+            <Button className="font-bold flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md w-full sm:w-auto">
               Book Site Survey & Pricing <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>

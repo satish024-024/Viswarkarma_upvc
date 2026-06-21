@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function TestimonialsPage() {
   return (
-    <div className="py-12 sm:py-16 space-y-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-8 md:py-16 space-y-10 md:space-y-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Page Header */}
       <div className="space-y-3 max-w-2xl">
@@ -23,9 +23,9 @@ export default function TestimonialsPage() {
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
         {testimonialsList.map((t) => (
-          <Card key={t.id} className="border-brand-border bg-white p-6 sm:p-8 space-y-4">
+          <Card key={t.id} className="border-brand-border bg-white p-5 sm:p-8 space-y-4">
             <div className="flex items-center gap-1 text-brand-secondary">
               {Array.from({ length: t.rating }).map((_, i) => (
                 <span key={i} className="text-sm">★</span>

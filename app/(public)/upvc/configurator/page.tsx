@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function UpvcConfiguratorPage() {
   return (
-    <div className="py-8 sm:py-12 bg-slate-50/30 flex-grow">
+    <div className="py-8 md:py-12 bg-slate-50/30 flex-grow">
       <Configurator initialFamily="upvc" />
     </div>
   );

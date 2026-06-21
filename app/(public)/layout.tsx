@@ -1,3 +1,5 @@
+import { AuthProvider } from "@/context/AuthContext";
+import AuthModal from "@/components/public/AuthModal";
 import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
 import StickyMobileCta from "@/components/public/StickyMobileCta";
@@ -8,11 +10,14 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <Header />
-      <main className="flex-grow flex flex-col pb-16 lg:pb-0">{children}</main>
-      <Footer />
-      <StickyMobileCta />
-    </>
+    <AuthProvider>
+      <div className="flex flex-col min-h-screen pb-20 md:pb-0">
+        <Header />
+        <main className="flex-grow flex flex-col">{children}</main>
+        <Footer />
+        <StickyMobileCta />
+        <AuthModal />
+      </div>
+    </AuthProvider>
   );
 }

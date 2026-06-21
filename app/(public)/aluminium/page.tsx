@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function AluminiumOverviewPage() {
   return (
-    <div className="py-12 sm:py-16 space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-8 md:py-16 space-y-10 md:space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Hero Info */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -23,14 +23,14 @@ export default function AluminiumOverviewPage() {
           <p className="text-brand-muted text-sm sm:text-base leading-relaxed">
             Our structural-grade aluminium profiles offer unparalleled mechanical strength and slim frames. Perfect for modern architects, builders, and villa owners seeking massive sliding glass panels, high wind-load tolerances for high-rises, and durable anodized or powder-coated finishes.
           </p>
-          <div className="flex flex-wrap gap-3">
-            <Link href="/aluminium/configurator">
-              <Button className="font-bold flex items-center gap-1.5 shadow-sm hover:shadow-md">
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            <Link href="/aluminium/configurator" className="w-full sm:w-auto">
+              <Button className="font-bold flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md w-full sm:w-auto">
                 Configure Aluminium Estimate <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
-            <Link href="/contact">
-              <Button variant="secondary" className="font-bold">Book Free Site Survey</Button>
+            <Link href="/contact" className="w-full sm:w-auto">
+              <Button variant="secondary" className="font-bold w-full sm:w-auto justify-center">Book Free Site Survey</Button>
             </Link>
           </div>
         </div>

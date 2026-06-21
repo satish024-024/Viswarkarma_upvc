@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function UpvcDoorsPage() {
   return (
-    <div className="py-12 sm:py-16 space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-8 md:py-16 space-y-10 md:space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Header */}
       <div className="space-y-4 max-w-3xl">
@@ -23,8 +23,8 @@ export default function UpvcDoorsPage() {
           Our door frames utilize larger, thick-walled uPVC profiles with heavy steel reinforcement. They are designed to withstand frequent use, carry heavy double-glazed units (DGU) easily, and seal tightly to block outdoor sound and dust.
         </p>
         <div className="pt-2">
-          <Link href="/upvc/configurator">
-            <Button className="font-bold flex items-center gap-1.5 shadow-sm hover:shadow-md">
+          <Link href="/upvc/configurator" className="w-full sm:w-auto inline-block">
+            <Button className="font-bold flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md w-full sm:w-auto">
               Configure uPVC Door Estimate <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
