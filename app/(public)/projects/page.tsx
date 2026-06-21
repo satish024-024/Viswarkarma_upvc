@@ -1,17 +1,23 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { projectsList } from '@/lib/data/business';
+import { projectsList as defaultProjects } from '@/lib/data/business';
 import { SystemType } from '@/types/entities';
+import { getProjects } from '@/lib/supabase';
 
 export default function ProjectsPage() {
   const [filter, setFilter] = useState<SystemType | 'all'>('all');
+  const [projects, setProjects] = useState(defaultProjects);
+
+  useEffect(() => {
+    getProjects().then(setProjects);
+  }, []);
 
   const filteredProjects = filter === 'all' 
-    ? projectsList 
-    : projectsList.filter(p => p.category === filter);
+    ? projects 
+    : projects.filter(p => p.category === filter);
 
   return (
     <div className="py-12 sm:py-16 space-y-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
-  title: 'Reinforced uPVC Doors | Sliding Patio & Swing | Daddy uPVC & Aluminium',
+  title: 'Reinforced uPVC Doors | Sliding Patio & Swing | Viswarkarma uPVC & Aluminium',
   description: 'Heavy-duty custom fabricated uPVC doors, sliding balcony doors, and openable terrace doors. Equipped with secure multi-point lock systems.',
 };
 

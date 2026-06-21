@@ -1,13 +1,16 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { faqsList } from '@/lib/data/business';
+import { faqsList as defaultFaqs } from '@/lib/data/business';
+import { getFaqs } from '@/lib/supabase';
 
 export const metadata = {
-  title: 'Frequently Asked Questions | Daddy uPVC & Aluminium',
+  title: 'Frequently Asked Questions | Viswarkarma uPVC & Aluminium',
   description: 'Find answers about uPVC vs aluminium window profiles, double-glazing specifications, sound insulation, in-house manufacturing, and home installations.',
 };
 
-export default function FAQPage() {
+export default async function FAQPage() {
+  const faqs = await getFaqs();
+
   return (
     <div className="py-12 sm:py-16 space-y-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       
@@ -24,7 +27,7 @@ export default function FAQPage() {
 
       {/* FAQs List */}
       <div className="space-y-4">
-        {faqsList.map((faq) => (
+        {faqs.map((faq) => (
           <Card key={faq.id} className="border-brand-border bg-white overflow-hidden">
             <CardContent className="p-6 space-y-3">
               <h3 className="font-bold text-sm sm:text-base text-brand-primary flex items-start gap-3">

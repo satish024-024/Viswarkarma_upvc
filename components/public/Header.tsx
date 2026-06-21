@@ -3,77 +3,77 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Phone, MessageSquare, Menu, X, ChevronDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Phone, MessageSquare, Menu, X, ChevronDown, Sparkles } from 'lucide-react';
 import { businessSettings } from '@/lib/data/business';
+
+const navigation = [
+  { name: 'Home', href: '/' },
+  { name: 'About', href: '/about' },
+  {
+    name: 'uPVC',
+    href: '/upvc',
+    submenu: [
+      { name: 'Overview', href: '/upvc' },
+      { name: 'Windows', href: '/upvc/windows' },
+      { name: 'Doors', href: '/upvc/doors' },
+    ],
+  },
+  {
+    name: 'Aluminium',
+    href: '/aluminium',
+    submenu: [
+      { name: 'Overview', href: '/aluminium' },
+      { name: 'Windows', href: '/aluminium/windows' },
+      { name: 'Doors', href: '/aluminium/doors' },
+    ],
+  },
+  { name: 'Mosquito Mesh', href: '/mesh/mosquito-mesh' },
+  {
+    name: 'Glass Work',
+    href: '/glass-railing',
+    submenu: [
+      { name: 'Glass Railings', href: '/glass-railing' },
+      { name: 'Elevation Glass', href: '/elevation-work' },
+    ],
+  },
+  { name: 'Projects', href: '/projects' },
+  { name: 'Contact', href: '/contact' },
+];
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-
-  const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    {
-      name: 'uPVC Systems',
-      href: '/upvc',
-      submenu: [
-        { name: 'Overview', href: '/upvc' },
-        { name: 'uPVC Windows', href: '/upvc/windows' },
-        { name: 'uPVC Doors', href: '/upvc/doors' },
-        { name: 'Configurator', href: '/upvc/configurator' },
-      ]
-    },
-    {
-      name: 'Aluminium Systems',
-      href: '/aluminium',
-      submenu: [
-        { name: 'Overview', href: '/aluminium' },
-        { name: 'Aluminium Windows', href: '/aluminium/windows' },
-        { name: 'Aluminium Doors', href: '/aluminium/doors' },
-        { name: 'Configurator', href: '/aluminium/configurator' },
-      ]
-    },
-    { name: 'Mosquito Mesh', href: '/mesh/mosquito-mesh' },
-    {
-      name: 'Architectural Glass',
-      href: '#',
-      submenu: [
-        { name: 'Glass Railing', href: '/glass-railing' },
-        { name: 'Elevation Glass', href: '/elevation-work' },
-      ]
-    },
-    { name: 'Projects', href: '/projects' },
-    { name: 'Contact', href: '/contact' },
-  ];
-
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const pathname = usePathname();
 
   const isActive = (href: string) => {
     if (href === '/' && pathname !== '/') return false;
     return pathname.startsWith(href);
   };
 
+  const hasActiveChild = (item: { submenu?: { href: string }[] }) =>
+    item.submenu?.some((s) => isActive(s.href)) ?? false;
+
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-brand-border">
+    <header className="sticky top-0 z-50 bg-white/98 backdrop-blur-md border-b border-slate-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo / Title */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-lg bg-brand-primary flex items-center justify-center text-white font-bold transition-transform duration-300 group-hover:scale-105">
-              D
+        <div className="flex items-center justify-between h-[68px]">
+
+          {/* ── Logo ── */}
+          <Link href="/" className="flex items-center gap-3 group flex-shrink-0">
+            <div className="w-9 h-9 rounded-lg bg-slate-950 border border-gold/50 flex items-center justify-center text-gold font-black text-base transition-all duration-200 group-hover:border-gold group-hover:shadow-[0_0_12px_rgba(197,168,128,0.25)]">
+              V
             </div>
-            <div>
-              <span className="text-base font-bold text-brand-primary block tracking-tight">Daddy</span>
-              <span className="text-[10px] font-bold text-brand-secondary block uppercase tracking-wider -mt-1.5">uPVC & Aluminium</span>
+            <div className="leading-none">
+              <span className="text-[15px] font-black text-slate-950 block tracking-tight">Viswarkarma</span>
+              <span className="text-[9px] font-bold text-gold block uppercase tracking-[0.15em] mt-0.5">uPVC & Aluminium</span>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-6">
+          {/* ── Desktop Nav ── */}
+          <nav className="hidden lg:flex items-center gap-1">
             {navigation.map((item) => {
               if (item.submenu) {
+                const active = hasActiveChild(item);
                 return (
                   <div
                     key={item.name}
@@ -83,21 +83,26 @@ export default function Header() {
                   >
                     <button
                       type="button"
-                      className={`inline-flex items-center gap-1 text-sm font-medium transition-colors hover:text-brand-primary cursor-pointer py-2 ${
-                        item.submenu.some(sub => isActive(sub.href)) ? 'text-brand-primary font-semibold' : 'text-brand-muted'
+                      className={`inline-flex items-center gap-1 text-[13px] font-semibold px-3 py-2 rounded-md transition-all duration-150 cursor-pointer ${
+                        active
+                          ? 'text-slate-950 bg-gold/10'
+                          : 'text-slate-500 hover:text-slate-950 hover:bg-slate-50'
                       }`}
                     >
                       {item.name}
-                      <ChevronDown className="w-3.5 h-3.5" />
+                      <ChevronDown className={`w-3 h-3 transition-transform ${activeDropdown === item.name ? 'rotate-180' : ''}`} />
                     </button>
+
                     {activeDropdown === item.name && (
-                      <div className="absolute top-full left-0 w-48 bg-white border border-brand-border rounded-lg shadow-md py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
+                      <div className="absolute top-full left-0 mt-1 w-44 bg-white border border-slate-200 rounded-xl shadow-xl py-1.5 z-50">
                         {item.submenu.map((sub) => (
                           <Link
                             key={sub.name}
                             href={sub.href}
-                            className={`block px-4 py-2 text-xs font-medium transition-colors hover:bg-slate-50 ${
-                              isActive(sub.href) ? 'text-brand-primary bg-slate-50 font-bold' : 'text-brand-muted'
+                            className={`block px-4 py-2 text-[12px] font-medium transition-colors ${
+                              isActive(sub.href)
+                                ? 'text-slate-950 font-bold bg-gold/10'
+                                : 'text-slate-600 hover:text-slate-950 hover:bg-slate-50'
                             }`}
                           >
                             {sub.name}
@@ -113,8 +118,10 @@ export default function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`text-sm font-medium transition-colors hover:text-brand-primary ${
-                    isActive(item.href) ? 'text-brand-primary font-semibold' : 'text-brand-muted'
+                  className={`text-[13px] font-semibold px-3 py-2 rounded-md transition-all duration-150 ${
+                    isActive(item.href)
+                      ? 'text-slate-950 bg-gold/10'
+                      : 'text-slate-500 hover:text-slate-950 hover:bg-slate-50'
                   }`}
                 >
                   {item.name}
@@ -123,45 +130,44 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Key Actions Block (Always visible on desktop) */}
-          <div className="hidden sm:flex items-center gap-3">
+          {/* ── Desktop CTA ── */}
+          <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
             <a
               href={`tel:${businessSettings.phone}`}
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-primary hover:text-brand-secondary transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-bold text-slate-600 hover:text-slate-950 hover:bg-slate-50 transition-all"
             >
-              <Phone className="w-4 h-4 text-brand-secondary" />
-              <span>Call</span>
+              <Phone className="w-3.5 h-3.5" />
+              Call
             </a>
-            
             <a
               href={`https://wa.me/${businessSettings.whatsapp.replace(/\D/g, '')}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:text-emerald-700 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-bold text-emerald-600 hover:bg-emerald-50 transition-all"
             >
-              <MessageSquare className="w-4 h-4" />
-              <span>WhatsApp</span>
+              <MessageSquare className="w-3.5 h-3.5" />
+              WhatsApp
             </a>
-
-            <Link href="/quote">
-              <Button size="sm" className="font-bold flex items-center gap-1 shadow-xs hover:shadow-md">
-                Get Estimate
-              </Button>
+            <Link
+              href="/quote"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] font-bold bg-slate-950 hover:bg-gold text-white hover:text-slate-950 transition-all duration-200 border border-transparent hover:border-gold/50 shadow-sm"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              Get Estimate
             </Link>
           </div>
 
-          {/* Hamburger trigger for mobile */}
-          <div className="lg:hidden flex items-center gap-3">
-            {/* Quick call button for mobile */}
+          {/* ── Mobile triggers ── */}
+          <div className="lg:hidden flex items-center gap-2">
             <a
               href={`tel:${businessSettings.phone}`}
-              className="p-2 rounded-full border border-brand-border bg-white text-brand-primary shadow-xs hover:bg-slate-50"
+              className="p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
             >
               <Phone className="w-4 h-4" />
             </a>
             <button
-              onClick={toggleMenu}
-              className="p-2 rounded-full border border-brand-border bg-white text-brand-primary shadow-xs"
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -169,42 +175,43 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile drawer menu */}
+      {/* ── Mobile Drawer ── */}
       {isOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-white border-t border-brand-border pt-20 animate-in fade-in duration-200">
-          <div className="max-w-7xl mx-auto px-4 py-6 space-y-4 h-full overflow-y-auto">
+        <div className="lg:hidden fixed inset-0 z-40 bg-white pt-[68px] overflow-y-auto">
+          <div className="px-4 py-6 space-y-1">
             {navigation.map((item) => {
               if (item.submenu) {
                 return (
                   <div key={item.name} className="space-y-1">
-                    <span className="block text-xs font-bold text-brand-primary uppercase tracking-wider px-3">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-3 pt-3 pb-1">
                       {item.name}
-                    </span>
-                    <div className="pl-4 space-y-1">
-                      {item.submenu.map((sub) => (
-                        <Link
-                          key={sub.name}
-                          href={sub.href}
-                          onClick={toggleMenu}
-                          className={`block px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                            isActive(sub.href) ? 'text-brand-primary bg-slate-50' : 'text-brand-muted'
-                          }`}
-                        >
-                          {sub.name}
-                        </Link>
-                      ))}
-                    </div>
+                    </p>
+                    {item.submenu.map((sub) => (
+                      <Link
+                        key={sub.name}
+                        href={sub.href}
+                        onClick={() => setIsOpen(false)}
+                        className={`block px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                          isActive(sub.href)
+                            ? 'text-slate-950 bg-gold/10 font-bold'
+                            : 'text-slate-600 hover:bg-slate-50'
+                        }`}
+                      >
+                        {sub.name}
+                      </Link>
+                    ))}
                   </div>
                 );
               }
-
               return (
                 <Link
                   key={item.name}
                   href={item.href}
-                  onClick={toggleMenu}
-                  className={`block px-3 py-2 rounded-lg text-base font-bold transition-colors ${
-                    isActive(item.href) ? 'text-brand-primary bg-slate-50' : 'text-brand-muted'
+                  onClick={() => setIsOpen(false)}
+                  className={`block px-4 py-2.5 rounded-xl text-sm font-bold transition-colors ${
+                    isActive(item.href)
+                      ? 'text-slate-950 bg-gold/10'
+                      : 'text-slate-600 hover:bg-slate-50'
                   }`}
                 >
                   {item.name}
@@ -212,26 +219,28 @@ export default function Header() {
               );
             })}
 
-            {/* Mobile CTAs */}
-            <div className="pt-6 border-t border-brand-border space-y-3">
+            {/* Mobile CTA block */}
+            <div className="pt-6 border-t border-slate-100 space-y-3 mt-4">
               <a
                 href={`tel:${businessSettings.phone}`}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-brand-border text-brand-primary font-bold bg-white text-sm"
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-slate-200 text-slate-700 font-bold text-sm"
               >
-                <Phone className="w-4 h-4 text-brand-secondary" /> Call Specialist
+                <Phone className="w-4 h-4" /> {businessSettings.phone}
               </a>
               <a
                 href={`https://wa.me/${businessSettings.whatsapp.replace(/\D/g, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-emerald-200 text-emerald-700 font-bold bg-emerald-50 text-sm"
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 font-bold text-sm"
               >
                 <MessageSquare className="w-4 h-4" /> Message on WhatsApp
               </a>
-              <Link href="/quote" onClick={toggleMenu} className="block">
-                <Button className="w-full py-3 text-sm font-bold bg-brand-primary hover:bg-brand-primary-hover">
-                  Open Price Configurator
-                </Button>
+              <Link
+                href="/quote"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-slate-950 text-white font-bold text-sm"
+              >
+                <Sparkles className="w-4 h-4" /> Get Home Estimate
               </Link>
             </div>
           </div>

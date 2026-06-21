@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
-  title: 'Structural Elevation Glass & Spider Glazing | Daddy uPVC & Aluminium',
+  title: 'Structural Elevation Glass & Spider Glazing | Viswarkarma uPVC & Aluminium',
   description: 'Premium structural glass facades, curtain walls, spider-fitting glass joints, and commercial storefronts. Built to high safety standards.',
 };
 

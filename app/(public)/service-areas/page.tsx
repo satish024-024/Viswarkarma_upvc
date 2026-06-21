@@ -4,8 +4,8 @@ import { MapPin, Truck } from 'lucide-react';
 import { serviceAreas } from '@/lib/data/business';
 
 export const metadata = {
-  title: 'Service Areas & Locations Served | Daddy uPVC & Aluminium',
-  description: 'Daddy uPVC serves Bangalore (Whitefield, Indiranagar, Jayanagar), Mysuru, and Tumakuru, providing direct transport and professional installation.',
+  title: 'Service Areas & Locations Served | Viswarkarma uPVC & Aluminium',
+  description: 'Viswarkarma uPVC serves Bangalore (Whitefield, Indiranagar, Jayanagar), Mysuru, and Tumakuru, providing direct transport and professional installation.',
 };
 
 export default function ServiceAreasPage() {

@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
-  title: 'Aluminium Balcony Sliding & Fold Doors | Daddy uPVC & Aluminium',
+  title: 'Aluminium Balcony Sliding & Fold Doors | Viswarkarma uPVC & Aluminium',
   description: 'Heavy-duty architectural aluminium balcony sliding doors, folding glass doors, and entrance doors. Custom manufactured at our Bangalore facility.',
 };
 

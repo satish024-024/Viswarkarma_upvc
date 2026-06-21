@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/card';
 import { testimonialsList } from '@/lib/data/business';
 
 export const metadata = {
-  title: 'Client Reviews | Daddy uPVC & Aluminium',
+  title: 'Client Reviews | Viswarkarma uPVC & Aluminium',
   description: 'Read actual testimonials from homeowners, architects, and builders who have installed custom uPVC & aluminium windows in Bangalore.',
 };
 

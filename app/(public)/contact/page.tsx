@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mail, Phone, MapPin, Clock, MessageSquare, Shield } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { businessSettings } from '@/lib/data/business';
+import { businessSettings as defaultSettings } from '@/lib/data/business';
+import { getBusinessSettings } from '@/lib/supabase';
 
 export default function ContactPage() {
+  const [settings, setSettings] = useState(defaultSettings);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -16,6 +18,10 @@ export default function ContactPage() {
   });
   const [submitted, setSubmitted] = useState(false);
 
+  useEffect(() => {
+    getBusinessSettings().then(setSettings);
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone || !formData.city) {
@@ -23,13 +29,13 @@ export default function ContactPage() {
       return;
     }
 
-    const whatsappMessage = `Hello Daddy uPVC & Aluminium! I have a general enquiry:
+    const whatsappMessage = `Hello Viswarkarma uPVC & Aluminium! I have a general enquiry:
 - Name: ${formData.name}
 - Phone: ${formData.phone}
 - Location: ${formData.city}
 - Message: ${formData.message}`;
 
-    const link = `https://wa.me/${businessSettings.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMessage)}`;
+    const link = `https://wa.me/${settings.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMessage)}`;
     window.open(link, '_blank');
     setSubmitted(true);
   };
@@ -156,7 +162,7 @@ export default function ContactPage() {
                 <MapPin className="w-4 h-4 text-brand-secondary flex-shrink-0 mt-0.5" />
                 <div>
                   <span className="font-bold text-brand-primary block">Bangalore Fabrication Facility</span>
-                  <span className="text-brand-muted mt-0.5 block leading-relaxed">{businessSettings.address}</span>
+                  <span className="text-brand-muted mt-0.5 block leading-relaxed">{settings.address}</span>
                 </div>
               </li>
 
@@ -164,8 +170,8 @@ export default function ContactPage() {
                 <Phone className="w-4 h-4 text-brand-secondary flex-shrink-0 mt-0.5" />
                 <div>
                   <span className="font-bold text-brand-primary block">Call Office Direct</span>
-                  <a href={`tel:${businessSettings.phone}`} className="text-brand-secondary font-bold block mt-0.5 hover:underline">
-                    {businessSettings.phone}
+                  <a href={`tel:${settings.phone}`} className="text-brand-secondary font-bold block mt-0.5 hover:underline">
+                    {settings.phone}
                   </a>
                 </div>
               </li>
@@ -174,8 +180,8 @@ export default function ContactPage() {
                 <Mail className="w-4 h-4 text-brand-secondary flex-shrink-0 mt-0.5" />
                 <div>
                   <span className="font-bold text-brand-primary block">Email Specialist</span>
-                  <a href={`mailto:${businessSettings.email}`} className="text-brand-muted block mt-0.5 hover:underline">
-                    {businessSettings.email}
+                  <a href={`mailto:${settings.email}`} className="text-brand-muted block mt-0.5 hover:underline">
+                    {settings.email}
                   </a>
                 </div>
               </li>
@@ -184,7 +190,7 @@ export default function ContactPage() {
                 <Clock className="w-4 h-4 text-brand-secondary flex-shrink-0 mt-0.5" />
                 <div>
                   <span className="font-bold text-brand-primary block">Working Hours</span>
-                  <span className="text-brand-muted block mt-0.5">{businessSettings.hours}</span>
+                  <span className="text-brand-muted block mt-0.5">{settings.hours}</span>
                 </div>
               </li>
             </ul>

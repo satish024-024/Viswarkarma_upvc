@@ -1,14 +1,17 @@
 import React from 'react';
 import { ShieldCheck, Factory, HeartHandshake } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { businessSettings } from '@/lib/data/business';
+import { businessSettings as defaultSettings } from '@/lib/data/business';
+import { getBusinessSettings } from '@/lib/supabase';
 
 export const metadata = {
-  title: 'About Us | Daddy uPVC & Aluminium',
-  description: 'With 25+ years of custom fabrication, Daddy uPVC manufactures and installs premium architectural windows and doors across Karnataka.',
+  title: 'About Us | Viswarkarma uPVC & Aluminium',
+  description: 'With 25+ years of custom fabrication, Viswarkarma uPVC manufactures and installs premium architectural windows and doors across Karnataka.',
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const settings = await getBusinessSettings();
+
   return (
     <div className="py-12 sm:py-16 space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
@@ -19,7 +22,7 @@ export default function AboutPage() {
           A 25+ Year Legacy of Structural Integrity and Trust
         </h1>
         <p className="text-brand-muted text-sm sm:text-base leading-relaxed">
-          Established as a small family-run fabrication facility, {businessSettings.name} has grown to become one of Bengaluru&apos;s most trusted manufacturers of custom uPVC and aluminium architectural systems. We don&apos;t act as middleman distributors; we own our factory, oversee our extrusions, and deploy our in-house installers to ensure total quality control.
+          Established as a small family-run fabrication facility, {settings.name} has grown to become one of Bengaluru&apos;s most trusted manufacturers of custom uPVC and aluminium architectural systems. We don&apos;t act as middleman distributors; we own our factory, oversee our extrusions, and deploy our in-house installers to ensure total quality control.
         </p>
       </div>
 

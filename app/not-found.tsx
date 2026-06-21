@@ -4,7 +4,7 @@ import { ArrowLeft, Compass } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
-  title: 'Page Not Found | Daddy uPVC & Aluminium',
+  title: 'Page Not Found | Viswarkarma uPVC & Aluminium',
   description: 'The requested architectural window/door page could not be found.',
 };
 

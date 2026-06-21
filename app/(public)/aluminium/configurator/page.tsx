@@ -2,7 +2,7 @@ import React from 'react';
 import Configurator from '@/features/configurator/components/Configurator';
 
 export const metadata = {
-  title: 'Configure Aluminium Windows & Doors | Daddy uPVC & Aluminium',
+  title: 'Configure Aluminium Windows & Doors | Viswarkarma uPVC & Aluminium',
   description: 'Custom design and calculate an estimated price guide for your architectural aluminium windows and doors. Send configuration directly to WhatsApp.',
 };
 

@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
-  title: 'Architectural Aluminium Systems | Direct Factory Pricing | Daddy uPVC & Aluminium',
+  title: 'Architectural Aluminium Systems | Direct Factory Pricing | Viswarkarma uPVC & Aluminium',
   description: 'Premium structural aluminium windows and doors with slim frames. Durable, powder-coated finishes, wind-load resistant, and thermally broken.',
 };
 

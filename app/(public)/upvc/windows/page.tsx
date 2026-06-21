@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
-  title: 'Custom uPVC Windows | sliding, Casement, & Tilt-Turn | Daddy',
+  title: 'Custom uPVC Windows | sliding, Casement, & Tilt-Turn | Viswarkarma uPVC & Aluminium',
   description: 'Custom fabricated uPVC windows including 2/3 track sliding systems, openable casements, and fixed frames. Engineered in Bangalore.',
 };
 

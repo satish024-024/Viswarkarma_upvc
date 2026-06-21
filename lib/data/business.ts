@@ -1,11 +1,11 @@
 import { BusinessSettings, ServiceVertical, Project, Testimonial, FAQ, ServiceArea } from '@/types/entities';
 
 export const businessSettings: BusinessSettings = {
-  name: "Daddy uPVC & Aluminium",
+  name: "Viswarkarma uPVC & Aluminium",
   tagline: "25+ Years of Custom Fabrication & Precision Installation",
   phone: "+91 98860 12345",
   whatsapp: "+919886012345",
-  email: "contact@daddyupvc.com",
+  email: "contact@viswarkarmaupvc.com",
   address: "Bangalore Fabrication Workshop & Office, Bengaluru, Karnataka, India",
   hours: "Monday - Saturday: 9:30 AM - 7:00 PM",
   googleMapUrl: "",
@@ -152,7 +152,7 @@ export const testimonialsList: Testimonial[] = [
     id: "t-2",
     name: "Architect Anjali Mehta",
     role: "Lead Architect, Mehta & Associates",
-    content: "As an architect, I am very picky about profiles and alignment. Daddy uPVC has fabricated and installed profiles for three of my villa projects. Their attention to detail on gaskets, corner joints, and silicone sealing is top-tier.",
+    content: "As an architect, I am very picky about profiles and alignment. Viswarkarma uPVC has fabricated and installed profiles for three of my villa projects. Their attention to detail on gaskets, corner joints, and silicone sealing is top-tier.",
     rating: 5,
     location: "HSR Layout, Bangalore",
     projectType: "Architectural Aluminium Sliding Systems"
