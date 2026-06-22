@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Phone, MessageSquare, Menu, X, ChevronDown, Sparkles, LogIn, LogOut, User, Sliders } from 'lucide-react';
@@ -155,8 +156,8 @@ export default function Header() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
-          <div className="w-9 h-9 rounded-lg bg-gold-faint border border-border flex items-center justify-center font-black text-gold text-base transition-all group-hover:bg-gold-pale">
-            V
+          <div className="w-9 h-9 flex-shrink-0">
+            <Image src="/logo.png" alt="Viswarkarma Logo" width={36} height={36} className="w-full h-full object-contain" priority />
           </div>
           <div className="leading-none">
             <span className="block text-[15px] font-black text-heading tracking-tight">Viswarkarma</span>
@@ -290,8 +291,8 @@ export default function Header() {
         {/* Drawer Header */}
         <div className="flex items-center justify-between p-4 border-b border-border-soft">
           <Link href="/" className="flex items-center gap-2 group flex-shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-gold-faint border border-border flex items-center justify-center font-black text-gold text-sm">
-              V
+            <div className="w-8 h-8 flex-shrink-0">
+              <Image src="/logo.png" alt="Viswarkarma Logo" width={32} height={32} className="w-full h-full object-contain" />
             </div>
             <div className="leading-none text-left">
               <span className="block text-xs font-black text-heading tracking-tight">Viswarkarma</span>
