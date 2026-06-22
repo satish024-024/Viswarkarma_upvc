@@ -12,6 +12,11 @@ ALTER TABLE public.product_types ADD COLUMN IF NOT EXISTS image_url TEXT;
 ALTER TABLE public.estimator_drafts ADD COLUMN IF NOT EXISTS series_choice TEXT DEFAULT '';
 ALTER TABLE public.estimator_drafts ADD COLUMN IF NOT EXISTS hardware_choice TEXT DEFAULT 'standard';
 
+-- 0.2 Populate product families first to satisfy foreign key constraints
+INSERT INTO public.product_families (id, name, description, status) VALUES
+('upvc', 'uPVC Systems', 'Excellent thermal, sound & weather insulation. Most popular for residential homes.', 'active'),
+('aluminium', 'Aluminium Systems', 'Sleek slimline architectural frames. Ideal for large glass views & commercial projects.', 'active')
+ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 
 -- 1. Update uPVC product type default images to match the correct home page IndiaMart images
 UPDATE public.product_types 
