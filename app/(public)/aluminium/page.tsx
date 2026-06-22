@@ -4,13 +4,20 @@ import Image from 'next/image';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { getProductTypes } from '@/lib/supabase';
 
 export const metadata = {
   title: 'Architectural Aluminium Systems | Direct Factory Pricing | Viswarkarma uPVC & Aluminium',
   description: 'Premium structural aluminium windows and doors with slim frames. Durable, powder-coated finishes, wind-load resistant, and thermally broken.',
 };
 
-export default function AluminiumOverviewPage() {
+export default async function AluminiumOverviewPage() {
+  const productTypes = await getProductTypes();
+
+  // Find images dynamically from database so they are changeable by admin
+  const aluWindowsImg = productTypes.find(t => t.id === 'alu_sliding_window')?.image || 'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=800&q=80';
+  const aluDoorsImg = productTypes.find(t => t.id === 'alu_sliding_door')?.image || 'https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=800&q=80';
+
   return (
     <div className="py-8 md:py-16 space-y-10 md:space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
@@ -74,7 +81,7 @@ export default function AluminiumOverviewPage() {
         <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
           <div className="relative h-64 w-full bg-slate-100 border-b border-brand-border">
             <Image 
-              src="https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=800&q=80" 
+              src={aluWindowsImg} 
               alt="Aluminium Windows"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -101,7 +108,7 @@ export default function AluminiumOverviewPage() {
         <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
           <div className="relative h-64 w-full bg-slate-100 border-b border-brand-border">
             <Image 
-              src="https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=800&q=80" 
+              src={aluDoorsImg} 
               alt="Aluminium Doors"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -129,4 +136,5 @@ export default function AluminiumOverviewPage() {
     </div>
   );
 }
+
 

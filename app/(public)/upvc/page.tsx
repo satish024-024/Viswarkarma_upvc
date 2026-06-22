@@ -4,13 +4,20 @@ import Image from 'next/image';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { getProductTypes } from '@/lib/supabase';
 
 export const metadata = {
   title: 'High-Performance uPVC Window & Door Systems | Direct Factory Pricing',
   description: 'Premium uPVC profiles manufactured locally in Bangalore. Offering soundproofing (up to 40dB), thermal efficiency, waterproofing, and multi-point locks.',
 };
 
-export default function UpvcOverviewPage() {
+export default async function UpvcOverviewPage() {
+  const productTypes = await getProductTypes();
+
+  // Find images dynamically from database so they are changeable by admin
+  const upvcWindowsImg = productTypes.find(t => t.id === 'sliding_window')?.image || 'https://5.imimg.com/data5/SX/YV/YG/SELLER-64612523/upvc-sliding-window-500x500.jpg';
+  const upvcDoorsImg = productTypes.find(t => t.id === 'sliding_door')?.image || 'https://5.imimg.com/data5/RU/YJ/HX/SELLER-64612523/upvc-french-door-500x500.jpg';
+
   return (
     <div className="py-8 md:py-16 space-y-10 md:space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
@@ -74,7 +81,7 @@ export default function UpvcOverviewPage() {
         <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
           <div className="relative h-64 w-full bg-slate-100 border-b border-brand-border">
             <Image 
-              src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80" 
+              src={upvcWindowsImg} 
               alt="uPVC Windows"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -101,7 +108,7 @@ export default function UpvcOverviewPage() {
         <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
           <div className="relative h-64 w-full bg-slate-100 border-b border-brand-border">
             <Image 
-              src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80" 
+              src={upvcDoorsImg} 
               alt="uPVC Doors"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -129,4 +136,3 @@ export default function UpvcOverviewPage() {
     </div>
   );
 }
-
