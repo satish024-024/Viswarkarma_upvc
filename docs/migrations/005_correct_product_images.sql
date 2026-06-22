@@ -1,12 +1,17 @@
 -- ============================================================
--- Viswarkarma uPVC & Aluminium — Correct Product Type Images
+-- Viswarkarma uPVC & Aluminium — Database Hotfix & Schema Sync
 -- Run this in your Supabase Dashboard > SQL Editor
 -- This ensures all product images match the correct home page images
--- and are fully editable/customizable by the admin.
+-- and fixes missing columns on estimator_drafts.
 -- ============================================================
 
--- 0. Ensure the image_url column exists on product_types
+-- 0. Ensure the image_url column exists on product_types table
 ALTER TABLE public.product_types ADD COLUMN IF NOT EXISTS image_url TEXT;
+
+-- 0.1 Ensure series_choice and hardware_choice columns exist on estimator_drafts table
+ALTER TABLE public.estimator_drafts ADD COLUMN IF NOT EXISTS series_choice TEXT DEFAULT '';
+ALTER TABLE public.estimator_drafts ADD COLUMN IF NOT EXISTS hardware_choice TEXT DEFAULT 'standard';
+
 
 -- 1. Update uPVC product type default images to match the correct home page IndiaMart images
 UPDATE public.product_types 
