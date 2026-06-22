@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -59,35 +60,57 @@ export default function UpvcOverviewPage() {
 
       {/* Sub-vertical links grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-brand-border pt-12">
-        <Card className="border-brand-border p-6 sm:p-8 flex flex-col justify-between">
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold text-brand-primary">uPVC Windows</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Choose from classic outward-swinging casement sashes, space-saving multi-track horizontal sliders, fixed picture windows, or advanced European-style tilt-and-turn units.
-            </p>
+        <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
+          <div className="relative h-64 w-full bg-slate-100 border-b border-brand-border">
+            <Image 
+              src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80" 
+              alt="uPVC Windows"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover hover:scale-105 transition-transform duration-500"
+            />
           </div>
-          <div className="pt-6">
-            <Link href="/upvc/windows">
-              <Button variant="secondary" size="sm" className="font-bold flex items-center gap-1">
-                Browse Windows <ArrowRight className="w-3.5 h-3.5" />
-              </Button>
-            </Link>
+          <div className="p-6 sm:p-8 flex flex-col justify-between flex-grow">
+            <div className="space-y-4">
+              <h3 className="text-xl font-bold text-brand-primary">uPVC Windows</h3>
+              <p className="text-xs text-brand-muted leading-relaxed">
+                Choose from classic outward-swinging casement sashes, space-saving multi-track horizontal sliders, fixed picture windows, or advanced European-style tilt-and-turn units.
+              </p>
+            </div>
+            <div className="pt-6">
+              <Link href="/upvc/windows">
+                <Button variant="secondary" size="sm" className="font-bold flex items-center gap-1">
+                  Browse Windows <ArrowRight className="w-3.5 h-3.5" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </Card>
 
-        <Card className="border-brand-border p-6 sm:p-8 flex flex-col justify-between">
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold text-brand-primary">uPVC Doors</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Available as heavy-duty swing entrance doors or wide sliding balcony patio doors with low aluminium thresholds. Fully reinforced with thick steel inserts and key-locking handles.
-            </p>
+        <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
+          <div className="relative h-64 w-full bg-slate-100 border-b border-brand-border">
+            <Image 
+              src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80" 
+              alt="uPVC Doors"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover hover:scale-105 transition-transform duration-500"
+            />
           </div>
-          <div className="pt-6">
-            <Link href="/upvc/doors">
-              <Button variant="secondary" size="sm" className="font-bold flex items-center gap-1">
-                Browse Doors <ArrowRight className="w-3.5 h-3.5" />
-              </Button>
-            </Link>
+          <div className="p-6 sm:p-8 flex flex-col justify-between flex-grow">
+            <div className="space-y-4">
+              <h3 className="text-xl font-bold text-brand-primary">uPVC Doors</h3>
+              <p className="text-xs text-brand-muted leading-relaxed">
+                Available as heavy-duty swing entrance doors or wide sliding balcony patio doors with low aluminium thresholds. Fully reinforced with thick steel inserts and key-locking handles.
+              </p>
+            </div>
+            <div className="pt-6">
+              <Link href="/upvc/doors">
+                <Button variant="secondary" size="sm" className="font-bold flex items-center gap-1">
+                  Browse Doors <ArrowRight className="w-3.5 h-3.5" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </Card>
       </div>
@@ -95,3 +118,4 @@ export default function UpvcOverviewPage() {
     </div>
   );
 }
+

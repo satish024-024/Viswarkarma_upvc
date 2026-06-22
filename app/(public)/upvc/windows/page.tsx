@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -33,30 +34,63 @@ export default function UpvcWindowsPage() {
 
       {/* Grid of Styles */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
-        <Card className="border-brand-border bg-white flex flex-col justify-between">
-          <CardContent className="p-6 space-y-4">
-            <h3 className="font-bold text-base text-brand-primary">Sliding Windows</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Equipped with smooth brass or nylon roller bearings and integrated mosquito track slots. Ideal for bedrooms, kitchens, and patios where swing clearance is limited. Available in 2, 3, or 4-panel configurations.
-            </p>
+        <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
+          <div className="relative h-48 w-full bg-slate-100 border-b border-brand-border">
+            <Image 
+              src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=800&q=80" 
+              alt="Sliding Windows"
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+          <CardContent className="p-6 space-y-4 flex-grow flex flex-col justify-between">
+            <div className="space-y-3">
+              <h3 className="font-bold text-base text-brand-primary">Sliding Windows</h3>
+              <p className="text-xs text-brand-muted leading-relaxed">
+                Equipped with smooth brass or nylon roller bearings and integrated mosquito track slots. Ideal for bedrooms, kitchens, and patios where swing clearance is limited. Available in 2, 3, or 4-panel configurations.
+              </p>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border-brand-border bg-white flex flex-col justify-between">
-          <CardContent className="p-6 space-y-4">
-            <h3 className="font-bold text-base text-brand-primary">Casement (Openable) Windows</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Provides 100% opening area for high ventilation. Equipped with heavy-duty friction stay hinges that keep sashes steady against high winds without rattling. Double sealing gaskets ensure excellent sound proofing.
-            </p>
+        <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
+          <div className="relative h-48 w-full bg-slate-100 border-b border-brand-border">
+            <Image 
+              src="https://images.unsplash.com/photo-1603380353725-f8a4d39cc41e?auto=format&fit=crop&w=800&q=80" 
+              alt="Casement (Openable) Windows"
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+          <CardContent className="p-6 space-y-4 flex-grow flex flex-col justify-between">
+            <div className="space-y-3">
+              <h3 className="font-bold text-base text-brand-primary">Casement (Openable) Windows</h3>
+              <p className="text-xs text-brand-muted leading-relaxed">
+                Provides 100% opening area for high ventilation. Equipped with heavy-duty friction stay hinges that keep sashes steady against high winds without rattling. Double sealing gaskets ensure excellent sound proofing.
+              </p>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border-brand-border bg-white flex flex-col justify-between">
-          <CardContent className="p-6 space-y-4">
-            <h3 className="font-bold text-base text-brand-primary">Tilt & Turn / Fixed Windows</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Tilt & Turn window sashes tilt inwards at the top for ventilation or swing open like a door for cleaning. Fixed windows are perfect for maximizing light and architectural partitions.
-            </p>
+        <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
+          <div className="relative h-48 w-full bg-slate-100 border-b border-brand-border">
+            <Image 
+              src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" 
+              alt="Tilt & Turn / Fixed Windows"
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+          <CardContent className="p-6 space-y-4 flex-grow flex flex-col justify-between">
+            <div className="space-y-3">
+              <h3 className="font-bold text-base text-brand-primary">Tilt & Turn / Fixed Windows</h3>
+              <p className="text-xs text-brand-muted leading-relaxed">
+                Tilt & Turn window sashes tilt inwards at the top for ventilation or swing open like a door for cleaning. Fixed windows are perfect for maximizing light and architectural partitions.
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -64,3 +98,4 @@ export default function UpvcWindowsPage() {
     </div>
   );
 }
+

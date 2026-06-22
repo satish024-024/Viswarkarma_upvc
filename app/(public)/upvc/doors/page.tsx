@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -33,21 +34,43 @@ export default function UpvcDoorsPage() {
 
       {/* Grid of Styles */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
-        <Card className="border-brand-border bg-white flex flex-col justify-between">
-          <CardContent className="p-6 sm:p-8 space-y-4">
-            <h3 className="font-bold text-lg text-brand-primary">Sliding Balcony Doors</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Perfect for balconies, terrace entries, and partition openings. Running on heavy-duty steel tracks with specialized tandem rollers, even sashes weighing 120 kg slide open smoothly with one hand. Low-threshold tracks are available to prevent tripping.
-            </p>
+        <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
+          <div className="relative h-64 w-full bg-slate-100 border-b border-brand-border">
+            <Image 
+              src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80" 
+              alt="Sliding Balcony Doors"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+          <CardContent className="p-6 sm:p-8 space-y-4 flex-grow flex flex-col justify-between">
+            <div className="space-y-3">
+              <h3 className="font-bold text-lg text-brand-primary">Sliding Balcony Doors</h3>
+              <p className="text-xs text-brand-muted leading-relaxed">
+                Perfect for balconies, terrace entries, and partition openings. Running on heavy-duty steel tracks with specialized tandem rollers, even sashes weighing 120 kg slide open smoothly with one hand. Low-threshold tracks are available to prevent tripping.
+              </p>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border-brand-border bg-white flex flex-col justify-between">
-          <CardContent className="p-6 sm:p-8 space-y-4">
-            <h3 className="font-bold text-lg text-brand-primary">Swing & Utility Doors</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Classic inward or outward swinging doors, ideal for terrace entries, kitchens, and utilities. Equipped with full perimeter gaskets and secure key-locking cylinders that drive multi-point locking rods directly into the frame.
-            </p>
+        <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
+          <div className="relative h-64 w-full bg-slate-100 border-b border-brand-border">
+            <Image 
+              src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80" 
+              alt="Swing & Utility Doors"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+          <CardContent className="p-6 sm:p-8 space-y-4 flex-grow flex flex-col justify-between">
+            <div className="space-y-3">
+              <h3 className="font-bold text-lg text-brand-primary">Swing & Utility Doors</h3>
+              <p className="text-xs text-brand-muted leading-relaxed">
+                Classic inward or outward swinging doors, ideal for terrace entries, kitchens, and utilities. Equipped with full perimeter gaskets and secure key-locking cylinders that drive multi-point locking rods directly into the frame.
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -55,3 +78,4 @@ export default function UpvcDoorsPage() {
     </div>
   );
 }
+

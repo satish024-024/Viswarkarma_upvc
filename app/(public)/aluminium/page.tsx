@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -59,35 +60,57 @@ export default function AluminiumOverviewPage() {
 
       {/* Sub-vertical links grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-brand-border pt-12">
-        <Card className="border-brand-border p-6 sm:p-8 flex flex-col justify-between">
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold text-brand-primary">Aluminium Windows</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Available in slimline horizontal sliding designs, fixed panoramic sashes, and outward-swinging casement units. Low maintenance, high strength.
-            </p>
+        <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
+          <div className="relative h-64 w-full bg-slate-100 border-b border-brand-border">
+            <Image 
+              src="https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=800&q=80" 
+              alt="Aluminium Windows"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover hover:scale-105 transition-transform duration-500"
+            />
           </div>
-          <div className="pt-6">
-            <Link href="/aluminium/windows">
-              <Button variant="secondary" size="sm" className="font-bold flex items-center gap-1">
-                Browse Windows <ArrowRight className="w-3.5 h-3.5" />
-              </Button>
-            </Link>
+          <div className="p-6 sm:p-8 flex flex-col justify-between flex-grow">
+            <div className="space-y-4">
+              <h3 className="text-xl font-bold text-brand-primary">Aluminium Windows</h3>
+              <p className="text-xs text-brand-muted leading-relaxed">
+                Available in slimline horizontal sliding designs, fixed panoramic sashes, and outward-swinging casement units. Low maintenance, high strength.
+              </p>
+            </div>
+            <div className="pt-6">
+              <Link href="/aluminium/windows">
+                <Button variant="secondary" size="sm" className="font-bold flex items-center gap-1">
+                  Browse Windows <ArrowRight className="w-3.5 h-3.5" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </Card>
 
-        <Card className="border-brand-border p-6 sm:p-8 flex flex-col justify-between">
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold text-brand-primary">Aluminium Doors</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Engineered for large balcony layouts, panoramic sit-outs, and heavy commercial swing doors. Low floor tracks and smooth-rolling lift-and-slide layouts.
-            </p>
+        <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
+          <div className="relative h-64 w-full bg-slate-100 border-b border-brand-border">
+            <Image 
+              src="https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=800&q=80" 
+              alt="Aluminium Doors"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover hover:scale-105 transition-transform duration-500"
+            />
           </div>
-          <div className="pt-6">
-            <Link href="/aluminium/doors">
-              <Button variant="secondary" size="sm" className="font-bold flex items-center gap-1">
-                Browse Doors <ArrowRight className="w-3.5 h-3.5" />
-              </Button>
-            </Link>
+          <div className="p-6 sm:p-8 flex flex-col justify-between flex-grow">
+            <div className="space-y-4">
+              <h3 className="text-xl font-bold text-brand-primary">Aluminium Doors</h3>
+              <p className="text-xs text-brand-muted leading-relaxed">
+                Engineered for large balcony layouts, panoramic sit-outs, and heavy commercial swing doors. Low floor tracks and smooth-rolling lift-and-slide layouts.
+              </p>
+            </div>
+            <div className="pt-6">
+              <Link href="/aluminium/doors">
+                <Button variant="secondary" size="sm" className="font-bold flex items-center gap-1">
+                  Browse Doors <ArrowRight className="w-3.5 h-3.5" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </Card>
       </div>
@@ -95,3 +118,4 @@ export default function AluminiumOverviewPage() {
     </div>
   );
 }
+

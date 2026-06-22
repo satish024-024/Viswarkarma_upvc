@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -33,21 +34,43 @@ export default function AluminiumDoorsPage() {
 
       {/* Grid of Styles */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
-        <Card className="border-brand-border bg-white flex flex-col justify-between">
-          <CardContent className="p-6 sm:p-8 space-y-4">
-            <h3 className="font-bold text-lg text-brand-primary">Heavy Sliding Patio Doors</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Available as classic multi-track sliding panels or advanced lift-and-slide configurations. Lift-and-slide mechanics lift the door panel off the track gasket when turning the handle, allowing extremely heavy 200 kg sashes to slide with zero friction.
-            </p>
+        <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
+          <div className="relative h-64 w-full bg-slate-100 border-b border-brand-border">
+            <Image 
+              src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" 
+              alt="Heavy Sliding Patio Doors"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+          <CardContent className="p-6 sm:p-8 space-y-4 flex-grow flex flex-col justify-between">
+            <div className="space-y-3">
+              <h3 className="font-bold text-lg text-brand-primary">Heavy Sliding Patio Doors</h3>
+              <p className="text-xs text-brand-muted leading-relaxed">
+                Available as classic multi-track sliding panels or advanced lift-and-slide configurations. Lift-and-slide mechanics lift the door panel off the track gasket when turning the handle, allowing extremely heavy 200 kg sashes to slide with zero friction.
+              </p>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border-brand-border bg-white flex flex-col justify-between">
-          <CardContent className="p-6 sm:p-8 space-y-4">
-            <h3 className="font-bold text-lg text-brand-primary">Folding (Bi-Fold) Glass Doors</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Multi-panel glass doors that fold and stack against the wall. Perfect for wide balconies or outdoor patios, creating an uninterrupted opening of up to 90% of the structural aperture width.
-            </p>
+        <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
+          <div className="relative h-64 w-full bg-slate-100 border-b border-brand-border">
+            <Image 
+              src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80" 
+              alt="Folding (Bi-Fold) Glass Doors"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+          <CardContent className="p-6 sm:p-8 space-y-4 flex-grow flex flex-col justify-between">
+            <div className="space-y-3">
+              <h3 className="font-bold text-lg text-brand-primary">Folding (Bi-Fold) Glass Doors</h3>
+              <p className="text-xs text-brand-muted leading-relaxed">
+                Multi-panel glass doors that fold and stack against the wall. Perfect for wide balconies or outdoor patios, creating an uninterrupted opening of up to 90% of the structural aperture width.
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -55,3 +78,4 @@ export default function AluminiumDoorsPage() {
     </div>
   );
 }
+
