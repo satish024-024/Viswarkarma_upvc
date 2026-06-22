@@ -5,7 +5,7 @@ import { serviceAreas } from '@/lib/data/business';
 
 export const metadata = {
   title: 'Service Areas & Locations Served | Viswarkarma uPVC & Aluminium',
-  description: 'Viswarkarma uPVC serves Bangalore (Whitefield, Indiranagar, Jayanagar), Mysuru, and Tumakuru, providing direct transport and professional installation.',
+  description: 'Viswarkarma uPVC serves Andhra Pradesh (Rajahmundry, Vijayawada, Visakhapatnam, Kakinada), Hyderabad, and Pan-India, providing direct transport and professional installation.',
 };
 
 export default function ServiceAreasPage() {
@@ -16,10 +16,10 @@ export default function ServiceAreasPage() {
       <div className="space-y-3 max-w-2xl">
         <span className="text-xs font-bold text-brand-secondary uppercase tracking-wider block">OUR REGIONAL REACH</span>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-brand-primary tracking-tight">
-          Areas We Serve Across Karnataka
+          Areas We Serve Across Andhra Pradesh & Beyond
         </h1>
         <p className="text-sm text-brand-muted leading-relaxed">
-          From our local fabrication plant, we dispatch custom window sashes and technicians directly to building sites.
+          From our Rajahmundry fabrication plant, we dispatch custom window sashes and technicians directly to building sites across Andhra Pradesh, Telangana, and Pan-India.
         </p>
       </div>
 

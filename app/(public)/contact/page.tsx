@@ -118,7 +118,7 @@ export default function ContactPage() {
                       City / Area *
                     </label>
                     <Input 
-                      placeholder="Indiranagar, Bangalore"
+                      placeholder="Rajahmundry, Andhra Pradesh"
                       value={formData.city}
                       onChange={(e) => setFormData({...formData, city: e.target.value})}
                       required
@@ -161,7 +161,7 @@ export default function ContactPage() {
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-brand-secondary flex-shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-bold text-brand-primary block">Bangalore Fabrication Facility</span>
+                  <span className="font-bold text-brand-primary block">Rajahmundry Head Office & Workshop</span>
                   <span className="text-brand-muted mt-0.5 block leading-relaxed">{settings.address}</span>
                 </div>
               </li>

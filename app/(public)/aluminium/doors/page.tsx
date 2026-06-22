@@ -8,7 +8,7 @@ import { getProductTypes } from '@/lib/supabase';
 
 export const metadata = {
   title: 'Aluminium Balcony Sliding & Fold Doors | Viswarkarma uPVC & Aluminium',
-  description: 'Heavy-duty architectural aluminium balcony sliding doors, folding glass doors, and entrance doors. Custom manufactured at our Bangalore facility.',
+  description: 'Heavy-duty architectural aluminium balcony sliding doors, folding glass doors, and entrance doors. Custom manufactured at our Rajahmundry facility.',
 };
 
 export default async function AluminiumDoorsPage() {

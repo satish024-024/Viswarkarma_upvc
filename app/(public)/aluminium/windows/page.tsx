@@ -8,7 +8,7 @@ import { getProductTypes } from '@/lib/supabase';
 
 export const metadata = {
   title: 'Aluminium Windows | Slimline Sliding & Casement | Viswarkarma uPVC & Aluminium',
-  description: 'Custom fabricated aluminium windows with slim profiles, heavy T6 alloys, and multi-point locking. Manufactured directly at our Bangalore facility.',
+  description: 'Custom fabricated aluminium windows with slim profiles, heavy T6 alloys, and multi-point locking. Manufactured directly at our Rajahmundry facility.',
 };
 
 export default async function AluminiumWindowsPage() {

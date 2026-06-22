@@ -8,7 +8,7 @@ import { getProductTypes } from '@/lib/supabase';
 
 export const metadata = {
   title: 'High-Performance uPVC Window & Door Systems | Direct Factory Pricing',
-  description: 'Premium uPVC profiles manufactured locally in Bangalore. Offering soundproofing (up to 40dB), thermal efficiency, waterproofing, and multi-point locks.',
+  description: 'Premium uPVC profiles manufactured in Rajahmundry, Andhra Pradesh. Offering soundproofing (up to 40dB), thermal efficiency, waterproofing, and multi-point locks.',
 };
 
 export default async function UpvcOverviewPage() {

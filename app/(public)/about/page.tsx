@@ -6,7 +6,7 @@ import { getBusinessSettings } from '@/lib/supabase';
 
 export const metadata = {
   title: 'About Us | Viswarkarma uPVC & Aluminium',
-  description: 'With 25+ years of custom fabrication, Viswarkarma uPVC manufactures and installs premium architectural windows and doors across Karnataka.',
+  description: 'With 25+ years of custom fabrication, Viswarkarma uPVC manufactures and installs premium architectural windows and doors across Andhra Pradesh.',
 };
 
 export default async function AboutPage() {
@@ -22,7 +22,7 @@ export default async function AboutPage() {
           A 25+ Year Legacy of Structural Integrity and Trust
         </h1>
         <p className="text-brand-muted text-sm sm:text-base leading-relaxed">
-          Established as a small family-run fabrication facility, {settings.name} has grown to become one of Bengaluru&apos;s most trusted manufacturers of custom uPVC and aluminium architectural systems. We don&apos;t act as middleman distributors; we own our factory, oversee our extrusions, and deploy our in-house installers to ensure total quality control.
+          Established as a small family-run fabrication facility, {settings.name} has grown to become one of Andhra Pradesh&apos;s most trusted manufacturers of custom uPVC and aluminium architectural systems. We don&apos;t act as middleman distributors; we own our factory in Rajahmundry, oversee our extrusions, and deploy our in-house installers to ensure total quality control.
         </p>
       </div>
 
@@ -35,7 +35,7 @@ export default async function AboutPage() {
             </div>
             <h3 className="font-bold text-base text-brand-primary">In-House Factory Direct</h3>
             <p className="text-xs text-brand-muted leading-relaxed">
-              We own and operate our dedicated Bangalore fabrication facility. By cutting out third-party dealers and distributors, we provide factory-direct savings and maintain absolute command over weld strength and frame tolerances.
+              We own and operate our dedicated Rajahmundry fabrication facility. By cutting out third-party dealers and distributors, we provide factory-direct savings and maintain absolute command over weld strength and frame tolerances.
             </p>
           </CardContent>
         </Card>
@@ -81,7 +81,7 @@ export default async function AboutPage() {
         <div className="lg:col-span-4 bg-white border border-brand-border p-6 rounded-xl space-y-2 text-center shadow-xs">
           <span className="block text-4xl font-extrabold text-brand-secondary">25+</span>
           <span className="block text-xs font-bold text-brand-primary uppercase tracking-wider">Years of Solid Service</span>
-          <span className="block text-[10px] text-brand-muted">across Bengaluru, Mysuru, & Tumakuru</span>
+          <span className="block text-[10px] text-brand-muted">across Rajahmundry, Vijayawada, & Visakhapatnam</span>
         </div>
       </div>
 
