@@ -21,8 +21,10 @@ export interface DraftState {
   homeSqFt: number;
   installationRequired: boolean;
   colorChoice: string;
+  seriesChoice: string;
   glassChoice: string;
   meshChoice: string;
+  hardwareChoice: string;
   customerName: string;
   customerPhone: string;
   customerCity: string;
@@ -71,8 +73,10 @@ export async function upsertDraft(userId: string, draft: DraftRecord): Promise<s
     home_sq_ft:     draft.homeSqFt,
     installation:   draft.installationRequired,
     color_choice:   draft.colorChoice,
+    series_choice:   draft.seriesChoice,
     glass_choice:   draft.glassChoice,
     mesh_choice:    draft.meshChoice,
+    hardware_choice: draft.hardwareChoice,
     customer_name:  draft.customerName,
     customer_phone: draft.customerPhone,
     customer_city:  draft.customerCity,
@@ -125,8 +129,10 @@ export async function loadLatestDraft(userId: string): Promise<DraftRecord | nul
     homeSqFt:            data.home_sq_ft,
     installationRequired: data.installation,
     colorChoice:         data.color_choice,
+    seriesChoice:        data.series_choice || '',
     glassChoice:         data.glass_choice,
     meshChoice:          data.mesh_choice,
+    hardwareChoice:      data.hardware_choice || 'standard',
     customerName:        data.customer_name,
     customerPhone:       data.customer_phone,
     customerCity:        data.customer_city,
@@ -163,8 +169,10 @@ export async function loadUserDrafts(userId: string): Promise<DraftRecord[]> {
     homeSqFt:            d.home_sq_ft,
     installationRequired: d.installation,
     colorChoice:         d.color_choice,
+    seriesChoice:        d.series_choice || '',
     glassChoice:         d.glass_choice,
     meshChoice:          d.mesh_choice,
+    hardwareChoice:      d.hardware_choice || 'standard',
     customerName:        d.customer_name,
     customerPhone:       d.customer_phone,
     customerCity:        d.customer_city,

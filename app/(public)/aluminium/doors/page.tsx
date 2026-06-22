@@ -1,21 +1,35 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { getProductTypes } from '@/lib/supabase';
 
 export const metadata = {
   title: 'Aluminium Balcony Sliding & Fold Doors | Viswarkarma uPVC & Aluminium',
   description: 'Heavy-duty architectural aluminium balcony sliding doors, folding glass doors, and entrance doors. Custom manufactured at our Bangalore facility.',
 };
 
-export default function AluminiumDoorsPage() {
+export default async function AluminiumDoorsPage() {
+  const productTypes = await getProductTypes();
+
+  // Find images dynamically from database so they are changeable by admin
+  const aluSlidingDoorImg = productTypes.find(t => t.id === 'alu_sliding_door')?.image || 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80';
+  const aluOpenableDoorImg = productTypes.find(t => t.id === 'alu_openable_door')?.image || 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80';
+
   return (
     <div className="py-8 md:py-16 space-y-10 md:space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Header */}
       <div className="space-y-4 max-w-3xl">
+        <Link 
+          href="/aluminium" 
+          className="inline-flex items-center gap-2 text-xs font-bold text-brand-muted hover:text-brand-primary transition-colors group mb-2"
+        >
+          <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+          Back to Aluminium Overview
+        </Link>
         <span className="text-xs font-bold text-brand-secondary uppercase tracking-wider block">DOOR SYSTEMS</span>
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-primary tracking-tight">
           Heavy-Duty Aluminium Balcony Doors
@@ -37,7 +51,7 @@ export default function AluminiumDoorsPage() {
         <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
           <div className="relative h-64 w-full bg-slate-100 border-b border-brand-border">
             <Image 
-              src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" 
+              src={aluSlidingDoorImg} 
               alt="Heavy Sliding Patio Doors"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -57,7 +71,7 @@ export default function AluminiumDoorsPage() {
         <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
           <div className="relative h-64 w-full bg-slate-100 border-b border-brand-border">
             <Image 
-              src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80" 
+              src={aluOpenableDoorImg} 
               alt="Folding (Bi-Fold) Glass Doors"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -78,4 +92,5 @@ export default function AluminiumDoorsPage() {
     </div>
   );
 }
+
 

@@ -3,20 +3,24 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, Send, Sparkles, AlertCircle, Shield, CheckCircle2, LogIn, Save } from 'lucide-react';
-import { ProductFamily, ProductType, ColorOption, GlassOption, MeshOption } from '../types';
+import { ProductFamily, ProductType, ColorOption, GlassOption, MeshOption, ProductSeries, HardwareOption } from '../types';
 import { 
   createQuoteRequest, 
   getProductTypes, 
   getColorOptions, 
   getGlassOptions, 
-  getMeshOptions 
+  getMeshOptions,
+  getProductSeries,
+  getHardwareOptions
 } from '@/lib/supabase';
 import { businessSettings } from '@/lib/data/business';
 import { 
   productTypes as localTypes, 
   colorOptions as localColors, 
   glassOptions as localGlass, 
-  meshOptions as localMesh 
+  meshOptions as localMesh,
+  productSeries as localSeries,
+  hardwareOptions as localHardware
 } from '../config/data';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -36,8 +40,10 @@ interface HomeEstimatorState {
   homeSqFt: number;
   installationRequired: boolean;
   colorChoice: string;
+  seriesChoice: string;
   glassChoice: string;
   meshChoice: string;
+  hardwareChoice: string;
   customerName: string;
   customerPhone: string;
   customerCity: string;
@@ -72,8 +78,10 @@ const INITIAL_STATE: HomeEstimatorState = {
   homeSqFt: 1200,
   installationRequired: true,
   colorChoice: 'white',
+  seriesChoice: '',
   glassChoice: 'clear',
   meshChoice: 'none',
+  hardwareChoice: 'standard',
   customerName: '',
   customerPhone: '',
   customerCity: '',
@@ -92,6 +100,8 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
   const [colors, setColors] = useState<ColorOption[]>([]);
   const [glass, setGlass] = useState<GlassOption[]>([]);
   const [mesh, setMesh] = useState<MeshOption[]>([]);
+  const [series, setSeries] = useState<ProductSeries[]>([]);
+  const [hardware, setHardware] = useState<HardwareOption[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [state, setState] = useState<HomeEstimatorState>({
@@ -114,14 +124,16 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
           getProductTypes(true),
           getColorOptions(true),
           getGlassOptions(true),
-          getMeshOptions(true)
+          getMeshOptions(true),
+          getProductSeries(true),
+          getHardwareOptions(true)
         ]);
 
         const timeoutPromise = new Promise<never>((_, reject) => 
           setTimeout(() => reject(new Error('Supabase request timeout')), 4500)
         );
 
-        const [dbTypes, dbColors, dbGlass, dbMesh] = await Promise.race([
+        const [dbTypes, dbColors, dbGlass, dbMesh, dbSeries, dbHardware] = await Promise.race([
           dbPromise,
           timeoutPromise
         ]);
@@ -131,18 +143,24 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
           setColors(dbColors);
           setGlass(dbGlass);
           setMesh(dbMesh);
+          setSeries(dbSeries);
+          setHardware(dbHardware);
           setLoading(false);
 
           // Update default choices if needed
           const initialColor = dbColors.find(c => c.family === state.family)?.id || dbColors[0]?.id || 'white';
           const initialGlass = dbGlass.find(g => g.family === state.family)?.id || dbGlass[0]?.id || 'clear';
           const initialMesh = dbMesh.find(m => m.family === state.family)?.id || dbMesh[0]?.id || 'none';
+          const initialSeries = dbSeries.find(s => s.family === state.family)?.id || dbSeries[0]?.id || '';
+          const initialHardware = dbHardware[0]?.id || 'standard';
 
           setState(prev => ({
             ...prev,
             colorChoice: prev.colorChoice || initialColor,
+            seriesChoice: prev.seriesChoice || initialSeries,
             glassChoice: prev.glassChoice || initialGlass,
             meshChoice: prev.meshChoice || initialMesh,
+            hardwareChoice: prev.hardwareChoice || initialHardware,
           }));
         }
       } catch (err) {
@@ -158,7 +176,24 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
             setColors(localColors);
             setGlass(localGlass);
             setMesh(localMesh);
+            setSeries(localSeries);
+            setHardware(localHardware);
             setLoading(false);
+
+            const initialColor = localColors.find(c => c.family === state.family)?.id || localColors[0]?.id || 'white';
+            const initialGlass = localGlass.find(g => g.family === state.family)?.id || localGlass[0]?.id || 'clear';
+            const initialMesh = localMesh.find(m => m.family === state.family)?.id || localMesh[0]?.id || 'none';
+            const initialSeries = localSeries.find(s => s.family === state.family)?.id || localSeries[0]?.id || '';
+            const initialHardware = localHardware[0]?.id || 'standard';
+
+            setState(prev => ({
+              ...prev,
+              colorChoice: prev.colorChoice || initialColor,
+              seriesChoice: prev.seriesChoice || initialSeries,
+              glassChoice: prev.glassChoice || initialGlass,
+              meshChoice: prev.meshChoice || initialMesh,
+              hardwareChoice: prev.hardwareChoice || initialHardware,
+            }));
           }
         }
       }
@@ -191,14 +226,20 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
     const glassObj = glass.find(g => g.id === st.glassChoice) || glass.find(g => g.family === st.family) || { priceModifierPerSqFt: 0 };
     const meshObj = mesh.find(m => m.id === st.meshChoice) || mesh.find(m => m.family === st.family) || { priceModifierPerSqFt: 0 };
     const colorObj = colors.find(c => c.id === st.colorChoice) || colors.find(c => c.family === st.family) || { priceMultiplier: 1.0 };
+    const seriesObj = series.find(s => s.id === st.seriesChoice) || series.find(s => s.family === st.family) || { priceModifierPerSqFt: 0 };
+    const hardwareObj = hardware.find(h => h.id === st.hardwareChoice) || { priceModifierPerUnit: 0 };
     
     const glassMod = glassObj.priceModifierPerSqFt || 0;
     const meshMod = meshObj.priceModifierPerSqFt || 0;
     const colorMultiplier = colorObj.priceMultiplier || 1.0;
+    const seriesMod = seriesObj.priceModifierPerSqFt || 0;
+    const hardwareMod = (hardwareObj.priceModifierPerUnit || 0) * st.windowCount;
     
     const installationCost = st.installationRequired ? 60 : 0;
     
-    const unitPrice = ((base + glassMod + meshMod) * colorMultiplier + installationCost) * area;
+    const sqftBasePrice = (base + seriesMod + glassMod + meshMod) * colorMultiplier + installationCost;
+    const unitPrice = sqftBasePrice * area + hardwareMod;
+    
     return { min: Math.round(unitPrice), max: Math.round(unitPrice * 1.15), area: Math.round(area) };
   };
 
@@ -207,6 +248,7 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
     const familyColors = colors.filter(c => !c.family || c.family === st.family);
     const familyGlass = glass.filter(g => !g.family || g.family === st.family);
     const familyMesh = mesh.filter(m => !m.family || m.family === st.family);
+    const familySeries = series.filter(s => !s.family || s.family === st.family);
 
     const typesLabel = st.selectedTypes.length
       ? st.selectedTypes.map(id => familyStyles.find(w => w.id === id)?.name ?? id).join(', ')
@@ -214,6 +256,8 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
     const colorLabel = familyColors.find(c => c.id === st.colorChoice)?.name ?? st.colorChoice;
     const glassLabel = familyGlass.find(g => g.id === st.glassChoice)?.name ?? st.glassChoice;
     const meshLabel  = familyMesh.find(m => m.id === st.meshChoice)?.name  ?? st.meshChoice;
+    const seriesLabel = familySeries.find(s => s.id === st.seriesChoice)?.name ?? st.seriesChoice;
+    const hardwareLabel = hardware.find(h => h.id === st.hardwareChoice)?.name ?? st.hardwareChoice;
     const cbLabel    = CALLBACK_OPTIONS.find(c => c.id === st.callbackTime)?.label ?? st.callbackTime;
 
     return [
@@ -226,8 +270,10 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
       `*Installation Required:* ${st.installationRequired ? 'Yes' : 'No'}`,
       ``,
       `*Frame Colour:* ${colorLabel}`,
+      `*Profile Series:* ${seriesLabel}`,
       `*Glass Type:* ${glassLabel}`,
       `*Flyscreen:* ${meshLabel}`,
+      `*Security Locks:* ${hardwareLabel}`,
       ``,
       `*Estimate Range:* ₹${min.toLocaleString('en-IN')} – ₹${max.toLocaleString('en-IN')}`,
       ``,
@@ -254,8 +300,10 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
       homeSqFt: state.homeSqFt,
       installationRequired: state.installationRequired,
       colorChoice: state.colorChoice,
+      seriesChoice: state.seriesChoice,
       glassChoice: state.glassChoice,
       meshChoice: state.meshChoice,
+      hardwareChoice: state.hardwareChoice,
       customerName: state.customerName,
       customerPhone: state.customerPhone,
       customerCity: state.customerCity,
@@ -274,8 +322,10 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
       homeSqFt: draft.homeSqFt,
       installationRequired: draft.installationRequired,
       colorChoice: draft.colorChoice,
+      seriesChoice: draft.seriesChoice || '',
       glassChoice: draft.glassChoice,
       meshChoice: draft.meshChoice,
+      hardwareChoice: draft.hardwareChoice || 'standard',
       customerName: draft.customerName,
       customerPhone: draft.customerPhone,
       customerCity: draft.customerCity,
@@ -304,18 +354,23 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
     const familyColors = colors.filter(c => !c.family || c.family === newFamily);
     const familyGlass = glass.filter(g => !g.family || g.family === newFamily);
     const familyMesh = mesh.filter(m => !m.family || m.family === newFamily);
+    const familySeries = series.filter(s => !s.family || s.family === newFamily);
 
     const defaultColor = familyColors[0]?.id || (newFamily === 'upvc' ? 'white' : 'anodized_silver');
     const defaultGlass = familyGlass[0]?.id || (newFamily === 'upvc' ? 'clear' : 'clear_alu');
     const defaultMesh = familyMesh[0]?.id || (newFamily === 'upvc' ? 'none' : 'none_alu');
+    const defaultSeries = familySeries[0]?.id || (newFamily === 'upvc' ? '60mm_series' : 'alu_50mm_series');
+    const defaultHardware = hardware[0]?.id || 'standard';
 
     setState(prev => ({
       ...prev,
       family: newFamily,
       selectedTypes: [],
       colorChoice: defaultColor,
+      seriesChoice: defaultSeries,
       glassChoice: defaultGlass,
       meshChoice: defaultMesh,
+      hardwareChoice: defaultHardware,
     }));
   };
 
@@ -367,14 +422,14 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
         city_area: state.customerCity,
         product_family: state.family,
         product_type: state.selectedTypes.join(', '),
-        series: '',
+        series: state.seriesChoice,
         width: 0,
         height: 0,
         units: state.windowCount,
         colour: state.colorChoice,
         glass: state.glassChoice,
         mesh: state.meshChoice,
-        hardware: 'standard',
+        hardware: state.hardwareChoice,
         installation_required: state.installationRequired,
         callback_time: state.callbackTime,
         estimate_low: estimatedMin,
@@ -438,64 +493,78 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
   );
 
   // Step 1 — System Selection
-  const renderStep1 = () => (
-    <div className="space-y-5">
-      <p className="text-xs text-muted">
-        Choose the primary material system for your home. This sets the base pricing and profile aesthetics.
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        {(
-          [
-            {
-              key: 'upvc' as const,
-              label: 'uPVC Systems',
-              sub: 'Excellent thermal, sound & weather insulation. Most popular for residential homes.',
-              image: 'https://5.imimg.com/data5/SX/YV/YG/SELLER-64612523/upvc-sliding-window-500x500.jpg',
-            },
-            {
-              key: 'aluminium' as const,
-              label: 'Aluminium Systems',
-              sub: 'Sleek slimline architectural frames. Ideal for large glass views & commercial projects.',
-              image: 'https://5.imimg.com/data5/VJ/OO/VB/SELLER-64612523/upvc-sliding-window-profiles-125x125.jpg',
-            },
-          ] as const
-        ).map(opt => {
-          const isSelected = state.family === opt.key;
-          return (
-            <button
-              key={opt.key}
-              type="button"
-              onClick={() => handleFamilyChange(opt.key)}
-              className={`relative flex flex-col rounded-2xl border transition-all duration-300 text-left overflow-hidden cursor-pointer bg-white group ${
-                isSelected ? 'border-gold ring-1 ring-gold/20 shadow-md' : 'border-border/60 hover:border-gold/30 hover:shadow-sm'
-              }`}
-            >
-              <div className="relative w-full h-32 sm:h-44 bg-slate-50">
-                <Image
-                  src={opt.image}
-                  alt={opt.label}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-102"
-                  sizes="(max-width: 640px) 100vw, 50vw"
-                />
-                {isSelected && (
-                  <div className="absolute top-3 right-3 bg-gold text-white rounded-full p-1 shadow-md z-10">
-                    <CheckCircle2 className="w-4 h-4 stroke-[3]" />
-                  </div>
-                )}
-              </div>
-              <div className="p-4 flex-grow flex flex-col justify-between">
-                <div>
-                  <span className="block font-bold text-sm sm:text-base text-heading leading-tight">{opt.label}</span>
-                  <span className="block text-[11px] sm:text-xs text-muted mt-1 leading-normal">{opt.sub}</span>
+  const renderStep1 = () => {
+    const upvcTypes = types.filter(t => t.family === 'upvc');
+    const upvcMin = upvcTypes.length ? Math.min(...upvcTypes.map(t => t.basePricePerSqFt)) : 300;
+    const upvcMax = upvcTypes.length ? Math.max(...upvcTypes.map(t => t.basePricePerSqFt)) : 800;
+
+    const aluTypes = types.filter(t => t.family === 'aluminium');
+    const aluMin = aluTypes.length ? Math.min(...aluTypes.map(t => t.basePricePerSqFt)) : 350;
+    const aluMax = aluTypes.length ? Math.max(...aluTypes.map(t => t.basePricePerSqFt)) : 850;
+
+    return (
+      <div className="space-y-5">
+        <p className="text-xs text-muted">
+          Choose the primary material system for your home. This sets the base pricing and profile aesthetics.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {(
+            [
+              {
+                key: 'upvc' as const,
+                label: 'uPVC Systems',
+                sub: 'Excellent thermal, sound & weather insulation. Most popular for residential homes.',
+                image: 'https://5.imimg.com/data5/SX/YV/YG/SELLER-64612523/upvc-sliding-window-500x500.jpg',
+              },
+              {
+                key: 'aluminium' as const,
+                label: 'Aluminium Systems',
+                sub: 'Sleek slimline architectural frames. Ideal for large glass views & commercial projects.',
+                image: 'https://5.imimg.com/data5/VJ/OO/VB/SELLER-64612523/upvc-sliding-window-profiles-125x125.jpg',
+              },
+            ] as const
+          ).map(opt => {
+            const isSelected = state.family === opt.key;
+            return (
+              <button
+                key={opt.key}
+                type="button"
+                onClick={() => handleFamilyChange(opt.key)}
+                className={`relative flex flex-col rounded-2xl border transition-all duration-300 text-left overflow-hidden cursor-pointer bg-white group ${
+                  isSelected ? 'border-gold ring-1 ring-gold/20 shadow-md' : 'border-border/60 hover:border-gold/30 hover:shadow-sm'
+                }`}
+              >
+                <div className="relative w-full h-32 sm:h-44 bg-slate-50">
+                  <Image
+                    src={opt.image}
+                    alt={opt.label}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-102"
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                  />
+                  {isSelected && (
+                    <div className="absolute top-3 right-3 bg-gold text-white rounded-full p-1 shadow-md z-10">
+                      <CheckCircle2 className="w-4 h-4 stroke-[3]" />
+                    </div>
+                  )}
                 </div>
-              </div>
-            </button>
-          );
-        })}
+                <div className="p-4 flex-grow flex flex-col justify-between">
+                  <div>
+                    <span className="block font-bold text-sm sm:text-base text-heading leading-tight">{opt.label}</span>
+                    <span className="block text-[11px] sm:text-xs text-muted mt-1 leading-normal">{opt.sub}</span>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                    <span className="text-muted font-medium">Est. Base Price:</span>
+                    <span className="font-bold text-gold">₹{opt.key === 'upvc' ? `${upvcMin} – ₹${upvcMax}` : `${aluMin} – ₹${aluMax}`} / sq.ft</span>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   // Step 2 — Window Types (multi-select, system-aware)
   const renderStep2 = () => {
@@ -541,6 +610,10 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                   <div>
                     <span className="block text-xs sm:text-sm font-bold text-heading leading-tight">{wt.name}</span>
                     <span className="block text-[10px] sm:text-xs text-muted mt-1 leading-normal">{wt.description}</span>
+                  </div>
+                  <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between">
+                    <span className="text-[9px] text-muted uppercase tracking-wider font-semibold">Rate:</span>
+                    <span className="text-xs font-bold text-gold">₹{wt.basePricePerSqFt} / sq.ft</span>
                   </div>
                 </div>
               </button>
@@ -642,8 +715,8 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {(
             [
-              { val: true,  label: 'Include Installation', desc: 'Precise leveling, structural anchoring, and weather-grade silicone sealing.' },
-              { val: false, label: 'Supply Only', desc: 'Fabrication of profiles only. Transport and setup handled by your contractor.' },
+              { val: true,  label: 'Include Installation', priceLabel: ' (+₹60 / sq.ft)', desc: 'Precise leveling, structural anchoring, and weather-grade silicone sealing.' },
+              { val: false, label: 'Supply Only', priceLabel: ' (No extra charge)', desc: 'Fabrication of profiles only. Transport and setup handled by your contractor.' },
             ] as const
           ).map(opt => {
             const isSelected = state.installationRequired === opt.val;
@@ -659,7 +732,10 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                 }`}
               >
                 <div className="flex justify-between items-center">
-                  <span className={`text-xs font-bold ${isSelected ? 'text-gold' : 'text-heading'}`}>{opt.label}</span>
+                  <span className={`text-xs font-bold ${isSelected ? 'text-gold' : 'text-heading'}`}>
+                    {opt.label}
+                    <span className="ml-1 text-[10px] text-gold font-semibold">{opt.priceLabel}</span>
+                  </span>
                   {isSelected && <CheckCircle2 className="w-4 h-4 text-gold stroke-[2.5]" />}
                 </div>
                 <span className="block text-[11px] text-muted mt-1 leading-normal">{opt.desc}</span>
@@ -674,8 +750,10 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
   // Step 4 — Finishes (System-Aware Colors, Glass, and Flyscreens)
   const renderStep4 = () => {
     const configColors = colors.filter(c => !c.family || c.family === state.family);
+    const configSeries = series.filter(s => !s.family || s.family === state.family);
     const configGlass = glass.filter(g => !g.family || g.family === state.family);
     const configMesh = mesh.filter(m => !m.family || m.family === state.family);
+
     return (
       <div className="space-y-8">
         {/* Frame Colour */}
@@ -686,6 +764,9 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
           <div className="flex flex-wrap gap-6">
             {configColors.map(fc => {
               const isSelected = state.colorChoice === fc.id;
+              const hasModifier = fc.priceMultiplier > 1;
+              const modifierPercentage = hasModifier ? Math.round((fc.priceMultiplier - 1) * 100) : 0;
+
               return (
                 <button
                   key={fc.id}
@@ -714,9 +795,47 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                       </div>
                     )}
                   </div>
-                  <span className={`text-[10px] font-bold tracking-wide uppercase leading-tight text-center max-w-[64px] ${isSelected ? 'text-gold' : 'text-heading'}`}>
+                  <span className={`text-[10px] font-bold tracking-wide uppercase leading-tight text-center max-w-[80px] ${isSelected ? 'text-gold' : 'text-heading'}`}>
                     {fc.name}
+                    <span className="block text-[8px] font-normal text-muted mt-0.5 lowercase">
+                      {hasModifier ? `+${modifierPercentage}%` : 'base'}
+                    </span>
                   </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Profile Series */}
+        <div>
+          <label className="text-xs font-bold text-heading uppercase tracking-widest block mb-3">
+            Profile Series / Thickness
+          </label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {configSeries.map(s => {
+              const isSelected = state.seriesChoice === s.id;
+              return (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => setState(prev => ({ ...prev, seriesChoice: s.id }))}
+                  className={`p-3 rounded-xl border text-left cursor-pointer transition-all duration-200 ${
+                    isSelected
+                      ? 'border-gold bg-gold/5 ring-1 ring-gold/15'
+                      : 'border-border/60 bg-white hover:border-gold/30'
+                  }`}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className={`text-xs font-bold ${isSelected ? 'text-gold' : 'text-heading'}`}>
+                      {s.name} ({s.thickness})
+                      <span className="ml-1 text-[10px] text-gold font-semibold">
+                        {s.priceModifierPerSqFt > 0 ? ` (+₹${s.priceModifierPerSqFt}/sq.ft)` : ' (Included)'}
+                      </span>
+                    </span>
+                    {isSelected && <CheckCircle2 className="w-4 h-4 text-gold stroke-[2.5]" />}
+                  </div>
+                  <span className="block text-[11px] text-muted mt-1 leading-normal">{s.description}</span>
                 </button>
               );
             })}
@@ -743,7 +862,12 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                   }`}
                 >
                   <div className="flex justify-between items-center">
-                    <span className={`text-xs font-bold ${isSelected ? 'text-gold' : 'text-heading'}`}>{g.name}</span>
+                    <span className={`text-xs font-bold ${isSelected ? 'text-gold' : 'text-heading'}`}>
+                      {g.name}
+                      <span className="ml-1 text-[10px] text-gold font-semibold">
+                        {g.priceModifierPerSqFt > 0 ? ` (+₹${g.priceModifierPerSqFt}/sq.ft)` : ' (Included)'}
+                      </span>
+                    </span>
                     {isSelected && <CheckCircle2 className="w-4 h-4 text-gold stroke-[2.5]" />}
                   </div>
                   <span className="block text-[11px] text-muted mt-1 leading-normal">{g.description}</span>
@@ -773,10 +897,50 @@ export default function Configurator({ initialFamily }: ConfiguratorProps) {
                   }`}
                 >
                   <div className="flex justify-between items-center">
-                    <span className={`text-xs font-bold ${isSelected ? 'text-gold' : 'text-heading'}`}>{m.name}</span>
+                    <span className={`text-xs font-bold ${isSelected ? 'text-gold' : 'text-heading'}`}>
+                      {m.name}
+                      <span className="ml-1 text-[10px] text-gold font-semibold">
+                        {m.priceModifierPerSqFt > 0 ? ` (+₹${m.priceModifierPerSqFt}/sq.ft)` : ' (Included)'}
+                      </span>
+                    </span>
                     {isSelected && <CheckCircle2 className="w-4 h-4 text-gold stroke-[2.5]" />}
                   </div>
                   <span className="block text-[11px] text-muted mt-1 leading-normal">{m.description}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Hardware & Locks */}
+        <div>
+          <label className="text-xs font-bold text-heading uppercase tracking-widest block mb-3">
+            Security Hardware &amp; Locks
+          </label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {hardware.map(h => {
+              const isSelected = state.hardwareChoice === h.id;
+              return (
+                <button
+                  key={h.id}
+                  type="button"
+                  onClick={() => setState(prev => ({ ...prev, hardwareChoice: h.id }))}
+                  className={`p-3 rounded-xl border text-left cursor-pointer transition-all duration-200 ${
+                    isSelected
+                      ? 'border-gold bg-gold/5 ring-1 ring-gold/15'
+                      : 'border-border/60 bg-white hover:border-gold/30'
+                  }`}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className={`text-xs font-bold ${isSelected ? 'text-gold' : 'text-heading'}`}>
+                      {h.name}
+                      <span className="ml-1 text-[10px] text-gold font-semibold">
+                        {h.priceModifierPerUnit > 0 ? ` (+₹${h.priceModifierPerUnit.toLocaleString('en-IN')}/unit)` : ' (Included)'}
+                      </span>
+                    </span>
+                    {isSelected && <CheckCircle2 className="w-4 h-4 text-gold stroke-[2.5]" />}
+                  </div>
+                  <span className="block text-[11px] text-muted mt-1 leading-normal">{h.description}</span>
                 </button>
               );
             })}

@@ -1,21 +1,35 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { getProductTypes } from '@/lib/supabase';
 
 export const metadata = {
   title: 'Reinforced uPVC Doors | Sliding Patio & Swing | Viswarkarma uPVC & Aluminium',
   description: 'Heavy-duty custom fabricated uPVC doors, sliding balcony doors, and openable terrace doors. Equipped with secure multi-point lock systems.',
 };
 
-export default function UpvcDoorsPage() {
+export default async function UpvcDoorsPage() {
+  const productTypes = await getProductTypes();
+
+  // Find images dynamically from database so they are changeable by admin
+  const slidingDoorImg = productTypes.find(t => t.id === 'sliding_door')?.image || 'https://5.imimg.com/data5/RU/YJ/HX/SELLER-64612523/upvc-french-door-500x500.jpg';
+  const swingDoorImg = productTypes.find(t => t.id === 'openable_door')?.image || 'https://5.imimg.com/data5/AL/LI/CS/SELLER-64612523/upvc-glass-double-door-500x500.jpg';
+
   return (
     <div className="py-8 md:py-16 space-y-10 md:space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Header */}
       <div className="space-y-4 max-w-3xl">
+        <Link 
+          href="/upvc" 
+          className="inline-flex items-center gap-2 text-xs font-bold text-brand-muted hover:text-brand-primary transition-colors group mb-2"
+        >
+          <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+          Back to uPVC Overview
+        </Link>
         <span className="text-xs font-bold text-brand-secondary uppercase tracking-wider block">DOOR SYSTEMS</span>
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-primary tracking-tight">
           Heavy-Duty Custom uPVC Doors
@@ -37,7 +51,7 @@ export default function UpvcDoorsPage() {
         <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
           <div className="relative h-64 w-full bg-slate-100 border-b border-brand-border">
             <Image 
-              src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80" 
+              src={slidingDoorImg} 
               alt="Sliding Balcony Doors"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -57,7 +71,7 @@ export default function UpvcDoorsPage() {
         <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
           <div className="relative h-64 w-full bg-slate-100 border-b border-brand-border">
             <Image 
-              src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80" 
+              src={swingDoorImg} 
               alt="Swing & Utility Doors"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -78,4 +92,5 @@ export default function UpvcDoorsPage() {
     </div>
   );
 }
+
 

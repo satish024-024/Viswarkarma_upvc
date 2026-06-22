@@ -1,21 +1,36 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { getProductTypes } from '@/lib/supabase';
 
 export const metadata = {
   title: 'Aluminium Windows | Slimline Sliding & Casement | Viswarkarma uPVC & Aluminium',
   description: 'Custom fabricated aluminium windows with slim profiles, heavy T6 alloys, and multi-point locking. Manufactured directly at our Bangalore facility.',
 };
 
-export default function AluminiumWindowsPage() {
+export default async function AluminiumWindowsPage() {
+  const productTypes = await getProductTypes();
+
+  // Find images dynamically from database so they are changeable by admin
+  const aluSlidingWindowImg = productTypes.find(t => t.id === 'alu_sliding_window')?.image || 'https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=800&q=80';
+  const aluCasementWindowImg = productTypes.find(t => t.id === 'alu_casement_window')?.image || 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80';
+  const aluFixedWindowImg = productTypes.find(t => t.id === 'alu_fixed_window')?.image || 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80';
+
   return (
     <div className="py-8 md:py-16 space-y-10 md:space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Header */}
       <div className="space-y-4 max-w-3xl">
+        <Link 
+          href="/aluminium" 
+          className="inline-flex items-center gap-2 text-xs font-bold text-brand-muted hover:text-brand-primary transition-colors group mb-2"
+        >
+          <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+          Back to Aluminium Overview
+        </Link>
         <span className="text-xs font-bold text-brand-secondary uppercase tracking-wider block">WINDOW SYSTEMS</span>
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-primary tracking-tight">
           Architectural Aluminium Windows
@@ -37,7 +52,7 @@ export default function AluminiumWindowsPage() {
         <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
           <div className="relative h-48 w-full bg-slate-100 border-b border-brand-border">
             <Image 
-              src="https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=800&q=80" 
+              src={aluSlidingWindowImg} 
               alt="Slim Sliding Windows"
               fill
               sizes="(max-width: 768px) 100vw, 33vw"
@@ -57,7 +72,7 @@ export default function AluminiumWindowsPage() {
         <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
           <div className="relative h-48 w-full bg-slate-100 border-b border-brand-border">
             <Image 
-              src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80" 
+              src={aluCasementWindowImg} 
               alt="Architectural Casement"
               fill
               sizes="(max-width: 768px) 100vw, 33vw"
@@ -77,7 +92,7 @@ export default function AluminiumWindowsPage() {
         <Card className="border-brand-border overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
           <div className="relative h-48 w-full bg-slate-100 border-b border-brand-border">
             <Image 
-              src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80" 
+              src={aluFixedWindowImg} 
               alt="Fixed Picture Panels"
               fill
               sizes="(max-width: 768px) 100vw, 33vw"
@@ -98,4 +113,5 @@ export default function AluminiumWindowsPage() {
     </div>
   );
 }
+
 
