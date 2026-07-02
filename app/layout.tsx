@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Viswarkarma uPVC & Aluminium | Custom Windows & Doors | Rajahmundry, AP",
+  title: "Viswakarma uPVC & Aluminium | Custom Windows & Doors | Rajahmundry, AP",
   description: "Premium uPVC & Aluminium windows, doors, and glass solutions. Headquartered in Rajahmundry, Andhra Pradesh — serving all of India. 25+ years of family-run custom fabrication & precision installation.",
 };
 

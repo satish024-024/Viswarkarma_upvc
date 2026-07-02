@@ -1,10 +1,10 @@
-import React from 'react';
+﻿import React from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Compass } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
-  title: 'Page Not Found | Viswarkarma uPVC & Aluminium',
+  title: 'Page Not Found | Viswakarma uPVC & Aluminium',
   description: 'The requested architectural window/door page could not be found.',
 };
 

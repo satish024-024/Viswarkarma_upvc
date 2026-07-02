@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { getProductTypes } from '@/lib/supabase';
 
 export const metadata = {
-  title: 'Aluminium Balcony Sliding & Fold Doors | Viswarkarma uPVC & Aluminium',
+  title: 'Aluminium Balcony Sliding & Fold Doors | Viswakarma uPVC & Aluminium',
   description: 'Heavy-duty architectural aluminium balcony sliding doors, folding glass doors, and entrance doors. Custom manufactured at our Rajahmundry facility.',
 };
 

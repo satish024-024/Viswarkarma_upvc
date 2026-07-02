@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { getProductTypes } from '@/lib/supabase';
 
 export const metadata = {
-  title: 'Architectural Aluminium Systems | Direct Factory Pricing | Viswarkarma uPVC & Aluminium',
+  title: 'Architectural Aluminium Systems | Direct Factory Pricing | Viswakarma uPVC & Aluminium',
   description: 'Premium structural aluminium windows and doors with slim frames. Durable, powder-coated finishes, wind-load resistant, and thermally broken.',
 };
 

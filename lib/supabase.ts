@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+﻿import { createClient } from '@supabase/supabase-js';
 import { 
   businessSettings as defaultSettings, 
   serviceVerticals as defaultServices, 
@@ -76,7 +76,7 @@ export interface DbLead {
 // 1. Business Settings
 export async function getBusinessSettings(): Promise<BusinessSettings> {
   if (!supabase) {
-    return getLocalItem<BusinessSettings>('viswarkarma_mock_settings', defaultSettings);
+    return getLocalItem<BusinessSettings>('Viswakarma_mock_settings', defaultSettings);
   }
   try {
     const { data, error } = await supabase
@@ -105,7 +105,7 @@ export async function getBusinessSettings(): Promise<BusinessSettings> {
 
 export async function updateBusinessSettings(settings: BusinessSettings) {
   if (!supabase) {
-    setLocalItem<BusinessSettings>('viswarkarma_mock_settings', settings);
+    setLocalItem<BusinessSettings>('Viswakarma_mock_settings', settings);
     return { error: null };
   }
   try {
@@ -149,7 +149,7 @@ export async function updateBusinessSettings(settings: BusinessSettings) {
 // 2. Services
 export async function getServices(): Promise<ServiceVertical[]> {
   if (!supabase) {
-    return getLocalItem<ServiceVertical[]>('viswarkarma_mock_services', defaultServices);
+    return getLocalItem<ServiceVertical[]>('Viswakarma_mock_services', defaultServices);
   }
   try {
     const { data, error } = await supabase
@@ -159,7 +159,7 @@ export async function getServices(): Promise<ServiceVertical[]> {
       .order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      return getLocalItem<ServiceVertical[]>('viswarkarma_mock_services', defaultServices);
+      return getLocalItem<ServiceVertical[]>('Viswakarma_mock_services', defaultServices);
     }
 
     return data.map(d => ({
@@ -172,7 +172,7 @@ export async function getServices(): Promise<ServiceVertical[]> {
       features: d.feature_points || []
     }));
   } catch {
-    return getLocalItem<ServiceVertical[]>('viswarkarma_mock_services', defaultServices);
+    return getLocalItem<ServiceVertical[]>('Viswakarma_mock_services', defaultServices);
   }
 }
 
@@ -189,7 +189,7 @@ export interface DbServiceInput {
 
 export async function createService(service: DbServiceInput) {
   if (!supabase) {
-    const list = getLocalItem<ServiceVertical[]>('viswarkarma_mock_services', defaultServices);
+    const list = getLocalItem<ServiceVertical[]>('Viswakarma_mock_services', defaultServices);
     const newItem: ServiceVertical = { 
       id: Math.random().toString(), 
       title: service.title,
@@ -199,7 +199,7 @@ export async function createService(service: DbServiceInput) {
       system: service.category as SystemType,
       features: service.feature_points
     };
-    setLocalItem<ServiceVertical[]>('viswarkarma_mock_services', [...list, newItem]);
+    setLocalItem<ServiceVertical[]>('Viswakarma_mock_services', [...list, newItem]);
     return { error: null };
   }
   try {
@@ -212,7 +212,7 @@ export async function createService(service: DbServiceInput) {
 
 export async function updateService(id: string, service: Partial<DbServiceInput>) {
   if (!supabase) {
-    const list = getLocalItem<ServiceVertical[]>('viswarkarma_mock_services', defaultServices);
+    const list = getLocalItem<ServiceVertical[]>('Viswakarma_mock_services', defaultServices);
     const updated = list.map((s: ServiceVertical) => {
       if (s.id === id) {
         return {
@@ -226,7 +226,7 @@ export async function updateService(id: string, service: Partial<DbServiceInput>
       }
       return s;
     });
-    setLocalItem<ServiceVertical[]>('viswarkarma_mock_services', updated);
+    setLocalItem<ServiceVertical[]>('Viswakarma_mock_services', updated);
     return { error: null };
   }
   try {
@@ -239,9 +239,9 @@ export async function updateService(id: string, service: Partial<DbServiceInput>
 
 export async function deleteService(id: string) {
   if (!supabase) {
-    const list = getLocalItem<ServiceVertical[]>('viswarkarma_mock_services', defaultServices);
+    const list = getLocalItem<ServiceVertical[]>('Viswakarma_mock_services', defaultServices);
     const updated = list.filter((s: ServiceVertical) => s.id !== id);
-    setLocalItem<ServiceVertical[]>('viswarkarma_mock_services', updated);
+    setLocalItem<ServiceVertical[]>('Viswakarma_mock_services', updated);
     return { error: null };
   }
   try {
@@ -255,7 +255,7 @@ export async function deleteService(id: string) {
 // 3. Projects
 export async function getProjects(): Promise<Project[]> {
   if (!supabase) {
-    return getLocalItem<Project[]>('viswarkarma_mock_projects', defaultProjects);
+    return getLocalItem<Project[]>('Viswakarma_mock_projects', defaultProjects);
   }
   try {
     const { data, error } = await supabase
@@ -265,7 +265,7 @@ export async function getProjects(): Promise<Project[]> {
       .order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      return getLocalItem<Project[]>('viswarkarma_mock_projects', defaultProjects);
+      return getLocalItem<Project[]>('Viswakarma_mock_projects', defaultProjects);
     }
 
     return data.map(d => ({
@@ -284,13 +284,13 @@ export async function getProjects(): Promise<Project[]> {
       }
     }));
   } catch {
-    return getLocalItem<Project[]>('viswarkarma_mock_projects', defaultProjects);
+    return getLocalItem<Project[]>('Viswakarma_mock_projects', defaultProjects);
   }
 }
 
 export async function createProject(project: Omit<Project, 'id' | 'image' | 'category' | 'location' | 'completedYear'> & { cover_image: string, product_family: string, location_name: string }) {
   if (!supabase) {
-    const list = getLocalItem<Project[]>('viswarkarma_mock_projects', defaultProjects);
+    const list = getLocalItem<Project[]>('Viswakarma_mock_projects', defaultProjects);
     const newItem: Project = { 
       id: Math.random().toString(), 
       title: project.title,
@@ -301,7 +301,7 @@ export async function createProject(project: Omit<Project, 'id' | 'image' | 'cat
       completedYear: 2025,
       specs: project.specs
     };
-    setLocalItem<Project[]>('viswarkarma_mock_projects', [...list, newItem]);
+    setLocalItem<Project[]>('Viswakarma_mock_projects', [...list, newItem]);
     return { error: null };
   }
   try {
@@ -314,7 +314,7 @@ export async function createProject(project: Omit<Project, 'id' | 'image' | 'cat
 
 export async function updateProject(id: string, project: Partial<Omit<Project, 'id' | 'image' | 'category' | 'location' | 'completedYear'> & { cover_image: string, product_family: string, location_name: string }>) {
   if (!supabase) {
-    const list = getLocalItem<Project[]>('viswarkarma_mock_projects', defaultProjects);
+    const list = getLocalItem<Project[]>('Viswakarma_mock_projects', defaultProjects);
     const updated = list.map((p: Project) => {
       if (p.id === id) {
         return {
@@ -329,7 +329,7 @@ export async function updateProject(id: string, project: Partial<Omit<Project, '
       }
       return p;
     });
-    setLocalItem<Project[]>('viswarkarma_mock_projects', updated);
+    setLocalItem<Project[]>('Viswakarma_mock_projects', updated);
     return { error: null };
   }
   try {
@@ -342,9 +342,9 @@ export async function updateProject(id: string, project: Partial<Omit<Project, '
 
 export async function deleteProject(id: string) {
   if (!supabase) {
-    const list = getLocalItem<Project[]>('viswarkarma_mock_projects', defaultProjects);
+    const list = getLocalItem<Project[]>('Viswakarma_mock_projects', defaultProjects);
     const updated = list.filter((p: Project) => p.id !== id);
-    setLocalItem<Project[]>('viswarkarma_mock_projects', updated);
+    setLocalItem<Project[]>('Viswakarma_mock_projects', updated);
     return { error: null };
   }
   try {
@@ -358,7 +358,7 @@ export async function deleteProject(id: string) {
 // 4. Testimonials
 export async function getTestimonials(): Promise<Testimonial[]> {
   if (!supabase) {
-    return getLocalItem<Testimonial[]>('viswarkarma_mock_testimonials', defaultTestimonials);
+    return getLocalItem<Testimonial[]>('Viswakarma_mock_testimonials', defaultTestimonials);
   }
   try {
     const { data, error } = await supabase
@@ -368,7 +368,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
       .order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      return getLocalItem<Testimonial[]>('viswarkarma_mock_testimonials', defaultTestimonials);
+      return getLocalItem<Testimonial[]>('Viswakarma_mock_testimonials', defaultTestimonials);
     }
 
     return data.map(d => ({
@@ -381,7 +381,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
       projectType: d.related_service
     }));
   } catch {
-    return getLocalItem<Testimonial[]>('viswarkarma_mock_testimonials', defaultTestimonials);
+    return getLocalItem<Testimonial[]>('Viswakarma_mock_testimonials', defaultTestimonials);
   }
 }
 
@@ -397,7 +397,7 @@ export interface DbTestimonialInput {
 
 export async function createTestimonial(testimonial: DbTestimonialInput) {
   if (!supabase) {
-    const list = getLocalItem<Testimonial[]>('viswarkarma_mock_testimonials', defaultTestimonials);
+    const list = getLocalItem<Testimonial[]>('Viswakarma_mock_testimonials', defaultTestimonials);
     const newItem: Testimonial = { 
       id: Math.random().toString(), 
       name: testimonial.customer_name,
@@ -407,7 +407,7 @@ export async function createTestimonial(testimonial: DbTestimonialInput) {
       location: testimonial.location_name,
       projectType: testimonial.related_service
     };
-    setLocalItem<Testimonial[]>('viswarkarma_mock_testimonials', [...list, newItem]);
+    setLocalItem<Testimonial[]>('Viswakarma_mock_testimonials', [...list, newItem]);
     return { error: null };
   }
   try {
@@ -420,7 +420,7 @@ export async function createTestimonial(testimonial: DbTestimonialInput) {
 
 export async function updateTestimonial(id: string, testimonial: Partial<DbTestimonialInput>) {
   if (!supabase) {
-    const list = getLocalItem<Testimonial[]>('viswarkarma_mock_testimonials', defaultTestimonials);
+    const list = getLocalItem<Testimonial[]>('Viswakarma_mock_testimonials', defaultTestimonials);
     const updated = list.map((t: Testimonial) => {
       if (t.id === id) {
         return {
@@ -435,7 +435,7 @@ export async function updateTestimonial(id: string, testimonial: Partial<DbTesti
       }
       return t;
     });
-    setLocalItem<Testimonial[]>('viswarkarma_mock_testimonials', updated);
+    setLocalItem<Testimonial[]>('Viswakarma_mock_testimonials', updated);
     return { error: null };
   }
   try {
@@ -448,9 +448,9 @@ export async function updateTestimonial(id: string, testimonial: Partial<DbTesti
 
 export async function deleteTestimonial(id: string) {
   if (!supabase) {
-    const list = getLocalItem<Testimonial[]>('viswarkarma_mock_testimonials', defaultTestimonials);
+    const list = getLocalItem<Testimonial[]>('Viswakarma_mock_testimonials', defaultTestimonials);
     const updated = list.filter((t: Testimonial) => t.id !== id);
-    setLocalItem<Testimonial[]>('viswarkarma_mock_testimonials', updated);
+    setLocalItem<Testimonial[]>('Viswakarma_mock_testimonials', updated);
     return { error: null };
   }
   try {
@@ -464,7 +464,7 @@ export async function deleteTestimonial(id: string) {
 // 5. FAQs
 export async function getFaqs(): Promise<FAQ[]> {
   if (!supabase) {
-    return getLocalItem<FAQ[]>('viswarkarma_mock_faqs', defaultFaqs);
+    return getLocalItem<FAQ[]>('Viswakarma_mock_faqs', defaultFaqs);
   }
   try {
     const { data, error } = await supabase
@@ -474,7 +474,7 @@ export async function getFaqs(): Promise<FAQ[]> {
       .order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      return getLocalItem<FAQ[]>('viswarkarma_mock_faqs', defaultFaqs);
+      return getLocalItem<FAQ[]>('Viswakarma_mock_faqs', defaultFaqs);
     }
 
     return data.map(d => ({
@@ -484,15 +484,15 @@ export async function getFaqs(): Promise<FAQ[]> {
       category: d.category as FAQ['category']
     }));
   } catch {
-    return getLocalItem<FAQ[]>('viswarkarma_mock_faqs', defaultFaqs);
+    return getLocalItem<FAQ[]>('Viswakarma_mock_faqs', defaultFaqs);
   }
 }
 
 export async function createFaq(faq: Omit<FAQ, 'id'>) {
   if (!supabase) {
-    const list = getLocalItem<FAQ[]>('viswarkarma_mock_faqs', defaultFaqs);
+    const list = getLocalItem<FAQ[]>('Viswakarma_mock_faqs', defaultFaqs);
     const newItem: FAQ = { ...faq, id: Math.random().toString() };
-    setLocalItem<FAQ[]>('viswarkarma_mock_faqs', [...list, newItem]);
+    setLocalItem<FAQ[]>('Viswakarma_mock_faqs', [...list, newItem]);
     return { error: null };
   }
   try {
@@ -505,9 +505,9 @@ export async function createFaq(faq: Omit<FAQ, 'id'>) {
 
 export async function updateFaq(id: string, faq: Partial<Omit<FAQ, 'id'>>) {
   if (!supabase) {
-    const list = getLocalItem<FAQ[]>('viswarkarma_mock_faqs', defaultFaqs);
+    const list = getLocalItem<FAQ[]>('Viswakarma_mock_faqs', defaultFaqs);
     const updated = list.map((f: FAQ) => f.id === id ? { ...f, ...faq } : f);
-    setLocalItem<FAQ[]>('viswarkarma_mock_faqs', updated);
+    setLocalItem<FAQ[]>('Viswakarma_mock_faqs', updated);
     return { error: null };
   }
   try {
@@ -520,9 +520,9 @@ export async function updateFaq(id: string, faq: Partial<Omit<FAQ, 'id'>>) {
 
 export async function deleteFaq(id: string) {
   if (!supabase) {
-    const list = getLocalItem<FAQ[]>('viswarkarma_mock_faqs', defaultFaqs);
+    const list = getLocalItem<FAQ[]>('Viswakarma_mock_faqs', defaultFaqs);
     const updated = list.filter((f: FAQ) => f.id !== id);
-    setLocalItem<FAQ[]>('viswarkarma_mock_faqs', updated);
+    setLocalItem<FAQ[]>('Viswakarma_mock_faqs', updated);
     return { error: null };
   }
   try {
@@ -536,7 +536,7 @@ export async function deleteFaq(id: string) {
 // 6. Configurator - Product Types
 export async function getProductTypes(activeOnly = true): Promise<ProductType[]> {
   if (!supabase) {
-    const list = getLocalItem<ProductType[]>('viswarkarma_mock_types', safeProductTypes);
+    const list = getLocalItem<ProductType[]>('Viswakarma_mock_types', safeProductTypes);
     return activeOnly ? list.filter(t => t.status !== 'draft') : list;
   }
   try {
@@ -547,7 +547,7 @@ export async function getProductTypes(activeOnly = true): Promise<ProductType[]>
     const { data, error } = await query.order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      const list = getLocalItem<ProductType[]>('viswarkarma_mock_types', safeProductTypes);
+      const list = getLocalItem<ProductType[]>('Viswakarma_mock_types', safeProductTypes);
       return activeOnly ? list.filter(t => t.status !== 'draft') : list;
     }
 
@@ -563,16 +563,16 @@ export async function getProductTypes(activeOnly = true): Promise<ProductType[]>
       image: d.image_url || safeProductTypes.find(t => t.id === d.id)?.image || ''
     }));
   } catch {
-    const list = getLocalItem<ProductType[]>('viswarkarma_mock_types', safeProductTypes);
+    const list = getLocalItem<ProductType[]>('Viswakarma_mock_types', safeProductTypes);
     return activeOnly ? list.filter(t => t.status !== 'draft') : list;
   }
 }
 
 export async function createProductType(type: ProductType) {
   if (!supabase) {
-    const list = getLocalItem<ProductType[]>('viswarkarma_mock_types', defaultProductTypes);
+    const list = getLocalItem<ProductType[]>('Viswakarma_mock_types', defaultProductTypes);
     const updated = [...list, type];
-    setLocalItem('viswarkarma_mock_types', updated);
+    setLocalItem('Viswakarma_mock_types', updated);
     return { error: null };
   }
   try {
@@ -595,9 +595,9 @@ export async function createProductType(type: ProductType) {
 
 export async function updateProductType(id: string, type: Partial<ProductType>) {
   if (!supabase) {
-    const list = getLocalItem<ProductType[]>('viswarkarma_mock_types', defaultProductTypes);
+    const list = getLocalItem<ProductType[]>('Viswakarma_mock_types', defaultProductTypes);
     const updated = list.map(t => t.id === id ? { ...t, ...type } : t);
-    setLocalItem('viswarkarma_mock_types', updated);
+    setLocalItem('Viswakarma_mock_types', updated);
     return { error: null };
   }
   try {
@@ -624,9 +624,9 @@ export async function updateProductTypePrice(id: string, basePricePerSqFt: numbe
 
 export async function deleteProductType(id: string) {
   if (!supabase) {
-    const list = getLocalItem<ProductType[]>('viswarkarma_mock_types', defaultProductTypes);
+    const list = getLocalItem<ProductType[]>('Viswakarma_mock_types', defaultProductTypes);
     const updated = list.filter(t => t.id !== id);
-    setLocalItem('viswarkarma_mock_types', updated);
+    setLocalItem('Viswakarma_mock_types', updated);
     return { error: null };
   }
   try {
@@ -640,7 +640,7 @@ export async function deleteProductType(id: string) {
 // 7. Configurator - Series Options
 export async function getProductSeries(activeOnly = true): Promise<ProductSeries[]> {
   if (!supabase) {
-    const list = getLocalItem<ProductSeries[]>('viswarkarma_mock_series', safeProductSeries);
+    const list = getLocalItem<ProductSeries[]>('Viswakarma_mock_series', safeProductSeries);
     return activeOnly ? list.filter(s => s.status !== 'draft') : list;
   }
   try {
@@ -651,7 +651,7 @@ export async function getProductSeries(activeOnly = true): Promise<ProductSeries
     const { data, error } = await query.order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      const list = getLocalItem<ProductSeries[]>('viswarkarma_mock_series', safeProductSeries);
+      const list = getLocalItem<ProductSeries[]>('Viswakarma_mock_series', safeProductSeries);
       return activeOnly ? list.filter(s => s.status !== 'draft') : list;
     }
 
@@ -666,16 +666,16 @@ export async function getProductSeries(activeOnly = true): Promise<ProductSeries
       sortOrder: d.sort_order
     }));
   } catch {
-    const list = getLocalItem<ProductSeries[]>('viswarkarma_mock_series', safeProductSeries);
+    const list = getLocalItem<ProductSeries[]>('Viswakarma_mock_series', safeProductSeries);
     return activeOnly ? list.filter(s => s.status !== 'draft') : list;
   }
 }
 
 export async function createProductSeries(series: ProductSeries) {
   if (!supabase) {
-    const list = getLocalItem<ProductSeries[]>('viswarkarma_mock_series', safeProductSeries);
+    const list = getLocalItem<ProductSeries[]>('Viswakarma_mock_series', safeProductSeries);
     const updated = [...list, series];
-    setLocalItem('viswarkarma_mock_series', updated);
+    setLocalItem('Viswakarma_mock_series', updated);
     return { error: null };
   }
   try {
@@ -697,9 +697,9 @@ export async function createProductSeries(series: ProductSeries) {
 
 export async function updateProductSeries(id: string, series: Partial<ProductSeries>) {
   if (!supabase) {
-    const list = getLocalItem<ProductSeries[]>('viswarkarma_mock_series', safeProductSeries);
+    const list = getLocalItem<ProductSeries[]>('Viswakarma_mock_series', safeProductSeries);
     const updated = list.map(s => s.id === id ? { ...s, ...series } : s);
-    setLocalItem('viswarkarma_mock_series', updated);
+    setLocalItem('Viswakarma_mock_series', updated);
     return { error: null };
   }
   try {
@@ -725,9 +725,9 @@ export async function updateProductSeriesPrice(id: string, priceModifierPerSqFt:
 
 export async function deleteProductSeries(id: string) {
   if (!supabase) {
-    const list = getLocalItem<ProductSeries[]>('viswarkarma_mock_series', safeProductSeries);
+    const list = getLocalItem<ProductSeries[]>('Viswakarma_mock_series', safeProductSeries);
     const updated = list.filter(s => s.id !== id);
-    setLocalItem('viswarkarma_mock_series', updated);
+    setLocalItem('Viswakarma_mock_series', updated);
     return { error: null };
   }
   try {
@@ -741,7 +741,7 @@ export async function deleteProductSeries(id: string) {
 // 8. Configurator - Colors
 export async function getColorOptions(activeOnly = true): Promise<ColorOption[]> {
   if (!supabase) {
-    const list = getLocalItem<ColorOption[]>('viswarkarma_mock_colors', safeColorOptions);
+    const list = getLocalItem<ColorOption[]>('Viswakarma_mock_colors', safeColorOptions);
     return activeOnly ? list.filter(c => c.status !== 'draft') : list;
   }
   try {
@@ -752,7 +752,7 @@ export async function getColorOptions(activeOnly = true): Promise<ColorOption[]>
     const { data, error } = await query.order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      const list = getLocalItem<ColorOption[]>('viswarkarma_mock_colors', safeColorOptions);
+      const list = getLocalItem<ColorOption[]>('Viswakarma_mock_colors', safeColorOptions);
       return activeOnly ? list.filter(c => c.status !== 'draft') : list;
     }
 
@@ -768,16 +768,16 @@ export async function getColorOptions(activeOnly = true): Promise<ColorOption[]>
       sortOrder: d.sort_order
     }));
   } catch {
-    const list = getLocalItem<ColorOption[]>('viswarkarma_mock_colors', safeColorOptions);
+    const list = getLocalItem<ColorOption[]>('Viswakarma_mock_colors', safeColorOptions);
     return activeOnly ? list.filter(c => c.status !== 'draft') : list;
   }
 }
 
 export async function createColorOption(color: ColorOption) {
   if (!supabase) {
-    const list = getLocalItem<ColorOption[]>('viswarkarma_mock_colors', safeColorOptions);
+    const list = getLocalItem<ColorOption[]>('Viswakarma_mock_colors', safeColorOptions);
     const updated = [...list, color];
-    setLocalItem('viswarkarma_mock_colors', updated);
+    setLocalItem('Viswakarma_mock_colors', updated);
     return { error: null };
   }
   try {
@@ -800,9 +800,9 @@ export async function createColorOption(color: ColorOption) {
 
 export async function updateColorOption(id: string, color: Partial<ColorOption>) {
   if (!supabase) {
-    const list = getLocalItem<ColorOption[]>('viswarkarma_mock_colors', safeColorOptions);
+    const list = getLocalItem<ColorOption[]>('Viswakarma_mock_colors', safeColorOptions);
     const updated = list.map(c => c.id === id ? { ...c, ...color } : c);
-    setLocalItem('viswarkarma_mock_colors', updated);
+    setLocalItem('Viswakarma_mock_colors', updated);
     return { error: null };
   }
   try {
@@ -829,9 +829,9 @@ export async function updateColorOptionMultiplier(id: string, priceMultiplier: n
 
 export async function deleteColorOption(id: string) {
   if (!supabase) {
-    const list = getLocalItem<ColorOption[]>('viswarkarma_mock_colors', safeColorOptions);
+    const list = getLocalItem<ColorOption[]>('Viswakarma_mock_colors', safeColorOptions);
     const updated = list.filter(c => c.id !== id);
-    setLocalItem('viswarkarma_mock_colors', updated);
+    setLocalItem('Viswakarma_mock_colors', updated);
     return { error: null };
   }
   try {
@@ -845,7 +845,7 @@ export async function deleteColorOption(id: string) {
 // 9. Configurator - Glass Options
 export async function getGlassOptions(activeOnly = true): Promise<GlassOption[]> {
   if (!supabase) {
-    const list = getLocalItem<GlassOption[]>('viswarkarma_mock_glass', safeGlassOptions);
+    const list = getLocalItem<GlassOption[]>('Viswakarma_mock_glass', safeGlassOptions);
     return activeOnly ? list.filter(g => g.status !== 'draft') : list;
   }
   try {
@@ -856,7 +856,7 @@ export async function getGlassOptions(activeOnly = true): Promise<GlassOption[]>
     const { data, error } = await query.order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      const list = getLocalItem<GlassOption[]>('viswarkarma_mock_glass', safeGlassOptions);
+      const list = getLocalItem<GlassOption[]>('Viswakarma_mock_glass', safeGlassOptions);
       return activeOnly ? list.filter(g => g.status !== 'draft') : list;
     }
 
@@ -870,16 +870,16 @@ export async function getGlassOptions(activeOnly = true): Promise<GlassOption[]>
       sortOrder: d.sort_order
     }));
   } catch {
-    const list = getLocalItem<GlassOption[]>('viswarkarma_mock_glass', safeGlassOptions);
+    const list = getLocalItem<GlassOption[]>('Viswakarma_mock_glass', safeGlassOptions);
     return activeOnly ? list.filter(g => g.status !== 'draft') : list;
   }
 }
 
 export async function createGlassOption(glass: GlassOption) {
   if (!supabase) {
-    const list = getLocalItem<GlassOption[]>('viswarkarma_mock_glass', safeGlassOptions);
+    const list = getLocalItem<GlassOption[]>('Viswakarma_mock_glass', safeGlassOptions);
     const updated = [...list, glass];
-    setLocalItem('viswarkarma_mock_glass', updated);
+    setLocalItem('Viswakarma_mock_glass', updated);
     return { error: null };
   }
   try {
@@ -900,9 +900,9 @@ export async function createGlassOption(glass: GlassOption) {
 
 export async function updateGlassOption(id: string, glass: Partial<GlassOption>) {
   if (!supabase) {
-    const list = getLocalItem<GlassOption[]>('viswarkarma_mock_glass', safeGlassOptions);
+    const list = getLocalItem<GlassOption[]>('Viswakarma_mock_glass', safeGlassOptions);
     const updated = list.map(g => g.id === id ? { ...g, ...glass } : g);
-    setLocalItem('viswarkarma_mock_glass', updated);
+    setLocalItem('Viswakarma_mock_glass', updated);
     return { error: null };
   }
   try {
@@ -927,9 +927,9 @@ export async function updateGlassOptionPrice(id: string, priceModifierPerSqFt: n
 
 export async function deleteGlassOption(id: string) {
   if (!supabase) {
-    const list = getLocalItem<GlassOption[]>('viswarkarma_mock_glass', safeGlassOptions);
+    const list = getLocalItem<GlassOption[]>('Viswakarma_mock_glass', safeGlassOptions);
     const updated = list.filter(g => g.id !== id);
-    setLocalItem('viswarkarma_mock_glass', updated);
+    setLocalItem('Viswakarma_mock_glass', updated);
     return { error: null };
   }
   try {
@@ -943,7 +943,7 @@ export async function deleteGlassOption(id: string) {
 // 10. Configurator - Mesh Options
 export async function getMeshOptions(activeOnly = true): Promise<MeshOption[]> {
   if (!supabase) {
-    const list = getLocalItem<MeshOption[]>('viswarkarma_mock_mesh', safeMeshOptions);
+    const list = getLocalItem<MeshOption[]>('Viswakarma_mock_mesh', safeMeshOptions);
     return activeOnly ? list.filter(m => m.status !== 'draft') : list;
   }
   try {
@@ -954,7 +954,7 @@ export async function getMeshOptions(activeOnly = true): Promise<MeshOption[]> {
     const { data, error } = await query.order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      const list = getLocalItem<MeshOption[]>('viswarkarma_mock_mesh', safeMeshOptions);
+      const list = getLocalItem<MeshOption[]>('Viswakarma_mock_mesh', safeMeshOptions);
       return activeOnly ? list.filter(m => m.status !== 'draft') : list;
     }
 
@@ -968,16 +968,16 @@ export async function getMeshOptions(activeOnly = true): Promise<MeshOption[]> {
       sortOrder: d.sort_order
     }));
   } catch {
-    const list = getLocalItem<MeshOption[]>('viswarkarma_mock_mesh', safeMeshOptions);
+    const list = getLocalItem<MeshOption[]>('Viswakarma_mock_mesh', safeMeshOptions);
     return activeOnly ? list.filter(m => m.status !== 'draft') : list;
   }
 }
 
 export async function createMeshOption(mesh: MeshOption) {
   if (!supabase) {
-    const list = getLocalItem<MeshOption[]>('viswarkarma_mock_mesh', safeMeshOptions);
+    const list = getLocalItem<MeshOption[]>('Viswakarma_mock_mesh', safeMeshOptions);
     const updated = [...list, mesh];
-    setLocalItem('viswarkarma_mock_mesh', updated);
+    setLocalItem('Viswakarma_mock_mesh', updated);
     return { error: null };
   }
   try {
@@ -998,9 +998,9 @@ export async function createMeshOption(mesh: MeshOption) {
 
 export async function updateMeshOption(id: string, mesh: Partial<MeshOption>) {
   if (!supabase) {
-    const list = getLocalItem<MeshOption[]>('viswarkarma_mock_mesh', safeMeshOptions);
+    const list = getLocalItem<MeshOption[]>('Viswakarma_mock_mesh', safeMeshOptions);
     const updated = list.map(m => m.id === id ? { ...m, ...mesh } : m);
-    setLocalItem('viswarkarma_mock_mesh', updated);
+    setLocalItem('Viswakarma_mock_mesh', updated);
     return { error: null };
   }
   try {
@@ -1025,9 +1025,9 @@ export async function updateMeshOptionPrice(id: string, priceModifierPerSqFt: nu
 
 export async function deleteMeshOption(id: string) {
   if (!supabase) {
-    const list = getLocalItem<MeshOption[]>('viswarkarma_mock_mesh', safeMeshOptions);
+    const list = getLocalItem<MeshOption[]>('Viswakarma_mock_mesh', safeMeshOptions);
     const updated = list.filter(m => m.id !== id);
-    setLocalItem('viswarkarma_mock_mesh', updated);
+    setLocalItem('Viswakarma_mock_mesh', updated);
     return { error: null };
   }
   try {
@@ -1041,7 +1041,7 @@ export async function deleteMeshOption(id: string) {
 // 11. Configurator - Hardware Options
 export async function getHardwareOptions(activeOnly = true): Promise<HardwareOption[]> {
   if (!supabase) {
-    const list = getLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', safeHardwareOptions);
+    const list = getLocalItem<HardwareOption[]>('Viswakarma_mock_hardware', safeHardwareOptions);
     return activeOnly ? list.filter(h => h.status !== 'draft') : list;
   }
   try {
@@ -1052,7 +1052,7 @@ export async function getHardwareOptions(activeOnly = true): Promise<HardwareOpt
     const { data, error } = await query.order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      const list = getLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', safeHardwareOptions);
+      const list = getLocalItem<HardwareOption[]>('Viswakarma_mock_hardware', safeHardwareOptions);
       return activeOnly ? list.filter(h => h.status !== 'draft') : list;
     }
 
@@ -1065,16 +1065,16 @@ export async function getHardwareOptions(activeOnly = true): Promise<HardwareOpt
       sortOrder: d.sort_order
     }));
   } catch {
-    const list = getLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', safeHardwareOptions);
+    const list = getLocalItem<HardwareOption[]>('Viswakarma_mock_hardware', safeHardwareOptions);
     return activeOnly ? list.filter(h => h.status !== 'draft') : list;
   }
 }
 
 export async function createHardwareOption(hardware: HardwareOption) {
   if (!supabase) {
-    const list = getLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', safeHardwareOptions);
+    const list = getLocalItem<HardwareOption[]>('Viswakarma_mock_hardware', safeHardwareOptions);
     const updated = [...list, hardware];
-    setLocalItem('viswarkarma_mock_hardware', updated);
+    setLocalItem('Viswakarma_mock_hardware', updated);
     return { error: null };
   }
   try {
@@ -1094,9 +1094,9 @@ export async function createHardwareOption(hardware: HardwareOption) {
 
 export async function updateHardwareOption(id: string, hardware: Partial<HardwareOption>) {
   if (!supabase) {
-    const list = getLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', safeHardwareOptions);
+    const list = getLocalItem<HardwareOption[]>('Viswakarma_mock_hardware', safeHardwareOptions);
     const updated = list.map(h => h.id === id ? { ...h, ...hardware } : h);
-    setLocalItem('viswarkarma_mock_hardware', updated);
+    setLocalItem('Viswakarma_mock_hardware', updated);
     return { error: null };
   }
   try {
@@ -1120,9 +1120,9 @@ export async function updateHardwareOptionPrice(id: string, priceModifierPerUnit
 
 export async function deleteHardwareOption(id: string) {
   if (!supabase) {
-    const list = getLocalItem<HardwareOption[]>('viswarkarma_mock_hardware', safeHardwareOptions);
+    const list = getLocalItem<HardwareOption[]>('Viswakarma_mock_hardware', safeHardwareOptions);
     const updated = list.filter(h => h.id !== id);
-    setLocalItem('viswarkarma_mock_hardware', updated);
+    setLocalItem('Viswakarma_mock_hardware', updated);
     return { error: null };
   }
   try {
@@ -1156,14 +1156,14 @@ export async function createQuoteRequest(lead: {
 }) {
   if (!supabase) {
     console.log("Supabase client is not initialized. Mocking quote request submission locally:", lead);
-    const list = getLocalItem<DbLead[]>('viswarkarma_mock_leads', []);
+    const list = getLocalItem<DbLead[]>('Viswakarma_mock_leads', []);
     const mockLead: DbLead = {
       ...lead,
       id: Math.random().toString(),
       created_at: new Date().toISOString(),
       status: 'new'
     };
-    setLocalItem<DbLead[]>('viswarkarma_mock_leads', [...list, mockLead]);
+    setLocalItem<DbLead[]>('Viswakarma_mock_leads', [...list, mockLead]);
     return { data: [mockLead], error: null };
   }
   try {
@@ -1180,7 +1180,7 @@ export async function createQuoteRequest(lead: {
 
 export async function getQuoteRequests(): Promise<DbLead[]> {
   if (!supabase) {
-    const list = getLocalItem<DbLead[]>('viswarkarma_mock_leads', []);
+    const list = getLocalItem<DbLead[]>('Viswakarma_mock_leads', []);
     return [...list].reverse();
   }
   try {
@@ -1198,9 +1198,9 @@ export async function getQuoteRequests(): Promise<DbLead[]> {
 
 export async function updateQuoteRequestStatus(id: string, status: string) {
   if (!supabase) {
-    const list = getLocalItem<DbLead[]>('viswarkarma_mock_leads', []);
+    const list = getLocalItem<DbLead[]>('Viswakarma_mock_leads', []);
     const updated = list.map((item: DbLead) => item.id === id ? { ...item, status } : item);
-    setLocalItem<DbLead[]>('viswarkarma_mock_leads', updated);
+    setLocalItem<DbLead[]>('Viswakarma_mock_leads', updated);
     return { error: null };
   }
   try {
@@ -1217,9 +1217,9 @@ export async function updateQuoteRequestStatus(id: string, status: string) {
 
 export async function deleteQuoteRequest(id: string) {
   if (!supabase) {
-    const list = getLocalItem<DbLead[]>('viswarkarma_mock_leads', []);
+    const list = getLocalItem<DbLead[]>('Viswakarma_mock_leads', []);
     const updated = list.filter((item: DbLead) => item.id !== id);
-    setLocalItem<DbLead[]>('viswarkarma_mock_leads', updated);
+    setLocalItem<DbLead[]>('Viswakarma_mock_leads', updated);
     return { error: null };
   }
   try {

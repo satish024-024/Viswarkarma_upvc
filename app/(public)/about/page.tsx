@@ -1,12 +1,12 @@
-import React from 'react';
+﻿import React from 'react';
 import { ShieldCheck, Factory, HeartHandshake } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { businessSettings as defaultSettings } from '@/lib/data/business';
 import { getBusinessSettings } from '@/lib/supabase';
 
 export const metadata = {
-  title: 'About Us | Viswarkarma uPVC & Aluminium',
-  description: 'With 25+ years of custom fabrication, Viswarkarma uPVC manufactures and installs premium architectural windows and doors across Andhra Pradesh.',
+  title: 'About Us | Viswakarma uPVC & Aluminium',
+  description: 'With 25+ years of custom fabrication, Viswakarma uPVC manufactures and installs premium architectural windows and doors across Andhra Pradesh.',
 };
 
 export default async function AboutPage() {

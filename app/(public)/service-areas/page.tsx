@@ -1,11 +1,11 @@
-import React from 'react';
+﻿import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { MapPin, Truck } from 'lucide-react';
 import { serviceAreas } from '@/lib/data/business';
 
 export const metadata = {
-  title: 'Service Areas & Locations Served | Viswarkarma uPVC & Aluminium',
-  description: 'Viswarkarma uPVC serves Andhra Pradesh (Rajahmundry, Vijayawada, Visakhapatnam, Kakinada), Hyderabad, and Pan-India, providing direct transport and professional installation.',
+  title: 'Service Areas & Locations Served | Viswakarma uPVC & Aluminium',
+  description: 'Viswakarma uPVC serves Andhra Pradesh (Rajahmundry, Vijayawada, Visakhapatnam, Kakinada), Hyderabad, and Pan-India, providing direct transport and professional installation.',
 };
 
 export default function ServiceAreasPage() {

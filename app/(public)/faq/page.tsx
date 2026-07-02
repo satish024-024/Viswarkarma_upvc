@@ -1,10 +1,10 @@
-import React from 'react';
+﻿import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { faqsList as defaultFaqs } from '@/lib/data/business';
 import { getFaqs } from '@/lib/supabase';
 
 export const metadata = {
-  title: 'Frequently Asked Questions | Viswarkarma uPVC & Aluminium',
+  title: 'Frequently Asked Questions | Viswakarma uPVC & Aluminium',
   description: 'Find answers about uPVC vs aluminium window profiles, double-glazing specifications, sound insulation, in-house manufacturing, and home installations.',
 };
 

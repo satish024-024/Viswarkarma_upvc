@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from 'react';
 import { supabase } from '@/lib/supabase';
@@ -28,12 +28,12 @@ export default function AdminLoginPage() {
 
     if (isDemoMode) {
       // Demo authentication bypass
-      if (email === 'admin@viswarkarmaupvc.com' && password === 'admin123') {
-        localStorage.setItem('viswarkarma_mock_admin_session', 'true');
+      if (email === 'admin@Viswakarmaupvc.com' && password === 'admin123') {
+        localStorage.setItem('Viswakarma_mock_admin_session', 'true');
         // Reload to trigger layout effect update
         window.location.href = '/admin/dashboard';
       } else {
-        setError('Invalid credentials for Demo Mode. (Use admin@viswarkarmaupvc.com / admin123)');
+        setError('Invalid credentials for Demo Mode. (Use admin@Viswakarmaupvc.com / admin123)');
         setLoading(false);
       }
       return;
@@ -89,7 +89,7 @@ export default function AdminLoginPage() {
           </CardTitle>
           <CardDescription className="text-xs text-slate-500 font-semibold">
             {isDemoMode 
-              ? 'Demo credentials: admin@viswarkarmaupvc.com / admin123'
+              ? 'Demo credentials: admin@Viswakarmaupvc.com / admin123'
               : 'Sign in with your administrator credentials.'
             }
           </CardDescription>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
@@ -71,12 +71,12 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (loading) return;
 
-    const isAuthorized = isAdmin || (isDemoMode && session?.user?.email === 'admin@viswarkarmaupvc.com');
+    const isAuthorized = isAdmin || (isDemoMode && session?.user?.email === 'admin@Viswakarmaupvc.com');
 
     if (!session) {
       if (typeof window !== 'undefined') {
-        sessionStorage.setItem('viswarkarma_auth_redirect', pathname);
-        sessionStorage.setItem('viswarkarma_trigger_login', 'true');
+        sessionStorage.setItem('Viswakarma_auth_redirect', pathname);
+        sessionStorage.setItem('Viswakarma_trigger_login', 'true');
       }
       router.push('/');
     } else if (session && !isAuthorized) {
@@ -88,13 +88,13 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 
   const handleLogout = async () => {
     if (isDemoMode) {
-      localStorage.removeItem('viswarkarma_mock_admin_session');
+      localStorage.removeItem('Viswakarma_mock_admin_session');
       window.location.href = '/';
       return;
     }
 
     if (typeof window !== 'undefined') {
-      sessionStorage.setItem('viswarkarma_auth_error', 'unauthorized');
+      sessionStorage.setItem('Viswakarma_auth_error', 'unauthorized');
     }
     await supabase!.auth.signOut();
     router.push('/');
@@ -138,7 +138,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
       <aside className="hidden md:flex flex-col w-64 bg-white border-r border-slate-200 p-6 space-y-8 flex-shrink-0">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-base font-black tracking-tight text-slate-950 uppercase">Viswarkarma</h1>
+            <h1 className="text-base font-black tracking-tight text-slate-950 uppercase">Viswakarma</h1>
             <span className="px-1.5 py-0.5 rounded-sm bg-slate-100 text-[9px] font-bold text-slate-600 uppercase">Admin</span>
           </div>
           <p className="text-[10px] text-slate-500 font-semibold truncate mb-3">{session.user?.email}</p>
@@ -184,7 +184,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           <aside className="w-64 bg-white p-6 flex flex-col space-y-8 h-full" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-base font-black tracking-tight text-slate-950 uppercase">Viswarkarma</h1>
+                <h1 className="text-base font-black tracking-tight text-slate-950 uppercase">Viswakarma</h1>
                 <p className="text-[10px] text-slate-500 font-semibold truncate mb-1">{session.user?.email}</p>
               </div>
               <button onClick={() => setSidebarOpen(false)}>
@@ -245,8 +245,8 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
               <Menu className="w-5 h-5 text-slate-700" />
             </button>
             <div className="flex items-center gap-2">
-              <h1 className="text-sm font-black tracking-tight text-slate-900 uppercase hidden md:block">Viswarkarma Admin</h1>
-              <h1 className="text-sm font-black tracking-tight text-slate-950 uppercase md:hidden">Viswarkarma</h1>
+              <h1 className="text-sm font-black tracking-tight text-slate-900 uppercase hidden md:block">Viswakarma Admin</h1>
+              <h1 className="text-sm font-black tracking-tight text-slate-950 uppercase md:hidden">Viswakarma</h1>
               <span className="px-1.5 py-0.5 rounded-sm bg-slate-100 text-[8px] font-bold text-slate-600 uppercase tracking-wider">Console</span>
             </div>
           </div>

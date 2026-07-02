@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import type { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!supabase) {
       setLoading(false);
       // Demo authentication local storage check
-      const mockSession = typeof window !== 'undefined' ? localStorage.getItem('viswarkarma_mock_admin_session') : null;
+      const mockSession = typeof window !== 'undefined' ? localStorage.getItem('Viswakarma_mock_admin_session') : null;
       if (mockSession === 'true') {
         setRole('admin');
       } else {

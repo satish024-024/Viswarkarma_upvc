@@ -1,11 +1,11 @@
-import { BusinessSettings, ServiceVertical, Project, Testimonial, FAQ, ServiceArea } from '@/types/entities';
+﻿import { BusinessSettings, ServiceVertical, Project, Testimonial, FAQ, ServiceArea } from '@/types/entities';
 
 export const businessSettings: BusinessSettings = {
-  name: "Viswarkarma uPVC & Aluminium",
+  name: "Viswakarma uPVC & Aluminium",
   tagline: "25+ Years of Custom Fabrication & Precision Installation | Pan-India Service",
   phone: "+91 95056 83584",
   whatsapp: "+919505683584",
-  email: "contact@viswarkarmaupvc.com",
+  email: "contact@Viswakarmaupvc.com",
   address: "Rajahmundry Head Office & Fabrication Workshop, Rajahmundry, Andhra Pradesh, India",
   hours: "Monday - Saturday: 9:30 AM - 7:00 PM",
   googleMapUrl: "",
@@ -152,7 +152,7 @@ export const testimonialsList: Testimonial[] = [
     id: "t-2",
     name: "Architect Anjali Mehta",
     role: "Lead Architect, Mehta & Associates",
-    content: "As an architect, I am very picky about profiles and alignment. Viswarkarma uPVC has fabricated and installed profiles for three of my villa projects. Their attention to detail on gaskets, corner joints, and silicone sealing is top-tier.",
+    content: "As an architect, I am very picky about profiles and alignment. Viswakarma uPVC has fabricated and installed profiles for three of my villa projects. Their attention to detail on gaskets, corner joints, and silicone sealing is top-tier.",
     rating: 5,
     location: "Visakhapatnam, Andhra Pradesh",
     projectType: "Architectural Aluminium Sliding Systems"

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { getProductTypes } from '@/lib/supabase';
 
 export const metadata = {
-  title: 'Custom uPVC Windows | sliding, Casement, & Tilt-Turn | Viswarkarma uPVC & Aluminium',
+  title: 'Custom uPVC Windows | sliding, Casement, & Tilt-Turn | Viswakarma uPVC & Aluminium',
   description: 'Custom fabricated uPVC windows including 2/3 track sliding systems, openable casements, and fixed frames. Engineered in Rajahmundry, Andhra Pradesh.',
 };
 

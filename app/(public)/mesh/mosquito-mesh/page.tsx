@@ -1,11 +1,11 @@
-import React from 'react';
+﻿import React from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
-  title: 'Mosquito Mesh Screens & Systems | Viswarkarma uPVC & Aluminium',
+  title: 'Mosquito Mesh Screens & Systems | Viswakarma uPVC & Aluminium',
   description: 'Premium insect screening systems: Pleated mesh, sliding mesh, rolling screens, and high-strength SS304 rodent-proof grids. Custom sizes.',
 };
 

@@ -1,11 +1,11 @@
-import React from 'react';
+﻿import React from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
-  title: 'Frameless Glass Railings & Balustrades | Viswarkarma uPVC & Aluminium',
+  title: 'Frameless Glass Railings & Balustrades | Viswakarma uPVC & Aluminium',
   description: 'Premium structural glass railings for balconies, terrace parapets, and indoor stairs. Using 12mm laminated toughened safety glass and SS316 spigots.',
 };
 

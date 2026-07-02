@@ -1,11 +1,11 @@
-import React from 'react';
+﻿import React from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
-  title: 'Structural Elevation Glass & Spider Glazing | Viswarkarma uPVC & Aluminium',
+  title: 'Structural Elevation Glass & Spider Glazing | Viswakarma uPVC & Aluminium',
   description: 'Premium structural glass facades, curtain walls, spider-fitting glass joints, and commercial storefronts. Built to high safety standards.',
 };
 

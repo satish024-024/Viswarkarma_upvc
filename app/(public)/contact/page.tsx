@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from 'react';
 import { Mail, Phone, MapPin, Clock, MessageSquare, Shield } from 'lucide-react';
@@ -29,7 +29,7 @@ export default function ContactPage() {
       return;
     }
 
-    const whatsappMessage = `Hello Viswarkarma uPVC & Aluminium! I have a general enquiry:
+    const whatsappMessage = `Hello Viswakarma uPVC & Aluminium! I have a general enquiry:
 - Name: ${formData.name}
 - Phone: ${formData.phone}
 - Location: ${formData.city}

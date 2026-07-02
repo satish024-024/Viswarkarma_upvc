@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState } from 'react';
 import { X, Mail, Lock, User, Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
@@ -133,7 +133,7 @@ export default function AuthModal() {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <div className="w-7 h-7 rounded-lg bg-gold-faint border border-border flex items-center justify-center font-black text-gold text-xs">V</div>
-                <span className="text-xs font-bold text-gold uppercase tracking-widest">Viswarkarma</span>
+                <span className="text-xs font-bold text-gold uppercase tracking-widest">Viswakarma</span>
               </div>
               <h2 className="text-xl font-black text-heading tracking-tight">
                 {screen === 'login' && 'Welcome Back'}

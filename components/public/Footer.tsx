@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -22,10 +22,10 @@ export default function Footer() {
         <div className="space-y-4">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-9 h-9 flex-shrink-0">
-              <Image src="/logo.png" alt="Viswarkarma Logo" width={36} height={36} className="w-full h-full object-contain" />
+              <Image src="/logo.png" alt="Viswakarma Logo" width={36} height={36} className="w-full h-full object-contain" />
             </div>
             <div>
-              <span className="block text-sm font-black text-[#1F2937] tracking-tight">Viswarkarma</span>
+              <span className="block text-sm font-black text-[#1F2937] tracking-tight">Viswakarma</span>
               <span className="block text-[9px] font-bold text-gold uppercase tracking-widest -mt-0.5">uPVC &amp; Aluminium</span>
             </div>
           </Link>

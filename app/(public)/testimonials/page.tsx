@@ -1,9 +1,9 @@
-import { Card } from '@/components/ui/card';
+﻿import { Card } from '@/components/ui/card';
 import { getTestimonials } from '@/lib/supabase';
 import { testimonialsList as fallbackTestimonials } from '@/lib/data/business';
 
 export const metadata = {
-  title: 'Client Reviews | Viswarkarma uPVC & Aluminium',
+  title: 'Client Reviews | Viswakarma uPVC & Aluminium',
   description: 'Read actual testimonials from homeowners, architects, and builders who have installed custom uPVC & aluminium windows in Rajahmundry, Andhra Pradesh.',
 };
 

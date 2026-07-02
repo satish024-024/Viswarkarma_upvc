@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { getProductTypes } from '@/lib/supabase';
 
 export const metadata = {
-  title: 'Reinforced uPVC Doors | Sliding Patio & Swing | Viswarkarma uPVC & Aluminium',
+  title: 'Reinforced uPVC Doors | Sliding Patio & Swing | Viswakarma uPVC & Aluminium',
   description: 'Heavy-duty custom fabricated uPVC doors, sliding balcony doors, and openable terrace doors. Equipped with secure multi-point lock systems.',
 };
 

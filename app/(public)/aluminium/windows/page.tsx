@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { getProductTypes } from '@/lib/supabase';
 
 export const metadata = {
-  title: 'Aluminium Windows | Slimline Sliding & Casement | Viswarkarma uPVC & Aluminium',
+  title: 'Aluminium Windows | Slimline Sliding & Casement | Viswakarma uPVC & Aluminium',
   description: 'Custom fabricated aluminium windows with slim profiles, heavy T6 alloys, and multi-point locking. Manufactured directly at our Rajahmundry facility.',
 };
 

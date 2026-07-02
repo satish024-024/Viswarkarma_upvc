@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -58,15 +58,15 @@ export default function Header() {
   // Open login modal dynamically if unauthenticated, show error alert if unauthorized
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const triggerLogin = sessionStorage.getItem('viswarkarma_trigger_login');
+      const triggerLogin = sessionStorage.getItem('Viswakarma_trigger_login');
       if (triggerLogin === 'true') {
-        sessionStorage.removeItem('viswarkarma_trigger_login');
+        sessionStorage.removeItem('Viswakarma_trigger_login');
         openLoginModal();
       }
 
-      const authError = sessionStorage.getItem('viswarkarma_auth_error');
+      const authError = sessionStorage.getItem('Viswakarma_auth_error');
       if (authError === 'unauthorized') {
-        sessionStorage.removeItem('viswarkarma_auth_error');
+        sessionStorage.removeItem('Viswakarma_auth_error');
         alert("Unauthorized: Admin access required.");
       }
     }
@@ -75,9 +75,9 @@ export default function Header() {
   // Sync session active with dynamic redirects stored in sessionStorage
   useEffect(() => {
     if (session && typeof window !== 'undefined') {
-      const redirect = sessionStorage.getItem('viswarkarma_auth_redirect');
+      const redirect = sessionStorage.getItem('Viswakarma_auth_redirect');
       if (redirect) {
-        sessionStorage.removeItem('viswarkarma_auth_redirect');
+        sessionStorage.removeItem('Viswakarma_auth_redirect');
         // Prevent unauthorized redirecting loops for non-admin on admin routes
         if (isAdmin || !redirect.startsWith('/admin')) {
           window.location.href = redirect;
@@ -157,10 +157,10 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
           <div className="w-9 h-9 flex-shrink-0">
-            <Image src="/logo.png" alt="Viswarkarma Logo" width={36} height={36} className="w-full h-full object-contain" priority />
+            <Image src="/logo.png" alt="Viswakarma Logo" width={36} height={36} className="w-full h-full object-contain" priority />
           </div>
           <div className="leading-none">
-            <span className="block text-[15px] font-black text-heading tracking-tight">Viswarkarma</span>
+            <span className="block text-[15px] font-black text-heading tracking-tight">Viswakarma</span>
             <span className="block text-[9px] font-bold text-gold uppercase tracking-[0.14em] mt-0.5">uPVC & Aluminium</span>
           </div>
         </Link>
@@ -292,10 +292,10 @@ export default function Header() {
         <div className="flex items-center justify-between p-4 border-b border-border-soft">
           <Link href="/" className="flex items-center gap-2 group flex-shrink-0">
             <div className="w-8 h-8 flex-shrink-0">
-              <Image src="/logo.png" alt="Viswarkarma Logo" width={32} height={32} className="w-full h-full object-contain" />
+              <Image src="/logo.png" alt="Viswakarma Logo" width={32} height={32} className="w-full h-full object-contain" />
             </div>
             <div className="leading-none text-left">
-              <span className="block text-xs font-black text-heading tracking-tight">Viswarkarma</span>
+              <span className="block text-xs font-black text-heading tracking-tight">Viswakarma</span>
               <span className="block text-[8px] font-bold text-gold uppercase tracking-[0.12em] mt-0.5">uPVC & Aluminium</span>
             </div>
           </Link>
