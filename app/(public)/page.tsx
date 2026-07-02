@@ -1,8 +1,27 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import type { Metadata } from 'next';
 import { Phone, MessageSquare, ArrowRight, ShieldCheck, Award, VolumeX, Thermometer, Droplets, Sparkles, CheckCircle2, Star, Ruler, Wrench, Calculator, MapPin } from 'lucide-react';
 import { getBusinessSettings, getProjects, getTestimonials } from '@/lib/supabase';
+
+export const metadata: Metadata = {
+  title: 'uPVC & Aluminium Windows & Doors in Rajahmundry | Viswakarma',
+  description: 'Best uPVC & Aluminium windows and doors manufacturer in Rajahmundry, Andhra Pradesh. Sliding windows, casement windows, glass railings, mosquito mesh. Factory-direct pricing. Free home estimate. Call +91-9505683584.',
+  keywords: [
+    'uPVC windows Rajahmundry', 'aluminium windows Rajahmundry',
+    'sliding windows Rajahmundry', 'casement windows AP',
+    'glass railing Rajahmundry', 'mosquito mesh Rajahmundry',
+    'upvc doors andhra pradesh', 'window manufacturer Rajahmundry',
+  ],
+  alternates: { canonical: 'https://viswakarma-upvc.vercel.app' },
+  openGraph: {
+    title: 'uPVC & Aluminium Windows & Doors | Viswakarma | Rajahmundry, AP',
+    description: 'Factory-direct uPVC & Aluminium windows, doors, mosquito mesh & glass solutions from Rajahmundry. Free site measurement. 25+ years experience.',
+    url: 'https://viswakarma-upvc.vercel.app',
+    images: [{ url: '/logo.png', width: 512, height: 512, alt: 'Viswakarma uPVC Logo' }],
+  },
+};
 
 /* ─── DATA ───────────────────────────────────────────────── */
 const PRODUCTS = [
