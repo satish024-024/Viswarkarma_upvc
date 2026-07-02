@@ -92,8 +92,7 @@ export const metadata: Metadata = {
     apple: "/logo.png",
   },
   verification: {
-    // Add your Google Search Console verification code here after setup
-    // google: "your-verification-code",
+    google: "16rF84H9NE4g4qXJL_OVmAcqdn1CqhzE-lDIx7aZk48",
   },
 };
 
